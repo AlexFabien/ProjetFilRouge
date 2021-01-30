@@ -4,6 +4,7 @@ using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace QuizApi.Repositories
@@ -18,7 +19,25 @@ namespace QuizApi.Repositories
 
         public override RoleEntity Create(RoleEntity obj)
         {
-            throw new NotImplementedException();
+            OpenConnection();
+            Dictionary<string, dynamic> roleDictionnary = new Dictionary<string, dynamic>();
+
+            foreach (PropertyInfo pr in obj.GetType().GetProperties())
+            {
+                if (pr.Name.ToLower() != "id_role")
+                {
+                    roleDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
+                }
+            }
+            string request = queryBuilder
+                .Insert("role")
+                .Values(roleDictionnary);
+            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
+            cmd.ExecuteNonQuery();
+            long roleId = cmd.LastInsertedId;
+            obj.Id_Role = (int)roleId;
+            connectionSql.Close();
+            return obj;
         }
 
         public override int Delete(int id)
@@ -39,7 +58,7 @@ namespace QuizApi.Repositories
             RoleEntity roleEntity = new RoleEntity();
             while (rdr.Read())
             {
-                roleEntity.IdRole = rdr.GetInt32(0);
+                roleEntity.Id_Role = rdr.GetInt32(0);
                 roleEntity.Nom = rdr.GetString(1);
             }
             CloseConnection(rdr);
@@ -60,7 +79,7 @@ namespace QuizApi.Repositories
             while (rdr.Read())
             {
                 RoleEntity roleEntity = new RoleEntity();
-                roleEntity.IdRole = rdr.GetInt32(0);
+                roleEntity.Id_Role = rdr.GetInt32(0);
                 roleEntity.Nom = rdr.GetString(1);
                 roleEntities.Add(roleEntity);
             }

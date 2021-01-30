@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Dtos.Role
 {
-    //INFO : C'est mieux de faire des sous dossiers s'il y a plusieurs DTO par Entite
-    public class AllRoleDto
+    //INFO : le sous-dossier c'est pour classer les DTO par entity
+    public class RoleDto
     {
-        public AllRoleDto(string nom, int? idRole = null)
+        public RoleDto(){}
+
+        public RoleDto(string nom, int? idRole = null)
         {
             Nom = nom;
             IdRole = idRole;

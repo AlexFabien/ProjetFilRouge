@@ -11,10 +11,10 @@ namespace QuizApi.Entities
         public RoleEntity(string nom, int? idRole = null)
         {
             Nom = nom;
-            IdRole = idRole;
+            Id_Role = idRole;
         }
 
-        public int? IdRole { get; set; }
+        public int? Id_Role { get; set; }
         public string Nom { get; set; }
     }
 }

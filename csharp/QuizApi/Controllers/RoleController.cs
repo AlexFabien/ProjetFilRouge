@@ -22,20 +22,21 @@ namespace QuizApi.Controllers
         }
 
         [HttpGet]
-        public List<AllRoleDto> Get()
+        public List<RoleDto> Get()
         {
             return roleService.FindAll();
         }
 
         [HttpGet("{id}")]
-        public AllRoleDto Get(int id)
+        public RoleDto Get(int id)
         {
             return roleService.Find(id);
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public RoleDto Post([FromBody] RoleDto roleDto)
         {
+            return roleService.PostRole(roleDto);
         }
 
         [HttpPut("{id}")]
