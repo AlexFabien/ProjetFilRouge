@@ -40,6 +40,17 @@ namespace QuizApi.Services
             return ConvertEntityToDto(roleEntityConverted);
         }
 
+        internal RoleDto UpdateRole(int id, RoleDto newRoleDto)
+        {
+            RoleEntity roleEntity = ConvertDtoToEntity(newRoleDto);
+            RoleEntity newRoleEntity = roleRepository.Update(id, roleEntity);
+            return ConvertEntityToDto(newRoleEntity);
+        }
+        internal int Delete(int id)
+        {
+            return roleRepository.Delete(id);
+        }
+
         private RoleEntity ConvertDtoToEntity(RoleDto roleDto)
         {
             return new RoleEntity(roleDto.Nom);

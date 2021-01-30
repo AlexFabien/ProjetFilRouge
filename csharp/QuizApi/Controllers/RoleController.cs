@@ -40,13 +40,15 @@ namespace QuizApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public RoleDto Put(int id, [FromBody] RoleDto roleDto)
         {
+            return roleService.UpdateRole(id, roleDto);
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public int Delete(int id)
         {
+            return roleService.Delete(id);
         }
     }
 }

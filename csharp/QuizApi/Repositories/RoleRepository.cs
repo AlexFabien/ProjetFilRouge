@@ -40,9 +40,16 @@ namespace QuizApi.Repositories
             return obj;
         }
 
+        //FIXIT : trouver une autre facon de recupere l'id car c'est pas generique
         public override int Delete(int id)
         {
-            throw new NotImplementedException();
+            OpenConnection();
+            //TODO : c'est pas bien ca
+            string request = queryBuilder.Delete("role", id).Replace("id", "id_role");
+            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
+            int result = cmd.ExecuteNonQuery();
+            connectionSql.Close();
+            return result;
         }
 
         public override RoleEntity Find(int id)
@@ -89,7 +96,25 @@ namespace QuizApi.Repositories
 
         public override RoleEntity Update(int id, RoleEntity obj)
         {
-            throw new NotImplementedException();
+            OpenConnection();
+            Dictionary<string, dynamic> roleDictionnary = new Dictionary<string, dynamic>();
+
+            foreach (PropertyInfo pr in obj.GetType().GetProperties())
+            {
+                if (pr.Name.ToLower() != "id_role" && pr.GetValue(obj) != null)
+                {
+                    roleDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
+                }
+            }
+            string request = queryBuilder
+              .Update("role")
+              .Set(roleDictionnary)
+              .Where("id_role", id).Get();
+
+            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
+            cmd.ExecuteNonQuery();
+            connectionSql.Close();
+            return Find(id);
         }
     }
 }
