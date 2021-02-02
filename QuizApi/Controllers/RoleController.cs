@@ -34,15 +34,15 @@ namespace QuizApi.Controllers
         }
 
         [HttpPost]
-        public RoleDto Post([FromBody] RoleDto roleDto)
+        public RoleDto Post([FromBody] CreateRoleDto createRoleDto)
         {
-            return roleService.PostRole(roleDto);
+            return roleService.PostRole(createRoleDto);
         }
 
         [HttpPut("{id}")]
-        public RoleDto Put(int id, [FromBody] RoleDto roleDto)
+        public RoleDto Put(int id, [FromBody] CreateRoleDto createRoleDto)
         {
-            return roleService.UpdateRole(id, roleDto);
+            return roleService.UpdateRole(id, createRoleDto);
         }
 
         [HttpDelete("{id}")]

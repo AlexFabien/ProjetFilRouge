@@ -1,5 +1,5 @@
 ﻿using QuizApi.Dtos.Role;
-using QuizApi.Entities;
+using QuizApi.quiz;
 using QuizApi.Repositories;
 using QuizApi.Utils;
 using System;
@@ -20,45 +20,53 @@ namespace QuizApi.Services
 
         internal List<RoleDto> FindAll()
         {
-            List<RoleEntity> roleEntities = roleRepository.FindAll();
+            List<Role> role = roleRepository.FindAll();
             List<RoleDto> allRoleDtos = new List<RoleDto>();
-            roleEntities.ForEach(roleEntity => { allRoleDtos.Add(ConvertEntityToDto(roleEntity)); });
+            role.ForEach(r => { allRoleDtos.Add(ConvertEntityToDto(r)); });
             return allRoleDtos;
         }
 
         internal RoleDto Find(int id)
         {
-            RoleEntity roleEntity = roleRepository.Find(id);
-            RoleDto allRoleDto = ConvertEntityToDto(roleEntity);
+            Role role = roleRepository.Find(id);
+            RoleDto allRoleDto = ConvertEntityToDto(role);
             return allRoleDto;
         }
 
-        internal RoleDto PostRole(RoleDto roleDto)
+        internal RoleDto PostRole(CreateRoleDto roleDto)
         {
-            RoleEntity roleEntity = ConvertDtoToEntity(roleDto);
-            RoleEntity roleEntityConverted = roleRepository.Create(roleEntity);
-            return ConvertEntityToDto(roleEntityConverted);
+            Role role = ConvertDtoToEntity(roleDto);
+            Role roleConverted = roleRepository.Create(role);
+            return ConvertEntityToDto(roleConverted);
         }
 
-        internal RoleDto UpdateRole(int id, RoleDto newRoleDto)
+        internal RoleDto UpdateRole(int id, CreateRoleDto newRoleDto)
         {
-            RoleEntity roleEntity = ConvertDtoToEntity(newRoleDto);
-            RoleEntity newRoleEntity = roleRepository.Update(id, roleEntity);
-            return ConvertEntityToDto(newRoleEntity);
+            Role role = ConvertDtoToEntity(newRoleDto);
+            Role newRole = roleRepository.Update(id, role);
+            return ConvertEntityToDto(newRole);
         }
         internal int Delete(int id)
         {
             return roleRepository.Delete(id);
         }
 
-        private RoleEntity ConvertDtoToEntity(RoleDto roleDto)
+        private Role ConvertDtoToEntity(RoleDto roleDto)
         {
-            return new RoleEntity(roleDto.Nom);
+            Role roleConverted = new Role();
+            roleConverted.Nom = roleDto.Nom;
+            return roleConverted;
+        }
+        private Role ConvertDtoToEntity(CreateRoleDto roleDto)
+        {
+            Role roleConverted = new Role();
+            roleConverted.Nom = roleDto.Nom;
+            return roleConverted;
         }
 
-        private RoleDto ConvertEntityToDto(RoleEntity roleEntity)
+        private RoleDto ConvertEntityToDto(Role role)
         {
-            return new RoleDto(roleEntity.Nom, roleEntity.Id_Role);
+            return new RoleDto(role.Nom, role.IdRole);
         }
     }
 }

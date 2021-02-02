@@ -1,5 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
-using QuizApi.Entities;
+using QuizApi.quiz;
 using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Repositories
 {
-    public class RoleRepository : AbstractRepository<RoleEntity>
+    public class RoleRepository : AbstractRepository<Role>
     {
         private QueryBuilder queryBuilder;
         public RoleRepository(QueryBuilder queryBuilder)
@@ -17,14 +17,14 @@ namespace QuizApi.Repositories
             this.queryBuilder = queryBuilder;
         }
 
-        public override RoleEntity Create(RoleEntity obj)
+        public override Role Create(Role obj)
         {
             OpenConnection();
             Dictionary<string, dynamic> roleDictionnary = new Dictionary<string, dynamic>();
 
             foreach (PropertyInfo pr in obj.GetType().GetProperties())
             {
-                if (pr.Name.ToLower() != "id_role")
+                if (pr.Name.ToLower() != "idrole" && pr.Name != "Acteur")
                 {
                     roleDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
                 }
@@ -35,7 +35,7 @@ namespace QuizApi.Repositories
             MySqlCommand cmd = new MySqlCommand(request, connectionSql);
             cmd.ExecuteNonQuery();
             long roleId = cmd.LastInsertedId;
-            obj.Id_Role = (int)roleId;
+            obj.IdRole = (int)roleId;
             connectionSql.Close();
             return obj;
         }
@@ -52,7 +52,7 @@ namespace QuizApi.Repositories
             return result;
         }
 
-        public override RoleEntity Find(int id)
+        public override Role Find(int id)
         {
             OpenConnection();
             string request = queryBuilder
@@ -62,17 +62,17 @@ namespace QuizApi.Repositories
                 .Get();
             MySqlCommand cmd = new MySqlCommand(request, connectionSql);
             MySqlDataReader rdr = cmd.ExecuteReader();
-            RoleEntity roleEntity = new RoleEntity();
+            Role role = new Role();
             while (rdr.Read())
             {
-                roleEntity.Id_Role = rdr.GetInt32(0);
-                roleEntity.Nom = rdr.GetString(1);
+                role.IdRole = rdr.GetInt32(0);
+                role.Nom = rdr.GetString(1);
             }
             CloseConnection(rdr);
-            return roleEntity;
+            return role;
         }
 
-        public override List<RoleEntity> FindAll()
+        public override List<Role> FindAll()
         {
             OpenConnection();
             string request = queryBuilder
@@ -81,27 +81,27 @@ namespace QuizApi.Repositories
                 .Get();
             MySqlCommand cmd = new MySqlCommand(request, connectionSql);
             MySqlDataReader rdr = cmd.ExecuteReader();
-            List<RoleEntity> roleEntities = new List<RoleEntity>();
+            List<Role> roles = new List<Role>();
 
             while (rdr.Read())
             {
-                RoleEntity roleEntity = new RoleEntity();
-                roleEntity.Id_Role = rdr.GetInt32(0);
-                roleEntity.Nom = rdr.GetString(1);
-                roleEntities.Add(roleEntity);
+                Role role = new Role();
+                role.IdRole = rdr.GetInt32(0);
+                role.Nom = rdr.GetString(1);
+                roles.Add(role);
             }
             CloseConnection(rdr);
-            return roleEntities;
+            return roles;
         }
 
-        public override RoleEntity Update(int id, RoleEntity obj)
+        public override Role Update(int id, Role obj)
         {
             OpenConnection();
             Dictionary<string, dynamic> roleDictionnary = new Dictionary<string, dynamic>();
 
             foreach (PropertyInfo pr in obj.GetType().GetProperties())
             {
-                if (pr.Name.ToLower() != "id_role" && pr.GetValue(obj) != null)
+                if (pr.Name.ToLower() != "idrole" && pr.Name != "Acteur" && pr.GetValue(obj) != null)
                 {
                     roleDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
                 }
