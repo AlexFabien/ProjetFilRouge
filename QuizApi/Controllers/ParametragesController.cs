@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizApi.Dtos;
-using QuizApi.Dtos.Role;
 using QuizApi.Services;
 using QuizApi.Utils;
 using System;

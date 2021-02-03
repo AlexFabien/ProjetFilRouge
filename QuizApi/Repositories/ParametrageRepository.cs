@@ -1,6 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
 using QuizApi.Dtos;
-using QuizApi.Entities;
 using QuizApi.quiz;
 using QuizApi.Utils;
 using System;

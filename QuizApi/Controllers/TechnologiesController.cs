@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizApi.Dtos;
 using QuizApi.Services;
+using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,53 +15,113 @@ namespace QuizApi.Controllers
     [ApiController]
     public class TechnologiesController : ControllerBase
     {
-        TechnologieService technologieService;
+        private IService<TechnologieDto> service;
 
-        public TechnologiesController()
+        public TechnologiesController(IService<TechnologieDto> service)
         {
-            this.technologieService = new TechnologieService();
+            this.service = service;
         }
 
-            // GET: api/<TechnologiesController>
-            [HttpGet]
-
-        public List<AllTechnologieDto> Get()
+        [HttpGet]
+        [Route("")]
+        public IActionResult FindAll()
         {
-            return technologieService.FindAll();
+            try
+            {
+                return Ok(this.service.TrouverTout());
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        // GET api/<TechnologiesController>/5
-        [HttpGet("{id}")]
-
-        public AllTechnologieDto Get(int idTechnologie )
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult FindById(int id)
         {
-            return technologieService.Find(idTechnologie);
+            try
+            {
+                return Ok(this.service.TrouverParId(id));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
-        // POST api/<TechnologiesController>
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                this.service.Supprimer(id);
+                return Ok();
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+        }
+
         [HttpPost]
-        public AfterCreateTechnologieDto Post([FromBody] CreateTechnologieDto technologieEntity)
+        [Route("")]
+        public IActionResult Insert([FromBody] TechnologieDto technologieDto)
         {
-            return technologieService.PostTechnologieEntity(technologieEntity);
+            try
+            {
+                this.service.Ajouter(technologieDto);
+                return Ok(technologieDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        // PUT api/<TechnologiesController>/5
-        [HttpPut("{id}")]
-        public AfterCreateTechnologieDto Put(int id, [FromBody] CreateTechnologieDto technologieEntity)
+        [HttpPut]
+        [Route("")]
+        public IActionResult Update([FromBody] TechnologieDto technologieDto)
         {
-            return technologieService.PutTechnologeEntity(id, technologieEntity);
+            try
+            {
+                this.service.Modifier(technologieDto);
+                return Ok(technologieDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        // DELETE api/<TodosController>/5
-        [HttpDelete("{id}")]
-        public long Delete(int id )
-        {
-            return technologieService.Delete(id);
-        }
 
-        
-        
-        
-     }
+    }
  
  }
 

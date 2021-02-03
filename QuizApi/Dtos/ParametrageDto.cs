@@ -9,7 +9,6 @@ using System.Linq.Expressions;
 
 namespace QuizApi.Dtos
 {
-   // public partial class Parametrage
     public class ParametrageDto
     {
         public ParametrageDto() { }

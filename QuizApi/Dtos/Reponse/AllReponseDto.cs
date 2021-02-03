@@ -1,24 +1,21 @@
-﻿using System;
+﻿using QuizApi.quiz;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace QuizApi.quiz
+namespace QuizApi.Dtos.Reponse
 {
-    public partial class Reponse
+    public class AllReponseDto
     {
-        public Reponse()
+        public AllReponseDto()
         {
         }
 
-        public Reponse(string libelle, byte? reponseCorrecte)
+        public AllReponseDto(string libelle, int idReponse, byte? reponseCorrecte,int? idQuestion)
         {
             Libelle = libelle;
-            ReponseCorrecte = reponseCorrecte;
-        }
-
-        public Reponse(int idReponse,string libelle, byte? reponseCorrecte,int?idQuestion)
-        {
             IdReponse = idReponse;
-            Libelle = libelle;
             ReponseCorrecte = reponseCorrecte;
             IdQuestion = idQuestion;
         }
@@ -28,6 +25,6 @@ namespace QuizApi.quiz
         public byte? ReponseCorrecte { get; set; }
         public int? IdQuestion { get; set; }
 
-        public virtual Question IdQuestionNavigation { get; set; }
+        
     }
 }
