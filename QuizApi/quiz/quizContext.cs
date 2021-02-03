@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace QuizApi.quiz
 {
-    public partial class quizContext : DbContext
+    public partial class QuizContext : DbContext
     {
-        public quizContext()
+        public QuizContext()
         {
         }
 
-        public quizContext(DbContextOptions<quizContext> options)
+        public QuizContext(DbContextOptions<QuizContext> options)
             : base(options)
         {
         }

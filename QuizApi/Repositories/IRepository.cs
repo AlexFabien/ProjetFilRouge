@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Repositories
 {
-    interface IRepository<T> : IDisposable
+    public interface IRepository<T> : IDisposable
     {
         /// <summary>
         /// Méthode qui retourne la liste de toutes les T(DTO)

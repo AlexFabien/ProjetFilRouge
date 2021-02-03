@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using QuizApi.quiz;
+using QuizApi.Services;
+using QuizApi.Repositories;
+using QuizApi.Dtos;
 
 namespace QuizApi
 {
@@ -31,6 +36,10 @@ namespace QuizApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "QUIZ_API", Version = "v1" });
             });
+
+            services.AddTransient<QuizContext, QuizContext>();
+            services.AddTransient<IRepository<Parametrage>, ParametrageRepository>();
+            services.AddTransient<IService<ParametrageDto>, ParametrageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Services
 {
-    interface IService<T>
+    public interface IService<T>
     {
         /// <summary>
         /// Méthode qui retourne la liste de toutes les T(DTO)
