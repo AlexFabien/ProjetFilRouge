@@ -12,8 +12,8 @@ namespace QuizApi.Repositories
     public class ReponseRepository: AbstractRepository<Reponse>
     {
         //private QueryBuilder queryBuilder;
-        private quizContext context;
-        public ReponseRepository (/*QueryBuilder queryBuilder,*/ quizContext context)
+        private QuizContext context;
+        public ReponseRepository (/*QueryBuilder queryBuilder,*/ QuizContext context)
         {
             //this.queryBuilder = queryBuilder;
             this.context = context;
