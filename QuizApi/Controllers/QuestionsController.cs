@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QuizApi.Dtos.Niveau;
 using QuizApi.Dtos.Role;
 using QuizApi.Services;
 using System.Collections.Generic;

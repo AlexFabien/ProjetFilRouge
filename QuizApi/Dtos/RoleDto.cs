@@ -7,13 +7,13 @@ namespace QuizApi.Dtos
     {
         public RoleDto(){}
 
-        public RoleDto(string nom, int idRole)
+        public RoleDto(string nom, int? idRole = null)
         {
             Nom = nom;
             IdRole = idRole;
         }
 
-        public int IdRole { get; set; }
+        public int? IdRole { get; set; }
         public string Nom { get; set; }
 
         //public virtual ICollection<Acteur> Acteur { get; set; }

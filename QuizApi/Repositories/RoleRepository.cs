@@ -44,6 +44,7 @@ namespace QuizApi.Repositories
         public void Insert(Role obj)
         {
             context.Role.Add(obj);
+            Save();
         }
 
         public void Save()

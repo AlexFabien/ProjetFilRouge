@@ -11,13 +11,13 @@ namespace QuizApi.quiz
             Acteur = new HashSet<Acteur>();
         }
 
-        public Role(string nom, int id)
+        public Role(string nom, int? id = null)
         {
             Nom = nom;
             IdRole = id;
         }
 
-        public int IdRole { get; set; }
+        public int? IdRole { get; set; }
         public string Nom { get; set; }
 
         public virtual ICollection<Acteur> Acteur { get; set; }
