@@ -80,25 +80,25 @@ namespace QuizApi.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("")]
-        //public IActionResult Insert([FromBody] ParametrageDto parametrageDto)
-        //{
-        //    try
-        //    {
-        //        this.service.Ajouter(parametrageDto);
-        //        return Ok(parametrageDto);
-        //    }
-        //    catch (RessourceException e)
-        //    {
-        //        if (e.Statut == 404)
-        //            return NotFound(e.Message);
-        //        else
-        //        {
-        //            return BadRequest(e.Message);
-        //        }
-        //    }
-        //}
+        [HttpPost]
+        [Route("")]
+        public IActionResult Insert([FromBody] TechnologieDto technologieDto)
+        {
+            try
+            {
+                this.service.Ajouter(technologieDto);
+                return Ok(technologieDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+        }
 
         [HttpPut]
         [Route("")]
