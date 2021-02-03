@@ -42,6 +42,8 @@ namespace QuizApi
             services.AddTransient<IService<ParametrageDto>, ParametrageService>();
             services.AddTransient<IRepository<Technologie>, TechnologieRepository>();
             services.AddTransient<IService<TechnologieDto>, TechnologieService>();
+            services.AddTransient<IRepository<Repondu>, ReponduRepository>();
+            services.AddTransient<IService<ReponduDto>, ReponduService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
