@@ -1,4 +1,4 @@
-﻿using QuizApi.Dtos.Role;
+﻿using QuizApi.Dtos;
 using QuizApi.quiz;
 using QuizApi.Repositories;
 using QuizApi.Utils;

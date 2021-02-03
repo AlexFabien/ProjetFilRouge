@@ -1,4 +1,4 @@
-﻿namespace QuizApi.Dtos.Role
+﻿namespace QuizApi.Dtos
 {
     public class CreateRoleDto
     {

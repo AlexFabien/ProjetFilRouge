@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace QuizApi .Dtos
+namespace QuizApi.Dtos
 {
     public class AllTechnologieDto
     {
