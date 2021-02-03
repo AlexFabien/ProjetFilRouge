@@ -10,6 +10,11 @@ namespace QuizApi.quiz
             ActeurHasQuestion = new HashSet<ActeurHasQuestion>();
         }
 
+        public Repondu(string libelle)
+        {
+            Libelle = libelle;
+        }
+
         public int IdEtatReponse { get; set; }
         public string Libelle { get; set; }
 
