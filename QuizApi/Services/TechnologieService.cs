@@ -1,5 +1,5 @@
 ﻿using QuizApi.Dtos;
-using QuizApi.Entities;
+using QuizApi.quiz;
 using QuizApi.Repositories;
 using QuizApi.Utils;
 using System;
@@ -9,62 +9,40 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Services
 {
-    public class TechnologieService
+    public class TechnologieService : IService<TechnologieDto>
     {
-        private TechnologieRepository technologieRepository;
+        private IRepository<Technologie> repository;
 
-        public TechnologieService()
+        public TechnologieService(IRepository<Technologie> repository)
         {
-            this.technologieRepository = new TechnologieRepository(new QueryBuilder());
+            this.repository = repository;
         }
 
-        internal List<AllTechnologieDto> FindAll()
+        public void Ajouter(TechnologieDto obj)
         {
-            List<TechnologieEntity> technologieEntities = technologieRepository.FindAll();
-            List<AllTechnologieDto> allTechnologieDtos = new List<AllTechnologieDto>();
-            technologieEntities.ForEach(technologieEntity => { allTechnologieDtos.Add(ConvertEntityToDto(technologieEntity)); });
-            return allTechnologieDtos;
+            this.repository.Insert(obj);
         }
 
-        internal AllTechnologieDto Find(int id)
+        public void Modifier(TechnologieDto obj)
         {
-            TechnologieEntity technologieEntity = this.technologieRepository.Find(id);
-            AllTechnologieDto allTechnologieDtos = ConvertEntityToDto(technologieEntity);
-            return allTechnologieDtos;
+            this.repository.Update(obj);
         }
 
-        private AllTechnologieDto ConvertEntityToDto(TechnologieEntity technologieEntity)
+        public void Supprimer(int id)
         {
-            return new AllTechnologieDto(technologieEntity.Libelle, technologieEntity.Id_Technologie);
+            this.repository.Delete(id);
         }
 
-        internal AfterCreateTechnologieDto PostTechnologieEntity(CreateTechnologieDto technologieEntity)
+        public TechnologieDto TrouverParId(int id)
         {
-            TechnologieEntity newtTechnologieEntity = transformDtoToEntity(technologieEntity);
-            TechnologieEntity newtTechnologieEntityCreated = this.technologieRepository.Create(newtTechnologieEntity);
-            return transformEntityToAfterCreateDto(newtTechnologieEntityCreated, true);
+            return this.repository.FindById(id);
         }
 
-        internal long Delete(int id)
+        public IEnumerable<TechnologieDto> TrouverTout()
         {
-            return this.technologieRepository.Delete(id);
-        }
-
-        internal AfterCreateTechnologieDto PutTechnologeEntity(int idTechnologie, CreateTechnologieDto newTechnologieEntity)
-        {
-            TechnologieEntity newtTechnologieEntity = transformDtoToEntity(newTechnologieEntity);
-            TechnologieEntity newtTechnologieEntitylUpdated = this.technologieRepository.Update(idTechnologie, newtTechnologieEntity);
-            return transformEntityToAfterCreateDto(newtTechnologieEntitylUpdated, true);
-        }
-
-        private AfterCreateTechnologieDto transformEntityToAfterCreateDto(TechnologieEntity technologieEntity, bool isCreated)
-        {
-            return new AfterCreateTechnologieDto(technologieEntity.Libelle, isCreated,technologieEntity.Id_Technologie);
-        }
-
-        private TechnologieEntity transformDtoToEntity(CreateTechnologieDto technologieEntity)
-        {
-            return new TechnologieEntity(technologieEntity.Libelle);
+            List<TechnologieDto> technologieDto = new List<TechnologieDto>();
+            this.repository.FindAll().ToList().ForEach(p => technologieDto.Add(new TechnologieDto(p.Libelle, p.IdTechnologie)));
+            return technologieDto;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizApi.Dtos;
 using QuizApi.Services;
+using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,53 +15,113 @@ namespace QuizApi.Controllers
     [ApiController]
     public class TechnologiesController : ControllerBase
     {
-        TechnologieService technologieService;
+        private IService<TechnologieDto> service;
 
-        public TechnologiesController()
+        public TechnologiesController(IService<TechnologieDto> service)
         {
-            this.technologieService = new TechnologieService();
+            this.service = service;
         }
 
-            // GET: api/<TechnologiesController>
-            [HttpGet]
-
-        public List<AllTechnologieDto> Get()
+        [HttpGet]
+        [Route("")]
+        public IActionResult FindAll()
         {
-            return technologieService.FindAll();
+            try
+            {
+                return Ok(this.service.TrouverTout());
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        // GET api/<TechnologiesController>/5
-        [HttpGet("{id}")]
-
-        public AllTechnologieDto Get(int idTechnologie )
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult FindById(int id)
         {
-            return technologieService.Find(idTechnologie);
-        }
-        // POST api/<TechnologiesController>
-        [HttpPost]
-        public AfterCreateTechnologieDto Post([FromBody] CreateTechnologieDto technologieEntity)
-        {
-            return technologieService.PostTechnologieEntity(technologieEntity);
-        }
-
-        // PUT api/<TechnologiesController>/5
-        [HttpPut("{id}")]
-        public AfterCreateTechnologieDto Put(int id, [FromBody] CreateTechnologieDto technologieEntity)
-        {
-            return technologieService.PutTechnologeEntity(id, technologieEntity);
+            try
+            {
+                return Ok(this.service.TrouverParId(id));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        // DELETE api/<TodosController>/5
-        [HttpDelete("{id}")]
-        public long Delete(int id )
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete(int id)
         {
-            return technologieService.Delete(id);
+            try
+            {
+                this.service.Supprimer(id);
+                return Ok();
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        
-        
-        
-     }
+        //[HttpPost]
+        //[Route("")]
+        //public IActionResult Insert([FromBody] ParametrageDto parametrageDto)
+        //{
+        //    try
+        //    {
+        //        this.service.Ajouter(parametrageDto);
+        //        return Ok(parametrageDto);
+        //    }
+        //    catch (RessourceException e)
+        //    {
+        //        if (e.Statut == 404)
+        //            return NotFound(e.Message);
+        //        else
+        //        {
+        //            return BadRequest(e.Message);
+        //        }
+        //    }
+        //}
+
+        [HttpPut]
+        [Route("")]
+        public IActionResult Update([FromBody] TechnologieDto technologieDto)
+        {
+            try
+            {
+                this.service.Modifier(technologieDto);
+                return Ok(technologieDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+        }
+
+
+    }
  
  }
 

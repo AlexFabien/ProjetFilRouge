@@ -21,16 +21,16 @@ namespace QuizApi.Services
         internal List<AllReponduDto> FindAll()
         {
             List<Repondu> reponduEntities = reponduRepository.FindAll();
-            List<AllReponduDto> allRepondueDtos = new List<AllReponduDto>();
-            reponduEntities.ForEach(reponduEntity => { allRepondueDtos.Add(ConvertEntityToDto(reponduEntity)); });
-            return allRepondueDtos;
+            List<AllReponduDto> allReponduDtos = new List<AllReponduDto>();
+            reponduEntities.ForEach(reponduEntity => { allReponduDtos.Add(ConvertEntityToDto(reponduEntity)); });
+            return allReponduDtos;
         }
 
         internal AllReponduDto Find(int id)
         {
             Repondu reponduEntity = this.reponduRepository.Find(id);
-            AllReponduDto allRepondueDtos = ConvertEntityToDto(reponduEntity);
-            return allRepondueDtos;
+            AllReponduDto allReponduDtos = ConvertEntityToDto(reponduEntity);
+            return allReponduDtos;
         }
 
         private AllReponduDto ConvertEntityToDto(Repondu reponduEntity)
