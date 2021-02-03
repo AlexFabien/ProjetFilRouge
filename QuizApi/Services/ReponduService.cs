@@ -64,7 +64,8 @@ namespace QuizApi.Services
 
         private Repondu transformDtoToEntity(CreateReponduDto reponduEntity)
         {
-            return new Repondu(reponduEntity.Libelle);
+            //return new Repondu(reponduEntity.Libelle);
+            return null;
         }
     }
 }
