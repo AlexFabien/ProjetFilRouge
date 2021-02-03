@@ -1,4 +1,4 @@
-﻿namespace QuizApi.Dtos.ReponseCandidat
+﻿namespace QuizApi.Dtos
 {
     public class ReponseCandidatDto
     {
