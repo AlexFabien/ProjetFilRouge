@@ -9,58 +9,40 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Services
 {
-    public class NiveauService
+    public class NiveauService : IService<NiveauDto>
     {
-        private NiveauRepository niveauRepository;
+        private IRepository<Niveau> repository;
 
-        public NiveauService()
+        public NiveauService(IRepository<Niveau> repository)
         {
-            this.niveauRepository = new NiveauRepository(new QueryBuilder());
+            this.repository = repository;
         }
 
-        internal List<NiveauDto> FindAll()
+        public void Ajouter(NiveauDto obj)
         {
-            List<Niveau> niveau = niveauRepository.FindAll();
-            List<NiveauDto> niveauxDtos = new List<NiveauDto>();
-            niveau.ForEach(n => { niveauxDtos.Add(ConvertEntityToDto(n)); });
-            return niveauxDtos;
+            this.repository.Insert(obj);
         }
 
-        internal NiveauDto Find(int id)
+        public void Modifier(NiveauDto obj)
         {
-            Niveau niveau = niveauRepository.Find(id);
-            NiveauDto niveauDto = ConvertEntityToDto(niveau);
-            return niveauDto;
+            this.repository.Update(obj);
         }
 
-        internal NiveauDto PostNiveau(CreateNiveauDto dto)
+        public void Supprimer(int id)
         {
-            Niveau niveau = ConvertDtoToEntity(dto);
-            Niveau niveauConverted = niveauRepository.Create(niveau);
-            return ConvertEntityToDto(niveauConverted);
+            this.repository.Delete(id);
         }
 
-        internal NiveauDto UpdateNiveau(int id, CreateNiveauDto newDto)
+        public NiveauDto TrouverParId(int id)
         {
-            Niveau niveau = ConvertDtoToEntity(newDto);
-            Niveau newNiveau = niveauRepository.Update(id, niveau);
-            return ConvertEntityToDto(newNiveau);
-        }
-        internal int Delete(int id)
-        {
-            return niveauRepository.Delete(id);
+            return this.repository.FindById(id);
         }
 
-        private Niveau ConvertDtoToEntity(CreateNiveauDto dto)
+        public IEnumerable<NiveauDto> TrouverTout()
         {
-            Niveau roleConverted = new Niveau();
-            roleConverted.Libelle = dto.Libelle;
-            return roleConverted;
-        }
-
-        private NiveauDto ConvertEntityToDto(Niveau niveau)
-        {
-            return new NiveauDto(niveau.IdNiveau, niveau.Libelle);
+            List<NiveauDto> dtos = new List<NiveauDto>();
+            this.repository.FindAll().ToList().ForEach(p => dtos.Add(new NiveauDto(p.Libelle, p.IdNiveau)));
+            return dtos;
         }
     }
 }

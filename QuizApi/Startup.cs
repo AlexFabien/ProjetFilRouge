@@ -38,14 +38,48 @@ namespace QuizApi
             });
 
             services.AddTransient<QuizContext, QuizContext>();
+
+            //services.AddTransient<IRepository<Acteur>, ActeurRepository>();
+            //services.AddTransient<IService<ActeurDto>, ActeurService>();
+
+            //services.AddTransient<IRepository<ActeurHasQuestion>, ActeurHasQuestionRepository>();
+            //services.AddTransient<IService<ActeurHasQuestionDto>, ActeurHasQuestionService>();
+
+            //services.AddTransient<IRepository<ActeurHasQuiz>, ActeurHasQuizRepository>();
+            //services.AddTransient<IService<ActeurHasQuizDto>, ActeurHasQuizService>();
+
+            services.AddTransient<IRepository<Niveau>, NiveauRepository>();
+            services.AddTransient<IService<NiveauDto>, NiveauService>();
+
             services.AddTransient<IRepository<Parametrage>, ParametrageRepository>();
             services.AddTransient<IService<ParametrageDto>, ParametrageService>();
-            services.AddTransient<IRepository<Role>, RoleRepository>();
-            services.AddTransient<IService<RoleDto>, RoleService>();
-            services.AddTransient<IRepository<Technologie>, TechnologieRepository>();
-            services.AddTransient<IService<TechnologieDto>, TechnologieService>();
+
+            //services.AddTransient<IRepository<Question>, QuestionRepository>();
+            //services.AddTransient<IService<QuestionDto>, QuestionService>();
+
+            //services.AddTransient<IRepository<Quiz>, QuizRepository>();
+            //services.AddTransient<IService<QuizDto>, QuizService>();
+
             services.AddTransient<IRepository<Repondu>, ReponduRepository>();
             services.AddTransient<IService<ReponduDto>, ReponduService>();
+
+            //services.AddTransient<IRepository<Reponse>, ReponseRepository>();
+            //services.AddTransient<IService<ReponseDto>, ReponseService>();
+
+            services.AddTransient<IRepository<ReponseCandidat>, ReponseCandidatRepository>();
+            services.AddTransient<IService<ReponseCandidatDto>, ReponseCandidatService>();
+
+            services.AddTransient<IRepository<Role>, RoleRepository>();
+            services.AddTransient<IService<RoleDto>, RoleService>();
+
+            services.AddTransient<IRepository<Technologie>, TechnologieRepository>();
+            services.AddTransient<IService<TechnologieDto>, TechnologieService>();
+
+            //services.AddTransient<IRepository<TypeQuestion>, TypeQuestionRepository>();
+            //services.AddTransient<IService<TypeQuestionDto>, TypeQuestionService>();
+
+            //services.AddTransient<IRepository<Ventillation>, VentillationRepository>();
+            //services.AddTransient<IService<VentillationDto>, VentillationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

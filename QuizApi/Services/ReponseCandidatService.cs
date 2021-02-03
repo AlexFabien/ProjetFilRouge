@@ -3,61 +3,43 @@ using QuizApi.quiz;
 using QuizApi.Repositories;
 using QuizApi.Utils;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QuizApi.Services
 {
-    public class ReponseCandidatService
+    public class ReponseCandidatService : IService<ReponseCandidatDto>
     {
-        private ReponseCandidatRepository reponseCandidatRepository;
+        private IRepository<ReponseCandidat> repository;
 
-        public ReponseCandidatService()
+        public ReponseCandidatService(IRepository<ReponseCandidat> repository)
         {
-            this.reponseCandidatRepository = new ReponseCandidatRepository(new QueryBuilder());
+            this.repository = repository;
         }
-
-        internal List<ReponseCandidatDto> FindAll()
+        public void Ajouter(ReponseCandidatDto obj)
         {
-            List<ReponseCandidat> rcList = reponseCandidatRepository.FindAll();
-            List<ReponseCandidatDto> allDtos = new List<ReponseCandidatDto>();
-            rcList.ForEach(entity => { allDtos.Add(ConvertEntityToDto(entity)); });
-            return allDtos;
+            this.repository.Insert(obj);
         }
 
-        internal ReponseCandidatDto Find(int id)
+        public void Modifier(ReponseCandidatDto obj)
         {
-            ReponseCandidat rc = reponseCandidatRepository.Find(id);
-            ReponseCandidatDto allDto = ConvertEntityToDto(rc);
-            return allDto;
+            this.repository.Update(obj);
         }
 
-        internal ReponseCandidatDto PostRole(CreateReponseCandidatDto createDto)
+        public void Supprimer(int id)
         {
-            ReponseCandidat rc = ConvertDtoToEntity(createDto);
-            ReponseCandidat rcConverted = reponseCandidatRepository.Create(rc);
-            return ConvertEntityToDto(rcConverted);
+            this.repository.Delete(id);
         }
 
-        internal ReponseCandidatDto UpdateRole(int id, CreateReponseCandidatDto newDto)
+        public ReponseCandidatDto TrouverParId(int id)
         {
-            ReponseCandidat rc = ConvertDtoToEntity(newDto);
-            ReponseCandidat newRc = reponseCandidatRepository.Update(id, rc);
-            return ConvertEntityToDto(newRc);
-        }
-        internal int Delete(int id)
-        {
-            return reponseCandidatRepository.Delete(id);
-        }
-        
-        private ReponseCandidat ConvertDtoToEntity(CreateReponseCandidatDto dto)
-        {
-            ReponseCandidat rcConverted = new ReponseCandidat();
-            rcConverted.Libelle = dto.Libelle;
-            return rcConverted;
+            return this.repository.FindById(id);
         }
 
-        private ReponseCandidatDto ConvertEntityToDto(ReponseCandidat rc)
+        public IEnumerable<ReponseCandidatDto> TrouverTout()
         {
-            return new ReponseCandidatDto(rc.Libelle, rc.IdReponseCandidat);
+            List<ReponseCandidatDto> dtos = new List<ReponseCandidatDto>();
+            this.repository.FindAll().ToList().ForEach(p => dtos.Add(new ReponseCandidatDto(p.Libelle, p.IdReponseCandidat)));
+            return dtos;
         }
     }
 }

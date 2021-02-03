@@ -1,7 +1,4 @@
-﻿using QuizApi.quiz;
-using System.Collections.Generic;
-
-namespace QuizApi.Dtos
+﻿namespace QuizApi.Dtos
 {
     public class RoleDto
     {

@@ -1,11 +1,8 @@
 ﻿using QuizApi.Dtos;
 using QuizApi.quiz;
 using QuizApi.Repositories;
-using QuizApi.Utils;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace QuizApi.Services
 {
