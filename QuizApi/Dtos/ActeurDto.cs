@@ -48,20 +48,20 @@ namespace QuizApi.Dtos
         /// Fonction qui transforme une Acteur(DTO) en Acteur(Models) automatiquement
         /// </summary>
         /// <param name="acteurDto"></param>
-        //public static implicit operator Acteur(ActeurDto acteurDto)
-        //{
-        //    return new Acteur(
-        //        acteurDto.IdActeur,
-        //        acteurDto.Nom,
-        //        acteurDto.Prenom,
-        //        acteurDto.Email,
-        //        acteurDto.Password,
-        //        acteurDto.IdRole,
-        //        acteurDto.IdRoleNavigation,
-        //        acteurDto.ActeurHasQuestion,
-        //        acteurDto.ActeurHasQuiz
-        //        );
-        //}
+        public static implicit operator Acteur(ActeurDto acteurDto)
+        {
+            return new Acteur(
+                acteurDto.IdActeur,
+                acteurDto.Nom,
+                acteurDto.Prenom,
+                acteurDto.Email,
+                acteurDto.Password,
+                acteurDto.IdRole,
+                acteurDto.IdRoleNavigation,
+                acteurDto.ActeurHasQuestion,
+                acteurDto.ActeurHasQuiz
+                );
+        }
 
     }
 }

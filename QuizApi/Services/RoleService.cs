@@ -22,14 +22,15 @@ namespace QuizApi.Services
         {
             List<Role> role = roleRepository.FindAll();
             List<RoleDto> allRoleDtos = new List<RoleDto>();
-            role.ForEach(r => { allRoleDtos.Add(ConvertEntityToDto(r)); });
+            //role.ForEach(r => { allRoleDtos.Add(ConvertEntityToDto(r)); });
             return allRoleDtos;
         }
 
         internal RoleDto Find(int id)
         {
             Role role = roleRepository.Find(id);
-            RoleDto allRoleDto = ConvertEntityToDto(role);
+            //RoleDto allRoleDto = ConvertEntityToDto(role);
+            RoleDto allRoleDto = null;
             return allRoleDto;
         }
 
@@ -37,14 +38,16 @@ namespace QuizApi.Services
         {
             Role role = ConvertDtoToEntity(roleDto);
             Role roleConverted = roleRepository.Create(role);
-            return ConvertEntityToDto(roleConverted);
+            //return ConvertEntityToDto(roleConverted);
+            return null;
         }
 
         internal RoleDto UpdateRole(int id, CreateRoleDto newRoleDto)
         {
             Role role = ConvertDtoToEntity(newRoleDto);
             Role newRole = roleRepository.Update(id, role);
-            return ConvertEntityToDto(newRole);
+            //return ConvertEntityToDto(newRole);
+            return null;
         }
         internal int Delete(int id)
         {
@@ -64,9 +67,9 @@ namespace QuizApi.Services
             return roleConverted;
         }
 
-        private RoleDto ConvertEntityToDto(Role role)
-        {
-            return new RoleDto(role.Nom, role.IdRole);
-        }
+        //private RoleDto ConvertEntityToDto(Role role)
+        //{
+        //    return new RoleDto(role.IdRole, role.Nom, role.Acteur);
+        //}
     }
 }
