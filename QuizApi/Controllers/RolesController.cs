@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QuizApi.Dtos.Role;
+using QuizApi.Dtos;
 using QuizApi.Services;
+using QuizApi.Utils;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,41 +12,104 @@ namespace QuizApi.Controllers
     [ApiController]
     public class RolesController : ControllerBase
     {
-        RoleService roleService;
+        private IService<RoleDto> service;
 
-        public RolesController()
+        public RolesController(IService<RoleDto> service)
         {
-            this.roleService = new RoleService();
+            this.service = service;
         }
 
         [HttpGet]
-        public List<RoleDto> Get()
+        public IActionResult FindAll()
         {
-            return roleService.FindAll();
+            try
+            {
+                return Ok(this.service.TrouverTout());
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
         [HttpGet("{id}")]
-        public RoleDto Get(int id)
+        public IActionResult FindById(int id)
         {
-            return roleService.Find(id);
+            try
+            {
+                return Ok(this.service.TrouverParId(id));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
         [HttpPost]
-        public RoleDto Post([FromBody] CreateRoleDto createRoleDto)
+        public IActionResult Post([FromBody] RoleDto createDto)
         {
-            return roleService.PostRole(createRoleDto);
+            try
+            {
+                this.service.Ajouter(createDto);
+                return Ok(createDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        [HttpPut("{id}")]
-        public RoleDto Put(int id, [FromBody] CreateRoleDto createRoleDto)
+        [HttpPut()]
+        public IActionResult Update( [FromBody] RoleDto dto)
         {
-            return roleService.UpdateRole(id, createRoleDto);
+            try
+            {
+                this.service.Modifier(dto);
+                return Ok(dto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
         [HttpDelete("{id}")]
-        public int Delete(int id)
+        public IActionResult Delete(int id)
         {
-            return roleService.Delete(id);
+            try
+            {
+                this.service.Supprimer(id);
+                return Ok();
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
     }
 }
