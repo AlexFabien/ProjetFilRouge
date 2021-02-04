@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace QuizApi.Dtos.Reponse
+namespace QuizApi.Dtos
 {
     public class AllReponseDto
     {

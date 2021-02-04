@@ -1,4 +1,5 @@
 ﻿using QuizApi.quiz;
+using QuizApi.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -58,8 +59,8 @@ namespace QuizApi.Dtos
                 acteurDto.Password,
                 acteurDto.IdRole,
                 acteurDto.IdRoleNavigation,
-                acteurDto.ActeurHasQuestion,
-                acteurDto.ActeurHasQuiz
+                ConvertDtoEntity.ConvertListActeurHasQuestionDtoToListActeurHasQuestion(acteurDto.ActeurHasQuestion),
+                ConvertDtoEntity.ConvertListActeurHasQuizDtoToListActeurHasQuiz(acteurDto.ActeurHasQuiz)
                 );
         }
 

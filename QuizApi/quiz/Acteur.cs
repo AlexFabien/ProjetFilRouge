@@ -54,7 +54,7 @@ namespace QuizApi.quiz
                 acteur.IdRole,
                 acteur.IdRoleNavigation,
                 ConvertDtoEntity.ConvertListActeurHasQuestionToListActeurHasQuestionDto(acteur.ActeurHasQuestion),
-                acteur.ActeurHasQuiz
+                ConvertDtoEntity.ConvertListActeurHasQuizToListActeurHasQuizDto(acteur.ActeurHasQuiz)
                 );
         }
     }

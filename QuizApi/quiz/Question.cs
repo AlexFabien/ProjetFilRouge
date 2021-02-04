@@ -1,4 +1,6 @@
-﻿using System;
+﻿using QuizApi.Dtos;
+using QuizApi.Utils;
+using System;
 using System.Collections.Generic;
 
 namespace QuizApi.quiz
@@ -11,6 +13,21 @@ namespace QuizApi.quiz
             Reponse = new HashSet<Reponse>();
         }
 
+        public Question(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion,
+            Niveau idNiveauNavigation, TypeQuestion idTypeQuestionNavigation,
+            ICollection<ActeurHasQuestion> acteurHasQuestion, ICollection<Reponse> reponse)
+        {
+            IdQuestion = idQuestion;
+            Libelle = libelle;
+            ExplicationReponse = explicationReponse;
+            IdNiveau = idNiveau;
+            IdTypeQuestion = idTypeQuestion;
+            IdNiveauNavigation = idNiveauNavigation;
+            IdTypeQuestionNavigation = idTypeQuestionNavigation;
+            ActeurHasQuestion = acteurHasQuestion;
+            Reponse = reponse;
+        }
+
         public int IdQuestion { get; set; }
         public string Libelle { get; set; }
         public string ExplicationReponse { get; set; }
@@ -21,5 +38,24 @@ namespace QuizApi.quiz
         public virtual TypeQuestion IdTypeQuestionNavigation { get; set; }
         public virtual ICollection<ActeurHasQuestion> ActeurHasQuestion { get; set; }
         public virtual ICollection<Reponse> Reponse { get; set; }
+
+        /// <summary>
+        /// Fonction qui transforme une question(Models) en question(DTO) automatiquement
+        /// </summary>
+        /// <param name="question"></param>
+        public static implicit operator QuestionDto(Question question)
+        {
+            return new QuestionDto(
+                question.IdQuestion,
+                question.Libelle,
+                question.ExplicationReponse,
+                question.IdNiveau,
+                question.IdTypeQuestion,
+                question.IdNiveauNavigation,
+                question.IdTypeQuestionNavigation,
+                ConvertDtoEntity.ConvertListActeurHasQuestionToListActeurHasQuestionDto(question.ActeurHasQuestion),
+                ConvertDtoEntity.ConvertListReponseToListReponseDto(question.Reponse)
+                );
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuizApi.Dtos;
+using System;
 using System.Collections.Generic;
 
 namespace QuizApi.quiz
@@ -29,5 +30,20 @@ namespace QuizApi.quiz
         public int? IdQuestion { get; set; }
 
         public virtual Question IdQuestionNavigation { get; set; }
+
+        /// <summary>
+        /// Fonction qui transforme une reponse(Models) en reponse(DTO) automatiquement
+        /// </summary>
+        /// <param name="reponse"></param>
+        public static implicit operator ReponseDto(Reponse reponse)
+        {
+            return new ReponseDto(
+                reponse.IdReponse,
+                reponse.Libelle,
+                reponse.ReponseCorrecte,
+                reponse.IdQuestion,
+                reponse.IdQuestionNavigation
+                );
+        }
     }
 }

@@ -22,29 +22,28 @@ namespace QuizApi.Services
         {
             List<Niveau> niveau = niveauRepository.FindAll();
             List<NiveauDto> niveauxDtos = new List<NiveauDto>();
-            niveau.ForEach(n => { niveauxDtos.Add(ConvertEntityToDto(n)); });
+            niveau.ForEach(n => { niveauxDtos.Add(n); });
             return niveauxDtos;
         }
 
         internal NiveauDto Find(int id)
         {
             Niveau niveau = niveauRepository.Find(id);
-            NiveauDto niveauDto = ConvertEntityToDto(niveau);
-            return niveauDto;
+            return niveau;
         }
 
         internal NiveauDto PostNiveau(CreateNiveauDto dto)
         {
             Niveau niveau = ConvertDtoToEntity(dto);
             Niveau niveauConverted = niveauRepository.Create(niveau);
-            return ConvertEntityToDto(niveauConverted);
+            return niveauConverted;
         }
 
         internal NiveauDto UpdateNiveau(int id, CreateNiveauDto newDto)
         {
             Niveau niveau = ConvertDtoToEntity(newDto);
             Niveau newNiveau = niveauRepository.Update(id, niveau);
-            return ConvertEntityToDto(newNiveau);
+            return newNiveau;
         }
         internal int Delete(int id)
         {
@@ -56,11 +55,6 @@ namespace QuizApi.Services
             Niveau roleConverted = new Niveau();
             roleConverted.Libelle = dto.Libelle;
             return roleConverted;
-        }
-
-        private NiveauDto ConvertEntityToDto(Niveau niveau)
-        {
-            return new NiveauDto(niveau.IdNiveau, niveau.Libelle);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using QuizApi.Dtos;
+using QuizApi.Utils;
+using System;
 using System.Collections.Generic;
 
 namespace QuizApi.quiz
@@ -21,5 +23,18 @@ namespace QuizApi.quiz
         public string Libelle { get; set; }
 
         public virtual ICollection<ActeurHasQuestion> ActeurHasQuestion { get; set; }
+
+        /// <summary>
+        /// Fonction qui transforme une reponseCandidat(Models) en reponseCandidat(DTO) automatiquement
+        /// </summary>
+        /// <param name="reponseCandidat"></param>
+        public static implicit operator ReponseCandidatDto(ReponseCandidat reponseCandidat)
+        {
+            return new ReponseCandidatDto(
+                reponseCandidat.IdReponseCandidat,
+                reponseCandidat.Libelle,
+                ConvertDtoEntity.ConvertListActeurHasQuestionToListActeurHasQuestionDto(reponseCandidat.ActeurHasQuestion)
+                );
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace QuizApi.Dtos
     {
         public ActeurHasQuestionDto(int idActeur, int idQuestion, string commentaire, 
                 int? idEtatReponse, int? idReponseCandidat, ActeurDto idActeurNavigation, 
-                ReponduDto idEtatReponseNavigation, Question idQuestionNavigation, 
+                ReponduDto idEtatReponseNavigation, QuestionDto idQuestionNavigation, 
                 ReponseCandidatDto idReponseCandidatNavigation)
         {
             IdActeur = idActeur;
@@ -35,7 +35,7 @@ namespace QuizApi.Dtos
 
         public virtual ActeurDto IdActeurNavigation { get; set; }
         public virtual ReponduDto IdEtatReponseNavigation { get; set; }
-        public virtual Question IdQuestionNavigation { get; set; }
+        public virtual QuestionDto IdQuestionNavigation { get; set; }
         public virtual ReponseCandidatDto IdReponseCandidatNavigation { get; set; }
 
         /// <summary>

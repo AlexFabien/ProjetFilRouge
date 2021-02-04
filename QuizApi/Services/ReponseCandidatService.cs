@@ -19,29 +19,28 @@ namespace QuizApi.Services
         {
             List<ReponseCandidat> rcList = reponseCandidatRepository.FindAll();
             List<ReponseCandidatDto> allDtos = new List<ReponseCandidatDto>();
-            rcList.ForEach(entity => { allDtos.Add(ConvertEntityToDto(entity)); });
+            rcList.ForEach(entity => { allDtos.Add(entity); });
             return allDtos;
         }
 
         internal ReponseCandidatDto Find(int id)
         {
             ReponseCandidat rc = reponseCandidatRepository.Find(id);
-            ReponseCandidatDto allDto = ConvertEntityToDto(rc);
-            return allDto;
+            return rc;
         }
 
         internal ReponseCandidatDto PostRole(CreateReponseCandidatDto createDto)
         {
             ReponseCandidat rc = ConvertDtoToEntity(createDto);
             ReponseCandidat rcConverted = reponseCandidatRepository.Create(rc);
-            return ConvertEntityToDto(rcConverted);
+            return rcConverted;
         }
 
         internal ReponseCandidatDto UpdateRole(int id, CreateReponseCandidatDto newDto)
         {
             ReponseCandidat rc = ConvertDtoToEntity(newDto);
             ReponseCandidat newRc = reponseCandidatRepository.Update(id, rc);
-            return ConvertEntityToDto(newRc);
+            return newRc;
         }
         internal int Delete(int id)
         {
@@ -53,11 +52,6 @@ namespace QuizApi.Services
             ReponseCandidat rcConverted = new ReponseCandidat();
             rcConverted.Libelle = dto.Libelle;
             return rcConverted;
-        }
-
-        private ReponseCandidatDto ConvertEntityToDto(ReponseCandidat rc)
-        {
-            return new ReponseCandidatDto(rc.Libelle, rc.IdReponseCandidat);
         }
     }
 }

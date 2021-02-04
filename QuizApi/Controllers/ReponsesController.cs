@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QuizApi.Dtos.Reponse;
+using QuizApi.Dtos;
 using QuizApi.Services;
 using System;
 using System.Collections.Generic;
