@@ -8,20 +8,16 @@ namespace QuizApi.Dtos
     {
         public ReponseCandidatDto()
         {
-            ActeurHasQuestion = new HashSet<ActeurHasQuestionDto>();
         }
 
-        public ReponseCandidatDto(int idReponseCandidat, string libelle, ICollection<ActeurHasQuestionDto> acteurHasQuestion)
+        public ReponseCandidatDto(int idReponseCandidat, string libelle)
         {
             IdReponseCandidat = idReponseCandidat;
             Libelle = libelle;
-            ActeurHasQuestion = acteurHasQuestion;
         }
 
         public int IdReponseCandidat { get; set; }
         public string Libelle { get; set; }
-
-        public virtual ICollection<ActeurHasQuestionDto> ActeurHasQuestion { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une reponseCandidat(DTO) en reponseCandidat(Models) automatiquement
@@ -31,8 +27,7 @@ namespace QuizApi.Dtos
         {
             return new ReponseCandidat(
                 reponseCandidat.IdReponseCandidat,
-                reponseCandidat.Libelle,
-                ConvertDtoEntity.ConvertListActeurHasQuestionDtoToListActeurHasQuestion(reponseCandidat.ActeurHasQuestion)
+                reponseCandidat.Libelle
                 );
         }
     }

@@ -12,6 +12,12 @@ namespace QuizApi.quiz
             ActeurHasQuestion = new HashSet<ActeurHasQuestion>();
         }
 
+        public ReponseCandidat(int idReponseCandidat, string libelle):this()
+        {
+            IdReponseCandidat = idReponseCandidat;
+            Libelle = libelle;
+        }
+
         public ReponseCandidat(int idReponseCandidat, string libelle, ICollection<ActeurHasQuestion> acteurHasQuestion)
         {
             IdReponseCandidat = idReponseCandidat;
@@ -31,8 +37,7 @@ namespace QuizApi.quiz
         {
             return new ReponseCandidatDto(
                 reponseCandidat.IdReponseCandidat,
-                reponseCandidat.Libelle,
-                ConvertDtoEntity.ConvertListActeurHasQuestionToListActeurHasQuestionDto(reponseCandidat.ActeurHasQuestion)
+                reponseCandidat.Libelle
                 );
         }
     }
