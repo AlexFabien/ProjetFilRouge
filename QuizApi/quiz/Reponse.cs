@@ -41,8 +41,7 @@ namespace QuizApi.quiz
                 reponse.IdReponse,
                 reponse.Libelle,
                 reponse.ReponseCorrecte,
-                reponse.IdQuestion,
-                reponse.IdQuestionNavigation
+                reponse.IdQuestion
                 );
         }
     }
