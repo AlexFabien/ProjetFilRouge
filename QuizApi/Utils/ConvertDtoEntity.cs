@@ -233,7 +233,7 @@ namespace QuizApi.Utils
             return listReponseCandidatDto;
         }
 
-        public static List<Acteur> ConvertListActeurDtoToListActeur(ICollection<ActeurDto> collectionActeurDto)
+        public static ICollection<Acteur> ConvertListActeurDtoToListActeur(ICollection<ActeurDto> collectionActeurDto)
         {
             List<Acteur> listActeur = null;
             if (collectionActeurDto != null)

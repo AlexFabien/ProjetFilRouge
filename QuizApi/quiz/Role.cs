@@ -1,4 +1,5 @@
 ﻿using QuizApi.Dtos;
+using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
 
@@ -29,24 +30,10 @@ namespace QuizApi.quiz
         /// <param name="role"></param>
         public static implicit operator RoleDto(Role role)
         {
-            List<ActeurDto> ConvertListActeurDtoToListActeur()
-            {
-                List<ActeurDto> listActeurDto = null;
-                if (role.Acteur != null)
-                {
-                    listActeurDto = new List<ActeurDto>();
-                    foreach (Acteur acteur in role.Acteur)
-                    {
-                        listActeurDto.Add(acteur);
-                    }
-                }
-                return listActeurDto;
-            }
-
             return new RoleDto(
                 role.IdRole,
                 role.Nom,
-                ConvertListActeurDtoToListActeur()
+                ConvertDtoEntity.ConvertListActeurToListActeurDto(role.Acteur)
                 );
         }
     }
