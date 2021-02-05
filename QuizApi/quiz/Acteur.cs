@@ -13,6 +13,16 @@ namespace QuizApi.quiz
             ActeurHasQuiz = new HashSet<ActeurHasQuiz>();
         }
 
+        public Acteur(int idActeur, string nom, string prenom, string email, string password, int? idRole):this()
+        {
+            IdActeur = idActeur;
+            Nom = nom;
+            Prenom = prenom;
+            Email = email;
+            Password = password;
+            IdRole = idRole;
+        }
+
         public Acteur(int idActeur, string nom, string prenom, string email, string password,
                 int? idRole, Role idRoleNavigation,
                 ICollection<ActeurHasQuestion> acteurHasQuestion, ICollection<ActeurHasQuiz> acteurHasQuiz)
@@ -51,10 +61,7 @@ namespace QuizApi.quiz
                 acteur.Prenom,
                 acteur.Email,
                 acteur.Password,
-                acteur.IdRole,
-                acteur.IdRoleNavigation,
-                ConvertDtoEntity.ConvertListActeurHasQuestionToListActeurHasQuestionDto(acteur.ActeurHasQuestion),
-                ConvertDtoEntity.ConvertListActeurHasQuizToListActeurHasQuizDto(acteur.ActeurHasQuiz)
+                acteur.IdRole
                 );
         }
     }
