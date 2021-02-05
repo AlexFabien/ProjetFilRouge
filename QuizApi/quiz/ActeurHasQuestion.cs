@@ -7,6 +7,15 @@ namespace QuizApi.quiz
 {
     public partial class ActeurHasQuestion
     {
+        public ActeurHasQuestion(int idActeur, int idQuestion, string commentaire, int? idEtatReponse, int? idReponseCandidat)
+        {
+            IdActeur = idActeur;
+            IdQuestion = idQuestion;
+            Commentaire = commentaire;
+            IdEtatReponse = idEtatReponse;
+            IdReponseCandidat = idReponseCandidat;
+        }
+
         public ActeurHasQuestion(int idActeur, int idQuestion, string commentaire, 
             int? idEtatReponse, int? idReponseCandidat, Acteur idActeurNavigation,
             Repondu idEtatReponseNavigation, Question idQuestionNavigation, ReponseCandidat idReponseCandidatNavigation)
@@ -44,11 +53,7 @@ namespace QuizApi.quiz
                 acteurHasQuestion.IdQuestion,
                 acteurHasQuestion.Commentaire,
                 acteurHasQuestion.IdEtatReponse,
-                acteurHasQuestion.IdReponseCandidat,
-                acteurHasQuestion.IdActeurNavigation,
-                acteurHasQuestion.IdEtatReponseNavigation,
-                acteurHasQuestion.IdQuestionNavigation,
-                acteurHasQuestion.IdReponseCandidatNavigation
+                acteurHasQuestion.IdReponseCandidat
                 );
         }
     }

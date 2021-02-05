@@ -12,19 +12,13 @@ namespace QuizApi.Dtos
     public class ActeurHasQuestionDto
     {
         public ActeurHasQuestionDto(int idActeur, int idQuestion, string commentaire, 
-                int? idEtatReponse, int? idReponseCandidat, ActeurDto idActeurNavigation, 
-                ReponduDto idEtatReponseNavigation, QuestionDto idQuestionNavigation, 
-                ReponseCandidatDto idReponseCandidatNavigation)
+                int? idEtatReponse, int? idReponseCandidat)
         {
             IdActeur = idActeur;
             IdQuestion = idQuestion;
             Commentaire = commentaire;
             IdEtatReponse = idEtatReponse;
             IdReponseCandidat = idReponseCandidat;
-            IdActeurNavigation = idActeurNavigation;
-            IdEtatReponseNavigation = idEtatReponseNavigation;
-            IdQuestionNavigation = idQuestionNavigation;
-            IdReponseCandidatNavigation = idReponseCandidatNavigation;
         }
 
         public int IdActeur { get; set; }
@@ -32,11 +26,6 @@ namespace QuizApi.Dtos
         public string Commentaire { get; set; }
         public int? IdEtatReponse { get; set; }
         public int? IdReponseCandidat { get; set; }
-
-        public virtual ActeurDto IdActeurNavigation { get; set; }
-        public virtual ReponduDto IdEtatReponseNavigation { get; set; }
-        public virtual QuestionDto IdQuestionNavigation { get; set; }
-        public virtual ReponseCandidatDto IdReponseCandidatNavigation { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une acteurHasQuestion(DTO) en acteurHasQuestion(Models) automatiquement
@@ -49,11 +38,7 @@ namespace QuizApi.Dtos
                 acteurHasQuestionDto.IdQuestion,
                 acteurHasQuestionDto.Commentaire,
                 acteurHasQuestionDto.IdEtatReponse,
-                acteurHasQuestionDto.IdReponseCandidat,
-                acteurHasQuestionDto.IdActeurNavigation,
-                acteurHasQuestionDto.IdEtatReponseNavigation,
-                acteurHasQuestionDto.IdQuestionNavigation,
-                acteurHasQuestionDto.IdReponseCandidatNavigation
+                acteurHasQuestionDto.IdReponseCandidat
                 );
         }
     }
