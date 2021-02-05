@@ -12,6 +12,13 @@ namespace QuizApi.quiz
             ActeurHasQuiz = new HashSet<ActeurHasQuiz>();
         }
 
+        public Quiz(int idQuiz, int? idTechnologie, int? idNiveau):this()
+        {
+            IdQuiz = idQuiz;
+            IdTechnologie = idTechnologie;
+            IdNiveau = idNiveau;
+        }
+
         public Quiz(int idQuiz, int? idTechnologie, int? idNiveau, Niveau idNiveauNavigation,
             Technologie idTechnologieNavigation, ICollection<ActeurHasQuiz> acteurHasQuiz)
         {
@@ -40,10 +47,7 @@ namespace QuizApi.quiz
             return new QuizDto(
                 quiz.IdQuiz,
                 quiz.IdTechnologie,
-                quiz.IdNiveau,
-                quiz.IdNiveauNavigation,
-                quiz.IdTechnologieNavigation,
-                ConvertDtoEntity.ConvertListActeurHasQuizToListActeurHasQuizDto(quiz.ActeurHasQuiz)
+                quiz.IdNiveau
                 );
         }
     }
