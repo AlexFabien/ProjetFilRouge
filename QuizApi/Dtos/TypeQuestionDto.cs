@@ -9,20 +9,16 @@ namespace QuizApi.Dtos
     {
         public TypeQuestionDto()
         {
-            Question = new HashSet<QuestionDto>();
         }
 
-        public TypeQuestionDto(int idTypeQuestion, string libelle, ICollection<QuestionDto> question)
+        public TypeQuestionDto(int idTypeQuestion, string libelle)
         {
             IdTypeQuestion = idTypeQuestion;
             Libelle = libelle;
-            Question = question;
         }
 
         public int IdTypeQuestion { get; set; }
         public string Libelle { get; set; }
-
-        public virtual ICollection<QuestionDto> Question { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une typeQuestion(DTO) en typeQuestion(Models) automatiquement
@@ -32,8 +28,7 @@ namespace QuizApi.Dtos
         {
             return new TypeQuestion(
                 typeQuestionDto.IdTypeQuestion,
-                typeQuestionDto.Libelle,
-                ConvertDtoEntity.ConvertListQuestionDtoToListQuestion(typeQuestionDto.Question)
+                typeQuestionDto.Libelle
                 );
         }
     }

@@ -18,10 +18,13 @@ namespace QuizApi.quiz
 
         public int? IdTechnologie { get; set; }
         public string Libelle { get; set; }
+
+        public virtual ICollection<Quiz> Quiz { get; set; }
+
         /// <summary>
-        /// Fonction qui transforme une Parametrage(Models) en Parametrage(DTO) automatiquement
+        /// Fonction qui transforme une technologie(Models) en technologie(DTO) automatiquement
         /// </summary>
-        /// <param name="parametrage"></param>
+        /// <param name="technologie"></param>
         public static implicit operator TechnologieDto(Technologie technologie)
         {
             return new TechnologieDto(
@@ -29,6 +32,5 @@ namespace QuizApi.quiz
                 technologie.IdTechnologie
                 );
         }
-        public virtual ICollection<Quiz> Quiz { get; set; }
     }
 }
