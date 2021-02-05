@@ -37,9 +37,7 @@ namespace QuizApi.Services
 
         public IEnumerable<ReponseCandidatDto> TrouverTout()
         {
-            List<ReponseCandidatDto> dtos = new List<ReponseCandidatDto>();
-            this.repository.FindAll().ToList().ForEach(p => dtos.Add(new ReponseCandidatDto(p.Libelle, p.IdReponseCandidat)));
-            return dtos;
+            return ConvertDtoEntity.ConvertListReponseCandidatToListReponseCandidatDto(this.repository.FindAll().ToList());
         }
     }
 }

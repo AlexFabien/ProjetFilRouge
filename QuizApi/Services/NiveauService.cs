@@ -40,9 +40,7 @@ namespace QuizApi.Services
 
         public IEnumerable<NiveauDto> TrouverTout()
         {
-            List<NiveauDto> dtos = new List<NiveauDto>();
-            this.repository.FindAll().ToList().ForEach(p => dtos.Add(new NiveauDto(p.Libelle, p.IdNiveau)));
-            return dtos;
+            return ConvertDtoEntity.ConvertListNiveauToListNiveauDto(this.repository.FindAll().ToList());
         }
     }
 }

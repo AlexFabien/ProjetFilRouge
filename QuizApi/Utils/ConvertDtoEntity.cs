@@ -176,5 +176,142 @@ namespace QuizApi.Utils
             }
             return listReponseDto;
         }
+
+        public static List<Niveau> ConvertListNiveauDtoToListNiveau(ICollection<NiveauDto> collectionNiveauDto)
+        {
+            List<Niveau> listNiveau = null;
+            if (collectionNiveauDto != null)
+            {
+                listNiveau = new List<Niveau>();
+                foreach (NiveauDto niveauDto in collectionNiveauDto)
+                {
+                    listNiveau.Add(niveauDto);
+                }
+            }
+            return listNiveau;
+        }
+
+        internal static ICollection<NiveauDto> ConvertListNiveauToListNiveauDto(ICollection<Niveau> collectionNiveau)
+        {
+            List<NiveauDto> listNiveauDto = null;
+            if (collectionNiveau != null)
+            {
+                listNiveauDto = new List<NiveauDto>();
+                foreach (Niveau niveau in collectionNiveau)
+                {
+                    listNiveauDto.Add(niveau);
+                }
+            }
+            return listNiveauDto;
+        }
+
+        public static List<ReponseCandidat> ConvertListReponseCandidatDtoToListReponseCandidat(ICollection<ReponseCandidatDto> collectionReponseCandidatDto)
+        {
+            List<ReponseCandidat> listReponseCandidat = null;
+            if (collectionReponseCandidatDto != null)
+            {
+                listReponseCandidat = new List<ReponseCandidat>();
+                foreach (ReponseCandidatDto reponseCandidatDto in collectionReponseCandidatDto)
+                {
+                    listReponseCandidat.Add(reponseCandidatDto);
+                }
+            }
+            return listReponseCandidat;
+        }
+
+        internal static ICollection<ReponseCandidatDto> ConvertListReponseCandidatToListReponseCandidatDto(ICollection<ReponseCandidat> collectionReponseCandidat)
+        {
+            List<ReponseCandidatDto> listReponseCandidatDto = null;
+            if (collectionReponseCandidat != null)
+            {
+                listReponseCandidatDto = new List<ReponseCandidatDto>();
+                foreach (ReponseCandidat reponseCandidat in collectionReponseCandidat)
+                {
+                    listReponseCandidatDto.Add(reponseCandidat);
+                }
+            }
+            return listReponseCandidatDto;
+        }
+
+        public static List<Acteur> ConvertListActeurDtoToListActeur(ICollection<ActeurDto> collectionActeurDto)
+        {
+            List<Acteur> listActeur = null;
+            if (collectionActeurDto != null)
+            {
+                listActeur = new List<Acteur>();
+                foreach (ActeurDto acteurDto in collectionActeurDto)
+                {
+                    listActeur.Add(acteurDto);
+                }
+            }
+            return listActeur;
+        }
+        internal static ICollection<ActeurDto> ConvertListActeurToListActeurDto(ICollection<Acteur> collectionActeur)
+        {
+            List<ActeurDto> listActeurDto = null;
+            if (collectionActeur != null)
+            {
+                listActeurDto = new List<ActeurDto>();
+                foreach (Acteur acteur in collectionActeur)
+                {
+                    listActeurDto.Add(acteur);
+                }
+            }
+            return listActeurDto;
+        }
+
+        public static ICollection<Role> ConvertListRoleDtoToListRole(ICollection<RoleDto> collectionRoleDto)
+        {
+            List<Role> listRole = null;
+            if (collectionRoleDto != null)
+            {
+                listRole = new List<Role>();
+                foreach (RoleDto roleDto in collectionRoleDto)
+                {
+                    listRole.Add(roleDto);
+                }
+            }
+            return listRole;
+        }
+        internal static ICollection<RoleDto> ConvertListRoleToListRoleDto(ICollection<Role> collectionRole)
+        {
+            List<RoleDto> listRoleDto = null;
+            if (collectionRole != null)
+            {
+                listRoleDto = new List<RoleDto>();
+                foreach (Role role in collectionRole)
+                {
+                    listRoleDto.Add(role);
+                }
+            }
+            return listRoleDto;
+        }
+
+        public static ICollection<Repondu> ConvertListReponduDtoToListRole(ICollection<ReponduDto> collectionReponduDto)
+        {
+            List<Repondu> listRepondu = null;
+            if (collectionReponduDto != null)
+            {
+                listRepondu = new List<Repondu>();
+                foreach (ReponduDto reponduDto in collectionReponduDto)
+                {
+                    listRepondu.Add(reponduDto);
+                }
+            }
+            return listRepondu;
+        }
+        internal static ICollection<ReponduDto> ConvertListReponduToListReponduDto(ICollection<Repondu> collectionRepondu)
+        {
+            List<ReponduDto> listReponduDto = null;
+            if (collectionRepondu != null)
+            {
+                listReponduDto = new List<ReponduDto>();
+                foreach (Repondu repondu in collectionRepondu)
+                {
+                    listReponduDto.Add(repondu);
+                }
+            }
+            return listReponduDto;
+        }
     }
 }

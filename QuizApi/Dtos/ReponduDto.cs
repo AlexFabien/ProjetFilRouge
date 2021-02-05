@@ -1,4 +1,5 @@
 ﻿using QuizApi.quiz;
+using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,32 +11,32 @@ namespace QuizApi.Dtos
     {
         public ReponduDto()
         {
+            ActeurHasQuestion = new HashSet<ActeurHasQuestionDto>();
         }
 
-        public ReponduDto( string libelle, int idEtatReponse)
+        public ReponduDto(int idEtatReponse, string libelle, ICollection<ActeurHasQuestionDto> acteurHasQuestion)
         {
-           
-            Libelle = libelle;
             IdEtatReponse = idEtatReponse;
+            Libelle = libelle;
+            ActeurHasQuestion = acteurHasQuestion;
         }
 
         public int IdEtatReponse { get; set; }
         public string Libelle { get; set; }
 
-
-
+        public virtual ICollection<ActeurHasQuestionDto> ActeurHasQuestion { get; set; }
 
         /// <summary>
-        /// Fonction qui transforme une parametrage(DTO) en parametrage(Models) automatiquement
+        /// Fonction qui transforme une repondu(DTO) en repondu(Models) automatiquement
         /// </summary>
         /// <param name="reponduDto"></param>
         public static implicit operator Repondu(ReponduDto reponduDto)
         {
             return new Repondu(
+                reponduDto.IdEtatReponse,
                 reponduDto.Libelle,
-                reponduDto.IdEtatReponse
+                ConvertDtoEntity.ConvertListActeurHasQuestionDtoToListActeurHasQuestion(reponduDto.ActeurHasQuestion)
                 );
         }
-
     }
 }

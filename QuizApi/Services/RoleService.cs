@@ -1,6 +1,7 @@
 ﻿using QuizApi.Dtos;
 using QuizApi.quiz;
 using QuizApi.Repositories;
+using QuizApi.Utils;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -37,9 +38,7 @@ namespace QuizApi.Services
 
         public IEnumerable<RoleDto> TrouverTout()
         {
-            List<RoleDto> dtos = new List<RoleDto>();
-            this.repository.FindAll().ToList().ForEach(p => dtos.Add(new RoleDto(p.Nom, p.IdRole)));
-            return dtos;
+            return ConvertDtoEntity.ConvertListRoleToListRoleDto(this.repository.FindAll().ToList());
         }
     }
 }

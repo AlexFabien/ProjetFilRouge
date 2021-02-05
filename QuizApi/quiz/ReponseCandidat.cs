@@ -23,8 +23,6 @@ namespace QuizApi.quiz
         public string Libelle { get; set; }
         public virtual ICollection<ActeurHasQuestion> ActeurHasQuestion { get; set; }
 
-        public virtual ICollection<ActeurHasQuestion> ActeurHasQuestion { get; set; }
-
         /// <summary>
         /// Fonction qui transforme une reponseCandidat(Models) en reponseCandidat(DTO) automatiquement
         /// </summary>

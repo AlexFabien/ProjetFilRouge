@@ -1,27 +1,35 @@
-﻿namespace QuizApi.Dtos
+﻿using QuizApi.quiz;
+using QuizApi.Utils;
+using System.Collections.Generic;
+
+namespace QuizApi.Dtos
 {
     public class RoleDto
     {
         public RoleDto(){}
 
-        public RoleDto(string nom, int? idRole = null)
+        public RoleDto(int idRole, string nom, ICollection<ActeurDto> acteur)
         {
-            Nom = nom;
             IdRole = idRole;
+            Nom = nom;
+            Acteur = acteur;
         }
 
-        public int? IdRole { get; set; }
+        public int IdRole { get; set; }
         public string Nom { get; set; }
-
-        //public virtual ICollection<Acteur> Acteur { get; set; }
+        public virtual ICollection<ActeurDto> Acteur { get; set; }
 
         /// <summary>
-        /// Fonction qui transforme un Role(DTO) en Role(Models) automatiquement
+        /// Fonction qui transforme une role(DTO) en role(Models) automatiquement
         /// </summary>
-        /// <param name="RoleDto"></param>
-        public static implicit operator quiz.Role(RoleDto dto)
+        /// <param name="roleDto"></param>
+        public static implicit operator Role(RoleDto roleDto)
         {
-            return new quiz.Role(dto.Nom, dto.IdRole);
+            return new Role(
+                roleDto.IdRole,
+                roleDto.Nom,
+                ConvertDtoEntity.ConvertListActeurDtoToListActeur(roleDto.Acteur)
+                );
         }
     }
 }

@@ -24,7 +24,7 @@ namespace QuizApi.quiz
         public virtual ICollection<Acteur> Acteur { get; set; }
 
         /// <summary>
-        /// Fonction qui transforme une Role(Models) en Role(DTO) automatiquement
+        /// Fonction qui transforme une role(Models) en role(DTO) automatiquement
         /// </summary>
         /// <param name="role"></param>
         public static implicit operator RoleDto(Role role)
