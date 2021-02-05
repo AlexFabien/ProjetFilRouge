@@ -13,8 +13,14 @@ namespace QuizApi.quiz
             ActeurHasQuestion = new HashSet<ActeurHasQuestion>();
         }
 
-        public Repondu(string libelle)
+        public Repondu(string libelle):this()
         {
+            Libelle = libelle;
+        }
+
+        public Repondu(int idEtatReponse, string libelle):this(libelle)
+        {
+            IdEtatReponse = idEtatReponse;
             Libelle = libelle;
         }
 
@@ -38,8 +44,7 @@ namespace QuizApi.quiz
         {
             return new ReponduDto(
                 repondu.IdEtatReponse,
-                repondu.Libelle,
-                ConvertDtoEntity.ConvertListActeurHasQuestionToListActeurHasQuestionDto(repondu.ActeurHasQuestion)
+                repondu.Libelle
                 );
         }
     }
