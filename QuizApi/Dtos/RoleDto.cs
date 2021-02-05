@@ -8,16 +8,14 @@ namespace QuizApi.Dtos
     {
         public RoleDto(){}
 
-        public RoleDto(int idRole, string nom, ICollection<ActeurDto> acteur)
+        public RoleDto(int idRole, string nom)
         {
             IdRole = idRole;
             Nom = nom;
-            Acteur = acteur;
         }
 
         public int IdRole { get; set; }
         public string Nom { get; set; }
-        public virtual ICollection<ActeurDto> Acteur { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une role(DTO) en role(Models) automatiquement
@@ -27,8 +25,7 @@ namespace QuizApi.Dtos
         {
             return new Role(
                 roleDto.IdRole,
-                roleDto.Nom,
-                ConvertDtoEntity.ConvertListActeurDtoToListActeur(roleDto.Acteur)
+                roleDto.Nom
                 );
         }
     }

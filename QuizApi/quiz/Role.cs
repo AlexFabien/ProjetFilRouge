@@ -12,6 +12,12 @@ namespace QuizApi.quiz
             Acteur = new HashSet<Acteur>();
         }
 
+        public Role(int idRole, string nom) : this()
+        {
+            IdRole = idRole;
+            Nom = nom;
+        }
+
         public Role(int idRole, string nom, ICollection<Acteur> acteur)
         {
             IdRole = idRole;
@@ -32,8 +38,7 @@ namespace QuizApi.quiz
         {
             return new RoleDto(
                 role.IdRole,
-                role.Nom,
-                ConvertDtoEntity.ConvertListActeurToListActeurDto(role.Acteur)
+                role.Nom
                 );
         }
     }
