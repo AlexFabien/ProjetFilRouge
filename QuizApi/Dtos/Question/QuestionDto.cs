@@ -9,23 +9,15 @@ namespace QuizApi.Dtos
     {
         public QuestionDto()
         {
-            ActeurHasQuestion = new HashSet<ActeurHasQuestionDto>();
-            Reponse = new HashSet<ReponseDto>();
         }
 
-        public QuestionDto(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion,
-            NiveauDto idNiveauNavigation, TypeQuestionDto idTypeQuestionNavigation,
-            ICollection<ActeurHasQuestionDto> acteurHasQuestion, ICollection<ReponseDto> reponse)
+        public QuestionDto(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion)
         {
             IdQuestion = idQuestion;
             Libelle = libelle;
             ExplicationReponse = explicationReponse;
             IdNiveau = idNiveau;
             IdTypeQuestion = idTypeQuestion;
-            IdNiveauNavigation = idNiveauNavigation;
-            IdTypeQuestionNavigation = idTypeQuestionNavigation;
-            ActeurHasQuestion = acteurHasQuestion;
-            Reponse = reponse;
         }
 
         public int IdQuestion { get; set; }
@@ -33,11 +25,6 @@ namespace QuizApi.Dtos
         public string ExplicationReponse { get; set; }
         public int? IdNiveau { get; set; }
         public int? IdTypeQuestion { get; set; }
-
-        public virtual NiveauDto IdNiveauNavigation { get; set; }
-        public virtual TypeQuestionDto IdTypeQuestionNavigation { get; set; }
-        public virtual ICollection<ActeurHasQuestionDto> ActeurHasQuestion { get; set; }
-        public virtual ICollection<ReponseDto> Reponse { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une question(DTO) en question(Models) automatiquement
@@ -50,11 +37,7 @@ namespace QuizApi.Dtos
                 questionDto.Libelle,
                 questionDto.ExplicationReponse,
                 questionDto.IdNiveau,
-                questionDto.IdTypeQuestion,
-                questionDto.IdNiveauNavigation,
-                questionDto.IdTypeQuestionNavigation,
-                ConvertDtoEntity.ConvertListActeurHasQuestionDtoToListActeurHasQuestion(questionDto.ActeurHasQuestion),
-                ConvertDtoEntity.ConvertListReponseDtoToListReponse(questionDto.Reponse)
+                questionDto.IdTypeQuestion
                 );
         }
     }

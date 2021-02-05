@@ -13,6 +13,15 @@ namespace QuizApi.quiz
             Reponse = new HashSet<Reponse>();
         }
 
+        public Question(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion):this()
+        {
+            IdQuestion = idQuestion;
+            Libelle = libelle;
+            ExplicationReponse = explicationReponse;
+            IdNiveau = idNiveau;
+            IdTypeQuestion = idTypeQuestion;
+        }
+
         public Question(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion,
             Niveau idNiveauNavigation, TypeQuestion idTypeQuestionNavigation,
             ICollection<ActeurHasQuestion> acteurHasQuestion, ICollection<Reponse> reponse)
@@ -50,11 +59,7 @@ namespace QuizApi.quiz
                 question.Libelle,
                 question.ExplicationReponse,
                 question.IdNiveau,
-                question.IdTypeQuestion,
-                question.IdNiveauNavigation,
-                question.IdTypeQuestionNavigation,
-                ConvertDtoEntity.ConvertListActeurHasQuestionToListActeurHasQuestionDto(question.ActeurHasQuestion),
-                ConvertDtoEntity.ConvertListReponseToListReponseDto(question.Reponse)
+                question.IdTypeQuestion
                 );
         }
     }
