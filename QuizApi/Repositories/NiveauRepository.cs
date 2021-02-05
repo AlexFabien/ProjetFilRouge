@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using QuizApi.quiz;
 using QuizApi.Utils;
 using System;
@@ -9,122 +11,91 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Repositories
 {
-    public class NiveauRepository : AbstractRepository<Niveau>
+    public class NiveauRepository : IRepository<Niveau>
     {
-        private QueryBuilder queryBuilder;
-        public NiveauRepository(QueryBuilder queryBuilder)
+        private QuizContext context;
+        private bool disposedValue;
+
+        public NiveauRepository(QuizContext context)
         {
-            this.queryBuilder = queryBuilder;
+            this.context = context;
         }
 
-        public override Niveau Create(Niveau obj)
+        public void Delete(int id)
         {
-            OpenConnection();
-            Dictionary<string, dynamic> roleDictionnary = new Dictionary<string, dynamic>();
-
-            foreach (PropertyInfo pr in obj.GetType().GetProperties())
+            Niveau obj = FindById(id);
+            if (obj != null)
             {
-                if (pr.Name.ToLower() != "idniveau" 
-                    && pr.Name != "Question" 
-                    && pr.Name != "Quiz" 
-                    && pr.Name != "VentillationIdNiveauQuestionNavigation" 
-                    && pr.Name != "VentillationIdNiveauQuizNavigation")
+                context.Niveau.Remove(obj);
+                Save();
+            }
+            else throw new RessourceException(StatusCodes.Status404NotFound, $"NiveauRepository.Delete : l'élément {id} n'a pas été trouvé ");
+
+        }
+
+       
+        public IEnumerable<Niveau> FindAll()
+        {
+            return context.Niveau;
+        }
+
+        public Niveau FindById(int id)
+        {
+            return context.Niveau.Find(id);
+        }
+
+        public void Insert(Niveau obj)
+        {
+            context.Niveau.Add(obj);
+            Save();
+        }
+
+        public void Save()
+        {
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                throw new RessourceException(StatusCodes.Status400BadRequest, $"NiveauRepository.Save : \n\tdoublon sur enregistrement \n\tou tentative de mise à jour d'un enregistrement inexistant.");
+            }
+        }
+
+        public void Update(Niveau obj)
+        {
+            context.Entry(obj).State = EntityState.Modified;
+            Save();
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
                 {
-                    roleDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
+                    // TODO: supprimer l'état managé (objets managés)
+                    context.Dispose();
                 }
+
+                // TODO: libérer les ressources non managées (objets non managés) et substituer le finaliseur
+                // TODO: affecter aux grands champs une valeur null
+                disposedValue = true;
             }
-            string request = queryBuilder
-                .Insert("niveau")
-                .Values(roleDictionnary);
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            cmd.ExecuteNonQuery();
-            long niveauId = cmd.LastInsertedId;
-            obj.IdNiveau = (int)niveauId;
-            connectionSql.Close();
-            return obj;
         }
 
-        //FIXIT : trouver une autre facon de recupere l'id car c'est pas generique
-        public override int Delete(int id)
+        // // TODO: substituer le finaliseur uniquement si 'Dispose(bool disposing)' a du code pour libérer les ressources non managées
+        // ~ParametrageRepository()
+        // {
+        //     // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
         {
-            OpenConnection();
-            //TODO : c'est pas bien ca
-            string request = queryBuilder.Delete("niveau", id).Replace("id", "id_niveau");
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            int result = cmd.ExecuteNonQuery();
-            connectionSql.Close();
-            return result;
+            // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
 
-        public override Niveau Find(int id)
-        {
-            OpenConnection();
-            string request = queryBuilder
-                .Select()
-                .From("niveau")
-                .Where("id_niveau", id, "=")
-                .Get();
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            Niveau niveau = new Niveau();
-            while (rdr.Read())
-            {
-                niveau.IdNiveau = rdr.GetInt32(0);
-                niveau.Libelle = rdr.GetString(1);
-            }
-            CloseConnection(rdr);
-            return niveau;
-        }
-
-        public override List<Niveau> FindAll()
-        {
-            OpenConnection();
-            string request = queryBuilder
-                .Select()
-                .From("niveau")
-                .Get();
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            List<Niveau> niveaux = new List<Niveau>();
-
-            while (rdr.Read())
-            {
-                Niveau niveau = new Niveau();
-                niveau.IdNiveau = rdr.GetInt32(0);
-                niveau.Libelle = rdr.GetString(1);
-                niveaux.Add(niveau);
-            }
-            CloseConnection(rdr);
-            return niveaux;
-        }
-
-        public override Niveau Update(int id, Niveau obj)
-        {
-            OpenConnection();
-            Dictionary<string, dynamic> niveauDictionnary = new Dictionary<string, dynamic>();
-
-            foreach (PropertyInfo pr in obj.GetType().GetProperties())
-            {
-                if (pr.Name.ToLower() != "idniveau"
-                    && pr.Name != "Question"
-                    && pr.Name != "Quiz"
-                    && pr.Name != "VentillationIdNiveauQuestionNavigation"
-                    && pr.Name != "VentillationIdNiveauQuizNavigation"
-                    && pr.Name != "Acteur"
-                    && pr.GetValue(obj) != null)
-                {
-                    niveauDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
-                }
-            }
-            string request = queryBuilder
-              .Update("niveau")
-              .Set(niveauDictionnary)
-              .Where("id_niveau", id).Get();
-
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            cmd.ExecuteNonQuery();
-            connectionSql.Close();
-            return Find(id);
-        }
     }
 }

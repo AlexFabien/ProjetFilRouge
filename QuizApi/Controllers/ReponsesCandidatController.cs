@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizApi.Dtos;
 using QuizApi.Services;
+using QuizApi.Utils;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,41 +12,104 @@ namespace QuizApi.Controllers
     [ApiController]
     public class ReponsesCandidatController : ControllerBase
     {
-        ReponseCandidatService reponsesCandidatService;
+        private IService<ReponseCandidatDto> service;
 
-        public ReponsesCandidatController()
+        public ReponsesCandidatController(IService<ReponseCandidatDto> service)
         {
-            this.reponsesCandidatService = new ReponseCandidatService();
+            this.service = service;
         }
 
         [HttpGet]
-        public List<ReponseCandidatDto> Get()
+        public IActionResult FindAll()
         {
-            return reponsesCandidatService.FindAll();
+            try
+            {
+                return Ok(this.service.TrouverTout());
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
         [HttpGet("{id}")]
-        public ReponseCandidatDto Get(int id)
+        public IActionResult FindById(int id)
         {
-            return reponsesCandidatService.Find(id);
+            try
+            {
+                return Ok(this.service.TrouverParId(id));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
         [HttpPost]
-        public ReponseCandidatDto Post([FromBody] CreateReponseCandidatDto createDto)
+        public IActionResult Post([FromBody] ReponseCandidatDto createDto)
         {
-            return reponsesCandidatService.PostRole(createDto);
+            try
+            {
+                this.service.Ajouter(createDto);
+                return Ok(createDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        [HttpPut("{id}")]
-        public ReponseCandidatDto Put(int id, [FromBody] CreateReponseCandidatDto createDto)
+        [HttpPut()]
+        public IActionResult Update([FromBody] ReponseCandidatDto dto)
         {
-            return reponsesCandidatService.UpdateRole(id, createDto);
+            try
+            {
+                this.service.Modifier(dto);
+                return Ok(dto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
         [HttpDelete("{id}")]
-        public int Delete(int id)
+        public IActionResult Delete(int id)
         {
-            return reponsesCandidatService.Delete(id);
+            try
+            {
+                this.service.Supprimer(id);
+                return Ok();
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
     }
 }

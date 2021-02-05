@@ -7,6 +7,7 @@ namespace QuizApi.quiz
 {
     public partial class Repondu
     {
+       
         public Repondu()
         {
             ActeurHasQuestion = new HashSet<ActeurHasQuestion>();

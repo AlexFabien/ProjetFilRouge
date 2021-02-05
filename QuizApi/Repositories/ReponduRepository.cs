@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using QuizApi.quiz;
 using QuizApi.Utils;
 using System;
@@ -9,114 +11,85 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Repositories
 {
-    public class ReponduRepository : AbstractRepository<Repondu>
+    public class ReponduRepository : IRepository<Repondu>
     {
-        private QueryBuilder queryBuilder;
-        public ReponduRepository(QueryBuilder queryBuilder)
+        private QuizContext context;
+
+        private bool disposedValue;
+
+        public ReponduRepository (QuizContext context)
         {
-            this.queryBuilder = queryBuilder;
+            this.context = context;
         }
 
-        public override Repondu Create(Repondu obj)
+        public void Delete(int id)
         {
-            OpenConnection();
-            Dictionary<string, dynamic> reponduDictionnary = new Dictionary<string, dynamic>();
-
-            foreach (PropertyInfo pr in obj.GetType().GetProperties())
+            Repondu obj = FindById(id);
+            if (obj != null)
             {
-                if (pr.Name.ToLower() != "idEtatReponse")
+                context.Repondu.Remove(obj);
+                Save();
+            }
+            else throw new RessourceException(StatusCodes.Status404NotFound, $"ReponduRepository.Delete : l'élément {id} n'a pas été trouvé ");
+        }
+
+        public IEnumerable<Repondu> FindAll()
+        {
+            return context.Repondu;
+        }
+
+        public Repondu FindById(int id)
+        {
+            return context.Repondu.Find(id);
+        }
+
+        public void Insert(Repondu obj)
+        {
+            context.Repondu.Add(obj);
+            Save();
+        }
+
+        public void Save()
+        {
+            context.SaveChanges();
+        }
+
+        public void Update(Repondu obj)
+        {
+            context.Entry(obj).State = EntityState.Modified;
+            Save();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
                 {
-                    reponduDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
+                    // TODO: supprimer l'état managé (objets managés)
+                    context.Dispose();
                 }
+
+                // TODO: libérer les ressources non managées (objets non managés) et substituer le finaliseur
+                // TODO: affecter aux grands champs une valeur null
+                disposedValue = true;
             }
-            string request = queryBuilder
-                .Insert("repondu")
-                .Values(reponduDictionnary);
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            Console.WriteLine(request);
-            cmd.ExecuteNonQuery();
-            long etat_reponseId = cmd.LastInsertedId;
-            obj.IdEtatReponse = (int)etat_reponseId;
-            connectionSql.Close();
-            return obj;
         }
 
-        //FIXIT : trouver une autre facon de recupere l'id car c'est pas generique
-        public override int Delete(int id)
+        // // TODO: substituer le finaliseur uniquement si 'Dispose(bool disposing)' a du code pour libérer les ressources non managées
+        // ~ParametrageRepository()
+        // {
+        //     // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
         {
-            OpenConnection();
-            //TODO : c'est pas bien ca
-            string request = queryBuilder.Delete("repondu", id).Replace("id", "idEtatReponse");
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            int result = cmd.ExecuteNonQuery();
-            connectionSql.Close();
-            return result;
+            // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
 
-        public override Repondu Find(int id)
-        {
-            OpenConnection();
-            string request = queryBuilder
-                .Select()
-                .From("repondu")
-                .Where("idEtatReponse", id, "=")
-                .Get();
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            Repondu reponduEntity = new Repondu();
-            while (rdr.Read())
-            {
-                reponduEntity.IdEtatReponse = rdr.GetInt32(0);
-                reponduEntity.Libelle = rdr.GetString(1);
-            }
-            CloseConnection(rdr);
-            return reponduEntity;
-        }
-
-        public override List<Repondu> FindAll()
-        {
-            OpenConnection();
-            string request = queryBuilder
-                .Select()
-                .From("repondu")
-                .Get();
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            List<Repondu> reponduEntities = new List<Repondu>();
-
-            while (rdr.Read())
-            {
-                Repondu reponduEntity = new Repondu();
-                reponduEntity.IdEtatReponse = rdr.GetInt32(0);
-                reponduEntity.Libelle = rdr.GetString(1);
-                reponduEntities.Add(reponduEntity);
-            }
-            CloseConnection(rdr);
-            return reponduEntities;
-        }
-
-        public override Repondu Update(int id, Repondu obj)
-        {
-            OpenConnection();
-            Dictionary<string, dynamic> reponduDictionnary = new Dictionary<string, dynamic>();
-
-            foreach (PropertyInfo pr in obj.GetType().GetProperties())
-            {
-                if (pr.Name.ToLower() != "idEtatReponse" && pr.GetValue(obj) != null)
-                {
-                    reponduDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
-                }
-            }
-            string request = queryBuilder
-              .Update("repondu")
-              .Set(reponduDictionnary)
-              .Where("idEtatReponse", id).Get();
-
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            cmd.ExecuteNonQuery();
-            connectionSql.Close();
-            return Find(id);
-        }
     }
 }
 

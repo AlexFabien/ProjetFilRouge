@@ -21,6 +21,7 @@ namespace QuizApi.quiz
 
         public int IdReponseCandidat { get; set; }
         public string Libelle { get; set; }
+        public virtual ICollection<ActeurHasQuestion> ActeurHasQuestion { get; set; }
 
         public virtual ICollection<ActeurHasQuestion> ActeurHasQuestion { get; set; }
 

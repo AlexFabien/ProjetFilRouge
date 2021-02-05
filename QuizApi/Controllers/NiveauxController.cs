@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizApi.Dtos;
 using QuizApi.Services;
+using QuizApi.Utils;
+using System;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,41 +13,108 @@ namespace QuizApi.Controllers
     [ApiController]
     public class NiveauxController : ControllerBase
     {
-        NiveauService niveauService;
+        private IService<NiveauDto> service;
 
-        public NiveauxController()
+        public NiveauxController(IService<NiveauDto> service)
         {
-            this.niveauService = new NiveauService();
+            this.service = service;
         }
 
         [HttpGet]
-        public List<NiveauDto> Get()
+        public IActionResult FindAll()
         {
-            return niveauService.FindAll();
+            try
+            {
+                return Ok(this.service.TrouverTout());
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
         [HttpGet("{id}")]
-        public NiveauDto Get(int id)
+        public IActionResult FindById(int id)
         {
-            return niveauService.Find(id);
+            try
+            {
+                return Ok(this.service.TrouverParId(id));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpPost]
-        public NiveauDto Post([FromBody] CreateNiveauDto createDto)
+        public IActionResult Post([FromBody] NiveauDto createDto)
         {
-            return niveauService.PostNiveau(createDto);
+            try
+            {
+                this.service.Ajouter(createDto);
+                return Ok(createDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        [HttpPut("{id}")]
-        public NiveauDto Put(int id, [FromBody] CreateNiveauDto createDto)
+        [HttpPut()]
+        public IActionResult Update([FromBody] NiveauDto dto)
         {
-            return niveauService.UpdateNiveau(id, createDto);
+            try
+            {
+                this.service.Modifier(dto);
+                return Ok(dto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
         [HttpDelete("{id}")]
-        public int Delete(int id)
+        public IActionResult Delete(int id)
         {
-            return niveauService.Delete(id);
+            try
+            {
+                this.service.Supprimer(id);
+                return Ok();
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
     }
 }

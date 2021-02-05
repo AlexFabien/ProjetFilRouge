@@ -1,120 +1,95 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using QuizApi.quiz;
 using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace QuizApi.Repositories
 {
-    public class RoleRepository : AbstractRepository<Role>
+    public class RoleRepository : IRepository<Role>
     {
-        private QueryBuilder queryBuilder;
-        public RoleRepository(QueryBuilder queryBuilder)
+        private QuizContext context;
+        private bool disposedValue;
+        public RoleRepository(QuizContext context)
         {
-            this.queryBuilder = queryBuilder;
+            this.context = context;
         }
 
-        public override Role Create(Role obj)
+        public void Delete(int id)
         {
-            OpenConnection();
-            Dictionary<string, dynamic> roleDictionnary = new Dictionary<string, dynamic>();
-
-            foreach (PropertyInfo pr in obj.GetType().GetProperties())
+            Role obj = FindById(id);
+            if (obj != null)
             {
-                if (pr.Name.ToLower() != "idrole" && pr.Name != "Acteur")
+                context.Role.Remove(obj);
+                Save();
+            }
+            else throw new RessourceException(StatusCodes.Status404NotFound, $"RoleRepository.Delete : l'élément {id} n'a pas été trouvé ");
+        }
+
+        public IEnumerable<Role> FindAll()
+        {
+            return context.Role;
+        }
+
+        public Role FindById(int id)
+        {
+            return context.Role.Find(id);
+        }
+
+        public void Insert(Role obj)
+        {
+            context.Role.Add(obj);
+            Save();
+        }
+
+        public void Save()
+        {
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                throw new RessourceException(StatusCodes.Status400BadRequest, $"RoleRepository.Save : \n\tdoublon sur enregistrement \n\tou tentative de mise à jour d'un enregistrement inexistant.");
+            }
+        }
+
+        public void Update(Role obj)
+        {
+            context.Entry(obj).State = EntityState.Modified;
+            Save();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
                 {
-                    roleDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
+                    // TODO: supprimer l'état managé (objets managés)
+                    context.Dispose();
                 }
+
+                // TODO: libérer les ressources non managées (objets non managés) et substituer le finaliseur
+                // TODO: affecter aux grands champs une valeur null
+                disposedValue = true;
             }
-            string request = queryBuilder
-                .Insert("role")
-                .Values(roleDictionnary);
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            cmd.ExecuteNonQuery();
-            long roleId = cmd.LastInsertedId;
-            obj.IdRole = (int)roleId;
-            connectionSql.Close();
-            return obj;
         }
 
-        //FIXIT : trouver une autre facon de recupere l'id car c'est pas generique
-        public override int Delete(int id)
+        // // TODO: substituer le finaliseur uniquement si 'Dispose(bool disposing)' a du code pour libérer les ressources non managées
+        // ~ParametrageRepository()
+        // {
+        //     // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
         {
-            OpenConnection();
-            //TODO : c'est pas bien ca
-            string request = queryBuilder.Delete("role", id).Replace("id", "id_role");
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            int result = cmd.ExecuteNonQuery();
-            connectionSql.Close();
-            return result;
+            // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
 
-        public override Role Find(int id)
-        {
-            OpenConnection();
-            string request = queryBuilder
-                .Select()
-                .From("role")
-                .Where("id_role", id, "=")
-                .Get();
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            Role role = new Role();
-            while (rdr.Read())
-            {
-                role.IdRole = rdr.GetInt32(0);
-                role.Nom = rdr.GetString(1);
-            }
-            CloseConnection(rdr);
-            return role;
-        }
-
-        public override List<Role> FindAll()
-        {
-            OpenConnection();
-            string request = queryBuilder
-                .Select()
-                .From("role")
-                .Get();
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            List<Role> roles = new List<Role>();
-
-            while (rdr.Read())
-            {
-                Role role = new Role();
-                role.IdRole = rdr.GetInt32(0);
-                role.Nom = rdr.GetString(1);
-                roles.Add(role);
-            }
-            CloseConnection(rdr);
-            return roles;
-        }
-
-        public override Role Update(int id, Role obj)
-        {
-            OpenConnection();
-            Dictionary<string, dynamic> roleDictionnary = new Dictionary<string, dynamic>();
-
-            foreach (PropertyInfo pr in obj.GetType().GetProperties())
-            {
-                if (pr.Name.ToLower() != "idrole" && pr.Name != "Acteur" && pr.GetValue(obj) != null)
-                {
-                    roleDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
-                }
-            }
-            string request = queryBuilder
-              .Update("role")
-              .Set(roleDictionnary)
-              .Where("id_role", id).Get();
-
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            cmd.ExecuteNonQuery();
-            connectionSql.Close();
-            return Find(id);
-        }
     }
 }

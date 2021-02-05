@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizApi.Dtos;
 using QuizApi.Services;
+using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,57 +15,118 @@ namespace QuizApi.Controllers
     [ApiController]
     public class RepondusController : ControllerBase
     {
-        
-        ReponduService reponduService;
 
-        public RepondusController()
+        private IService<ReponduDto> service;
+
+        public RepondusController(IService<ReponduDto> service)
         {
-            this.reponduService = new ReponduService();
+            this.service = service;
         }
 
-        // GET: api/<RepondusController>
         [HttpGet]
-
-        public List<AllReponduDto> Get()
+        [Route("")]
+        public IActionResult FindAll()
         {
-            return reponduService.FindAll();
+            try
+            {
+                return Ok(this.service.TrouverTout());
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        // GET api/<RepondusController>/5
-        [HttpGet("{id}")]
-
-        public AllReponduDto Get(int id)
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult FindById(int id)
         {
-            return reponduService.Find(id);
+            try
+            {
+                return Ok(this.service.TrouverParId(id));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
-        // POST api/<RepondusController>
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                this.service.Supprimer(id);
+                return Ok();
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+        }
+
         [HttpPost]
-        public AfterCreateReponduDto Post([FromBody] CreateReponduDto reponduEntity)
+        [Route("")]
+        public IActionResult Insert([FromBody] ReponduDto reponduDto)
         {
-            return reponduService.PostReponduEntity(reponduEntity);
+            try
+            {
+                this.service.Ajouter(reponduDto);
+                return Ok(reponduDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        // PUT api/<RepondusController>/5
-        [HttpPut("{id}")]
-        public AfterCreateReponduDto Put(int id, [FromBody] CreateReponduDto reponduEntity)
+        [HttpPut]
+        [Route("")]
+        public IActionResult Update([FromBody] ReponduDto reponduDto)
         {
-            return reponduService.PutReponduEntity(id, reponduEntity);
+            try
+            {
+                this.service.Modifier(reponduDto);
+                return Ok(reponduDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
-
-        // DELETE api/<RepondusController>/5
-        [HttpDelete("{id}")]
-        public long Delete(int id)
-        {
-            return reponduService.Delete(id);
-        }
-
 
 
 
     }
 
-    
 
-        
- }
+
+
+}
 
