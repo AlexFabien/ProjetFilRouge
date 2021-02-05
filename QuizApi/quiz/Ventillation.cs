@@ -6,6 +6,13 @@ namespace QuizApi.quiz
 {
     public partial class Ventillation
     {
+        public Ventillation(int idNiveauQuiz, int idNiveauQuestion, int? valeur)
+        {
+            IdNiveauQuiz = idNiveauQuiz;
+            IdNiveauQuestion = idNiveauQuestion;
+            Valeur = valeur;
+        }
+
         public Ventillation(int idNiveauQuiz, int idNiveauQuestion, int? valeur, Niveau idNiveauQuestionNavigation,
             Niveau idNiveauQuizNavigation)
         {
@@ -32,9 +39,7 @@ namespace QuizApi.quiz
             return new VentillationDto(
                 ventillation.IdNiveauQuiz,
                 ventillation.IdNiveauQuestion,
-                ventillation.Valeur,
-                ventillation.IdNiveauQuestionNavigation,
-                ventillation.IdNiveauQuizNavigation
+                ventillation.Valeur
                 );
         }
     }
