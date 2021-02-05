@@ -12,6 +12,12 @@ namespace QuizApi.quiz
             Question = new HashSet<Question>();
         }
 
+        public TypeQuestion(int idTypeQuestion, string libelle) : this()
+        {
+            IdTypeQuestion = idTypeQuestion;
+            Libelle = libelle;
+        }
+
         public TypeQuestion(int idTypeQuestion, string libelle, ICollection<Question> question)
         {
             IdTypeQuestion = idTypeQuestion;
@@ -32,8 +38,7 @@ namespace QuizApi.quiz
         {
             return new TypeQuestionDto(
                 typeQuestion.IdTypeQuestion,
-                typeQuestion.Libelle,
-                ConvertDtoEntity.ConvertListQuestionToListQuestionDto(typeQuestion.Question)
+                typeQuestion.Libelle
                 );
         }
     }
