@@ -15,6 +15,12 @@ namespace QuizApi.quiz
             VentillationIdNiveauQuizNavigation = new HashSet<Ventillation>();
         }
 
+        public Niveau(int idNiveau, string libelle):this()
+        {
+            IdNiveau = idNiveau;
+            Libelle = libelle;
+        }
+
         public Niveau(int idNiveau, string libelle, ICollection<Question> question, ICollection<Quiz> quiz,
             ICollection<Ventillation> ventillationIdNiveauQuestionNavigation,
             ICollection<Ventillation> ventillationIdNiveauQuizNavigation)
@@ -43,11 +49,7 @@ namespace QuizApi.quiz
         {
             return new NiveauDto(
                 niveau.IdNiveau,
-                niveau.Libelle,
-                ConvertDtoEntity.ConvertListQuestionToListQuestionDto(niveau.Question),
-                ConvertDtoEntity.ConvertListQuizToListQuizDto(niveau.Quiz),
-                ConvertDtoEntity.ConvertListVentillationToListVentillationDto(niveau.VentillationIdNiveauQuestionNavigation),
-                ConvertDtoEntity.ConvertListVentillationToListVentillationDto(niveau.VentillationIdNiveauQuizNavigation)
+                niveau.Libelle
                 );
         }
     }
