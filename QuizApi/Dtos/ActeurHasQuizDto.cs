@@ -6,19 +6,14 @@ namespace QuizApi.Dtos
 {
     public partial class ActeurHasQuizDto
     {
-        public ActeurHasQuizDto(int idActeur, int idQuiz, ActeurDto idActeurNavigation, QuizDto idQuizNavigation)
+        public ActeurHasQuizDto(int idActeur, int idQuiz)
         {
             IdActeur = idActeur;
             IdQuiz = idQuiz;
-            IdActeurNavigation = idActeurNavigation;
-            IdQuizNavigation = idQuizNavigation;
         }
 
         public int IdActeur { get; set; }
         public int IdQuiz { get; set; }
-
-        public virtual ActeurDto IdActeurNavigation { get; set; }
-        public virtual QuizDto IdQuizNavigation { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une acteurHasQuiz(DTO) en acteurHasQuiz(Models) automatiquement
@@ -28,9 +23,7 @@ namespace QuizApi.Dtos
         {
             return new ActeurHasQuiz(
                 acteurHasQuizDto.IdActeur,
-                acteurHasQuizDto.IdQuiz,
-                acteurHasQuizDto.IdActeurNavigation,
-                acteurHasQuizDto.IdQuizNavigation
+                acteurHasQuizDto.IdQuiz
                 );
         }
     }

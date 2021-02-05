@@ -6,6 +6,12 @@ namespace QuizApi.quiz
 {
     public partial class ActeurHasQuiz
     {
+        public ActeurHasQuiz(int idActeur, int idQuiz)
+        {
+            IdActeur = idActeur;
+            IdQuiz = idQuiz;
+        }
+
         public ActeurHasQuiz(int idActeur, int idQuiz, Acteur idActeurNavigation, Quiz idQuizNavigation)
         {
             IdActeur = idActeur;
@@ -28,9 +34,7 @@ namespace QuizApi.quiz
         {
             return new ActeurHasQuizDto(
                 acteurHasQuiz.IdActeur,
-                acteurHasQuiz.IdQuiz,
-                acteurHasQuiz.IdActeurNavigation,
-                acteurHasQuiz.IdQuizNavigation
+                acteurHasQuiz.IdQuiz
                 );
         }
     }
