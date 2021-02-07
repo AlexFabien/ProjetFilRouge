@@ -19,9 +19,9 @@ namespace QuizApi.Services
             this.repository = repository;
         }
 
-        public void Ajouter(ActeurDto obj)
+        public ActeurDto Ajouter(ActeurDto obj)
         {
-            this.repository.Insert(obj);
+            return this.repository.Insert(obj);
         }
 
         public void Modifier(ActeurDto obj)
@@ -41,9 +41,7 @@ namespace QuizApi.Services
 
         public IEnumerable<ActeurDto> TrouverTout()
         {
-            List<ActeurDto> acteursDto = new List<ActeurDto>();
-            //this.repository.FindAll().ToList().ForEach(p => acteursDto.Add(new ActeurDto(p.IdActeur)));
-            return acteursDto;
+            return ConvertDtoEntity.ConvertListActeurToListActeurDto(this.repository?.FindAll()?.ToList());
         }
     }
 }

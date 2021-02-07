@@ -41,13 +41,17 @@ namespace QuizApi.Repositories
 
         public Acteur FindById(int id)
         {
-            return context.Acteur.Find(id);
+            Acteur obj = context.Acteur.Find(id);
+            if (obj == null)
+                throw new RessourceException(StatusCodes.Status404NotFound, $"ActeurRepository.FindById : l'élément {id} n'a pas été trouvé ");
+            return obj;
         }
 
-        public void Insert(Acteur obj)
+        public Acteur Insert(Acteur obj)
         {
             context.Acteur.Add(obj);
             Save();
+            return obj;
         }
 
         public void Save()
