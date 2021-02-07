@@ -29,6 +29,7 @@ namespace QuizApi.quiz
         public string Libelle { get; set; }
         public virtual ICollection<ActeurHasQuestion> ActeurHasQuestion { get; set; }
 
+        //TODO : si l'objet en parapetre est null, on a un NullReferenceException
         /// <summary>
         /// Fonction qui transforme une reponseCandidat(Models) en reponseCandidat(DTO) automatiquement
         /// </summary>

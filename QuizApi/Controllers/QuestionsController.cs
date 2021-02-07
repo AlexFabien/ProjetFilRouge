@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using QuizApi.Dtos;
 using QuizApi.Services;
+using QuizApi.Utils;
+using System;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,42 +14,128 @@ namespace QuizApi.Controllers
     [ApiController]
     public class QuestionsController : ControllerBase
     {
-        QuestionService questionService;
+        private IService<QuestionDto> service;
 
-        public QuestionsController()
+        public QuestionsController(IService<QuestionDto> service)
         {
-            this.questionService = new QuestionService();
+            this.service = service;
         }
 
         [HttpGet]
-        public List<QuestionDto> Get()
+        public IActionResult FindAll()
         {
-            return questionService.FindAll();
+            try
+            {
+                return Ok(this.service.TrouverTout());
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet("{id}")]
-        public QuestionDto Get(int id)
+        public IActionResult FindById(int id)
         {
-            return questionService.Find(id);
+            try
+            {
+                return Ok(this.service.TrouverParId(id));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPost]
-        public QuestionDto Post([FromBody] CreateQuestionDto createDto)
+        public IActionResult Post([FromBody] QuestionDto createDto)
         {
-            //return questionService.PostQuestion(createDto);
-            return null;
+            try
+            {
+                this.service.Ajouter(createDto);
+                return Ok(createDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
-        [HttpPut("{id}")]
-        public QuestionDto Put(int id, [FromBody] CreateQuestionDto createDto)
+        [HttpPut()]
+        public IActionResult Update([FromBody] QuestionDto dto)
         {
-            return questionService.UpdateQuestion(id, createDto);
+            try
+            {
+                this.service.Modifier(dto);
+                return Ok(dto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpDelete("{id}")]
-        public int Delete(int id)
+        public IActionResult Delete(int id)
         {
-            return questionService.Delete(id);
+            try
+            {
+                this.service.Supprimer(id);
+                return Ok();
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

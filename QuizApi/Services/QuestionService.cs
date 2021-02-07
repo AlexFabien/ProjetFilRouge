@@ -11,51 +11,36 @@ namespace QuizApi.Services
 {
     public class QuestionService
     {
-        private QuestionRepository questionRepository;
+        private IRepository<Question> repository;
 
-        public QuestionService()
+        public QuestionService(IRepository<Question> repository)
         {
-            this.questionRepository = new QuestionRepository(new QueryBuilder());
+            this.repository = repository;
         }
 
-        internal List<QuestionDto> FindAll()
+        public QuestionDto Ajouter(QuestionDto obj)
         {
-            List<Question> question = questionRepository.FindAll();
-            List<QuestionDto> questionsDtos = new List<QuestionDto>();
-            question.ForEach(q => { questionsDtos.Add(q); });
-            return questionsDtos;
+            return this.repository.Insert(obj);
         }
 
-        internal QuestionDto Find(int id)
+        public void Modifier(QuestionDto obj)
         {
-            Question question = questionRepository.Find(id);
-            return question;
+            this.repository.Update(obj);
         }
 
-        internal QuestionDto PostNiveau(CreateQuestionDto dto)
+        public void Supprimer(int id)
         {
-            Question question = ConvertDtoToEntity(dto);
-            Question qConverted = questionRepository.Create(question);
-            return qConverted;
+            this.repository.Delete(id);
         }
 
-        internal QuestionDto UpdateQuestion(int id, CreateQuestionDto newDto)
+        public QuestionDto TrouverParId(int id)
         {
-            Question question = ConvertDtoToEntity(newDto);
-            Question newQuestion = questionRepository.Update(id, question);
-            return newQuestion;
-        }
-        internal int Delete(int id)
-        {
-            return questionRepository.Delete(id);
+            return this.repository.FindById(id);
         }
 
-        private Question ConvertDtoToEntity(CreateQuestionDto dto)
+        public IEnumerable<QuestionDto> TrouverTout()
         {
-            Question qConverted = new Question();
-            qConverted.Libelle = dto.Libelle;
-            qConverted.ExplicationReponse = dto.ExplicationReponse;
-            return qConverted;
+            return ConvertDtoEntity.ConvertListQuestionToListQuestionDto(this.repository?.FindAll()?.ToList());
         }
     }
 }
