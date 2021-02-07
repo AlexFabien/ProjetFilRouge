@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using QuizApi.quiz;
 using QuizApi.Utils;
 using System;
@@ -9,147 +11,84 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Repositories
 {
-    public class ReponseRepository: AbstractRepository<Reponse>
+    public class ReponseRepository : IRepository<Reponse>
     {
-        //private QueryBuilder queryBuilder;
         private QuizContext context;
-        public ReponseRepository (/*QueryBuilder queryBuilder,*/ QuizContext context)
+
+        private bool disposedValue;
+
+        public ReponseRepository(QuizContext context)
         {
-            //this.queryBuilder = queryBuilder;
             this.context = context;
         }
 
-        public override Reponse Create(Reponse obj)
+        public void Delete(int id)
         {
-            this.context.Add(obj);
-            return obj;
-           // OpenConnection();
-           // Dictionary<string, dynamic> reponseDictionnary = new Dictionary<string, dynamic>();
-
-           // foreach (PropertyInfo pr in obj.GetType().GetProperties())
-           // {
-           //     if (pr.Name.ToLower() != "idreponse")
-           //     {
-           //         reponseDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
-           //     }
-           // }
-           // string request = queryBuilder
-           //     .Insert("reponse")
-           //     .Values(reponseDictionnary);
-           //// request= "INSERT INTO reponse(libelle,reponse_correcte) VALUES ('methode de get','0')";
-           // MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-           // Console.WriteLine(request);
-           // cmd.ExecuteNonQuery();
-           // long reponseId = cmd.LastInsertedId;
-
-           // obj.IdReponse = (int)reponseId;
-
-           // connectionSql.Close();
-           // return obj;
+            Reponse obj = FindById(id);
+            if (obj != null)
+            {
+                context.Reponse.Remove(obj);
+                Save();
+            }
+            else throw new RessourceException(StatusCodes.Status404NotFound, $"ReponseRepository.Delete : l'élément {id} n'a pas été trouvé ");
         }
 
-        public override int Delete(int id)
+        public IEnumerable<Reponse> FindAll()
         {
-            throw new NotImplementedException();
+            return context.Reponse;
         }
 
-        public override Reponse Find(int id)
+        public Reponse FindById(int id)
         {
-            throw new NotImplementedException();
+            return context.Reponse.Find(id);
         }
 
-        public override List<Reponse> FindAll()
+        public void Insert(Reponse obj)
         {
-            throw new NotImplementedException();
+            context.Reponse.Add(obj);
+            Save();
         }
 
-        public override Reponse Update(int id, Reponse obj)
+        public void Save()
         {
-            throw new NotImplementedException();
+            context.SaveChanges();
         }
 
-        //FIXIT : trouver une autre facon de recupere l'id car c'est pas generique
-        //public override int Delete(int id)
-        //{
-        //    OpenConnection();
-        //    //TODO : c'est pas bien ca
-        //    string request = queryBuilder.Delete("reponse", id).Replace("id", "id_reponse");
-        //    MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-        //    int result = cmd.ExecuteNonQuery();
-        //    connectionSql.Close();
-        //    return result;
-        //}
+        public void Update(Reponse obj)
+        {
+            context.Entry(obj).State = EntityState.Modified;
+            Save();
+        }
 
-        //public override Reponse Find(int id)
-        //{
-        //    OpenConnection();
-        //    string request = queryBuilder
-        //        .Select()
-        //        .From("reponse")
-        //        .Where("id_reponse", id, "=")
-        //        .Get();
-        //    MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-        //    MySqlDataReader rdr = cmd.ExecuteReader();
-        //    Reponse reponseEntity = new Reponse();
-        //    while (rdr.Read())
-        //    {
-        //        reponseEntity.IdReponse = rdr.GetInt32(0);
-        //        reponseEntity.Libelle = rdr.GetString(1);
-        //        reponseEntity.ReponseCorrecte = rdr.GetByte(2);
-        //        reponseEntity.IdQuestion = rdr.GetInt32(3);
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: supprimer l'état managé (objets managés)
+                    context.Dispose();
+                }
 
-        //    }
-        //    CloseConnection(rdr);
-        //    return reponseEntity;
-        //}
+                // TODO: libérer les ressources non managées (objets non managés) et substituer le finaliseur
+                // TODO: affecter aux grands champs une valeur null
+                disposedValue = true;
+            }
+        }
 
-        //public override List<Reponse> FindAll()
-        //{
-        //    OpenConnection();
-        //    string request = queryBuilder
-        //        .Select()
-        //        .From("reponse")
-        //        .Get();
-        //    MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-        //    MySqlDataReader rdr = cmd.ExecuteReader();
-        //    List<Reponse> reponseEntities = new List<Reponse>();
+        // // TODO: substituer le finaliseur uniquement si 'Dispose(bool disposing)' a du code pour libérer les ressources non managées
+        // ~ActeurRepository()
+        // {
+        //     // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+        //     Dispose(disposing: false);
+        // }
 
-        //    while (rdr.Read())
-        //    {
-        //        Reponse reponseEntity = new Reponse();
-        //        reponseEntity.IdReponse = rdr.GetInt32(0);
-        //        reponseEntity.Libelle = rdr.GetString(1);
-        //        reponseEntity.ReponseCorrecte = rdr.GetByte(2);
-        //        reponseEntity.IdQuestion = rdr.GetInt32(3);
-
-        //        reponseEntities.Add(reponseEntity);
-        //    }
-        //    CloseConnection(rdr);
-        //    return reponseEntities;
-        //}
-
-        //public override Reponse Update(int id, Reponse obj)
-        //{
-        //    OpenConnection();
-        //    Dictionary<string, dynamic> reponseDictionnary = new Dictionary<string, dynamic>();
-
-        //    foreach (PropertyInfo pr in obj.GetType().GetProperties())
-        //    {
-        //        if (pr.Name.ToLower() != "idReponse" && pr.GetValue(obj) != null)
-        //        {
-        //            reponseDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
-        //        }
-        //    }
-        //    string request = queryBuilder
-        //      .Update("reponse")
-        //      .Set(reponseDictionnary)
-        //      .Where("idReponse", id).Get();
-
-        //    MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-        //    cmd.ExecuteNonQuery();
-        //    connectionSql.Close();
-        //    return Find(id);
-        //}
+        public void Dispose()
+        {
+            // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
 }
 

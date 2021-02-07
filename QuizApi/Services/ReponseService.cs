@@ -9,62 +9,41 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Services
 {
-    public class ReponseService
+    public class ReponseService : IService<ReponseDto>
     {
-        private ReponseRepository reponseRepository;
+        private IRepository<Reponse> repository;
 
-        public ReponseService(ReponseRepository reponseRepository)
+        public ReponseService(IRepository<Reponse> repository)
         {
-            this.reponseRepository = reponseRepository;
+            this.repository = repository;
         }
 
-        internal List<AllReponseDto> FindAll()
+        public void Ajouter(ReponseDto obj)
         {
-            List<Reponse> reponseEntities = reponseRepository.FindAll();
-            List<AllReponseDto> allReponseDtos = new List<AllReponseDto>();
-            reponseEntities.ForEach(reponduEntity => { allReponseDtos.Add(ConvertEntityToDto(reponduEntity)); });
-            return allReponseDtos;
+            this.repository.Insert(obj);
         }
 
-        internal AllReponseDto Find(int id)
+        public void Modifier(ReponseDto obj)
         {
-            Reponse reponseEntity = this.reponseRepository.Find(id);
-            AllReponseDto allReponseDtos = ConvertEntityToDto(reponseEntity);
-            return allReponseDtos;
+            this.repository.Update(obj);
         }
 
-        private AllReponseDto ConvertEntityToDto(Reponse reponseEntity)
+        public void Supprimer(int id)
         {
-            return new AllReponseDto(reponseEntity.Libelle, reponseEntity.IdReponse, reponseEntity.ReponseCorrecte, reponseEntity.IdQuestion);
+            this.repository.Delete(id);
         }
 
-        internal AfterCreateReponseDto PostReponseEntity(CreateReponseDto reponseEntity)
+        public ReponseDto TrouverParId(int id)
         {
-            Reponse newtReponse = transformDtoToEntity(reponseEntity);
-            Reponse newtReponseCreated = this.reponseRepository.Create(newtReponse);
-            return transformEntityToAfterCreateDto(newtReponseCreated, true);
+            return this.repository.FindById(id);
         }
 
-        internal long Delete(int id)
+        public IEnumerable<ReponseDto> TrouverTout()
         {
-            return this.reponseRepository.Delete(id);
-        }
 
-        internal AfterCreateReponseDto PutReponseEntity(int id, CreateReponseDto newReponse)
-        {
-            Reponse newtReponse = transformDtoToEntity(newReponse);
-            Reponse newtReponseUpdated = this.reponseRepository.Update(id, newtReponse);
-            return transformEntityToAfterCreateDto(newtReponseUpdated, true);
-        }
-
-        private AfterCreateReponseDto transformEntityToAfterCreateDto(Reponse reponseEntity, bool isCreated)
-        {
-            return new AfterCreateReponseDto(reponseEntity.Libelle, isCreated, reponseEntity.IdReponse, reponseEntity.ReponseCorrecte, reponseEntity.IdQuestion);
-        }
-
-        private Reponse transformDtoToEntity(CreateReponseDto reponseEntity)
-        {
-            return new Reponse(reponseEntity.Libelle,reponseEntity.ReponseCorrecte);
+            List<ReponseDto> reponsesDto = new List<ReponseDto>();
+            //this.repository.FindAll().ToList().ForEach(p => reponsesDto.Add(new ReponseDto(p.IdReponse)));
+            return reponsesDto;
         }
     }
 }

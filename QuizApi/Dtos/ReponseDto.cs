@@ -6,6 +6,7 @@ namespace QuizApi.Dtos
 {
     public class ReponseDto
     {
+       
         public ReponseDto(int idReponse, string libelle, byte? reponseCorrecte, int? idQuestion)
         {
             IdReponse = idReponse;

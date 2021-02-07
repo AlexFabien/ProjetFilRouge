@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizApi.Dtos;
 using QuizApi.Services;
+using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,48 +15,111 @@ namespace QuizApi.Controllers
     [ApiController]
     public class ReponsesController : ControllerBase
     {
-        
-        ReponseService reponseService;
+        private IService<ReponseDto> service;
 
-        public ReponsesController(ReponseService reponseService)
+        public ReponsesController(IService<ReponseDto> service)
         {
-            this.reponseService = reponseService;
+            this.service = service;
         }
 
-        // GET: api/<ReponsesController>
         [HttpGet]
-
-        public List<AllReponseDto> Get()
+        [Route("")]
+        public IActionResult FindAll()
         {
-            return this.reponseService.FindAll();
+            try
+            {
+                return Ok(this.service.TrouverTout());
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        // GET api/<ReponsesController>/5
-        [HttpGet("{id}")]
-
-        public AllReponseDto Get(int id)
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult FindById(int id)
         {
-            return reponseService.Find(id);
+            try
+            {
+                return Ok(this.service.TrouverParId(id));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
-        // POST api/<ReponsesController>
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                this.service.Supprimer(id);
+                return Ok();
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+        }
+
         [HttpPost]
-        public AfterCreateReponseDto Post([FromBody] CreateReponseDto reponseEntity)
+        [Route("")]
+        public IActionResult Insert([FromBody] ReponseDto reponseDto)
         {
-            return reponseService.PostReponseEntity(reponseEntity);
+            try
+            {
+                this.service.Ajouter(reponseDto);
+                return Ok(reponseDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        // PUT api/<ReponsesController>/5
-        [HttpPut("{id}")]
-        public AfterCreateReponseDto Put(int id, [FromBody] CreateReponseDto reponseEntity)
+        [HttpPut]
+        [Route("")]
+        public IActionResult Update([FromBody] ReponseDto reponseDto)
         {
-            return reponseService.PutReponseEntity(id, reponseEntity);
+            try
+            {
+                this.service.Modifier(reponseDto);
+                return Ok(reponseDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
         }
 
-        // DELETE api/<ReponsesController>/5
-        [HttpDelete("{id}")]
-        public long Delete(int id)
-        {
-            return reponseService.Delete(id);
-        }
+
     }
 }
