@@ -43,10 +43,11 @@ namespace QuizApi.Repositories
             return context.Repondu.Find(id);
         }
 
-        public void Insert(Repondu obj)
+        public Repondu Insert(Repondu obj)
         {
             context.Repondu.Add(obj);
             Save();
+            return obj;
         }
 
         public void Save()

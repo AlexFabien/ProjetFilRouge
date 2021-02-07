@@ -10,21 +10,21 @@ using System.Collections.Generic;
 
 namespace QuizApi.Services
 {
-    public class ActeurService : IService<ActeurDto>
+    public class QuizService : IService<QuizDto>
     {
-        private IRepository<Acteur> repository;
+        private IRepository<Quiz> repository;
 
-        public ActeurService(IRepository<Acteur> repository)
+        public QuizService(IRepository<Quiz> repository)
         {
             this.repository = repository;
         }
 
-        public ActeurDto Ajouter(ActeurDto obj)
+        public QuizDto Ajouter(QuizDto obj)
         {
             return this.repository.Insert(obj);
         }
 
-        public void Modifier(ActeurDto obj)
+        public void Modifier(QuizDto obj)
         {
             this.repository.Update(obj);
         }
@@ -34,14 +34,14 @@ namespace QuizApi.Services
             this.repository.Delete(id);
         }
 
-        public ActeurDto TrouverParId(int id)
+        public QuizDto TrouverParId(int id)
         {
             return this.repository.FindById(id);
         }
 
-        public IEnumerable<ActeurDto> TrouverTout()
+        public IEnumerable<QuizDto> TrouverTout()
         {
-            return ConvertDtoEntity.ConvertListActeurToListActeurDto(this.repository?.FindAll()?.ToList());
+            return ConvertDtoEntity.ConvertListQuizToListQuizDto(this.repository?.FindAll()?.ToList());
         }
     }
 }

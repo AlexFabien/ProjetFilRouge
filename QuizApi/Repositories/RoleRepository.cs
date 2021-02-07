@@ -37,10 +37,11 @@ namespace QuizApi.Repositories
             return context.Role.Find(id);
         }
 
-        public void Insert(Role obj)
+        public Role Insert(Role obj)
         {
             context.Role.Add(obj);
             Save();
+            return obj;
         }
 
         public void Save()

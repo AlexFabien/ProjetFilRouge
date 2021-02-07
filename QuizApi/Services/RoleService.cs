@@ -16,9 +16,9 @@ namespace QuizApi.Services
             this.repository = repository;
         }
 
-        public void Ajouter(RoleDto obj)
+        public RoleDto Ajouter(RoleDto obj)
         {
-            this.repository.Insert(obj);
+            return this.repository.Insert(obj);
         }
 
         public void Modifier(RoleDto obj)
@@ -38,7 +38,7 @@ namespace QuizApi.Services
 
         public IEnumerable<RoleDto> TrouverTout()
         {
-            return ConvertDtoEntity.ConvertListRoleToListRoleDto(this.repository.FindAll().ToList());
+            return ConvertDtoEntity.ConvertListRoleToListRoleDto(this.repository?.FindAll()?.ToList());
         }
     }
 }

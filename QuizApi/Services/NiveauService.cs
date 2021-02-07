@@ -18,9 +18,9 @@ namespace QuizApi.Services
             this.repository = repository;
         }
 
-        public void Ajouter(NiveauDto obj)
+        public NiveauDto Ajouter(NiveauDto obj)
         {
-            this.repository.Insert(obj);
+            return this.repository.Insert(obj);
         }
 
         public void Modifier(NiveauDto obj)
@@ -40,7 +40,7 @@ namespace QuizApi.Services
 
         public IEnumerable<NiveauDto> TrouverTout()
         {
-            return ConvertDtoEntity.ConvertListNiveauToListNiveauDto(this.repository.FindAll().ToList());
+            return ConvertDtoEntity.ConvertListNiveauToListNiveauDto(this.repository?.FindAll()?.ToList());
         }
     }
 }

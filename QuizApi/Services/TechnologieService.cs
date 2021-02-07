@@ -18,9 +18,9 @@ namespace QuizApi.Services
             this.repository = repository;
         }
 
-        public void Ajouter(TechnologieDto obj)
+        public TechnologieDto Ajouter(TechnologieDto obj)
         {
-            this.repository.Insert(obj);
+            return this.repository.Insert(obj);
         }
 
         public void Modifier(TechnologieDto obj)

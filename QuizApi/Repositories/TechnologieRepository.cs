@@ -44,10 +44,11 @@ namespace QuizApi.Repositories
             return context.Technologie.Find(id);
         }
 
-        public void Insert(Technologie obj)
+        public Technologie Insert(Technologie obj)
         {
             context.Technologie.Add(obj);
             Save();
+            return obj;
         }
 
         public void Save()

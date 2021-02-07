@@ -44,10 +44,11 @@ namespace QuizApi.Repositories
             return context.Parametrage.Find(id);
         }
 
-        public void Insert(Parametrage obj)
+        public Parametrage Insert(Parametrage obj)
         {
             context.Parametrage.Add(obj);
             Save();
+            return obj;
         }
 
         public void Save()
