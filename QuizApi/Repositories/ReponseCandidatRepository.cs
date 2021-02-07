@@ -40,10 +40,11 @@ namespace QuizApi.Repositories
             return context.ReponseCandidat.Find(id);
         }
 
-        public void Insert(ReponseCandidat obj)
+        public ReponseCandidat Insert(ReponseCandidat obj)
         {
             context.ReponseCandidat.Add(obj);
             Save();
+            return obj;
         }
 
         public void Save()

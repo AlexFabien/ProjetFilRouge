@@ -24,8 +24,8 @@ namespace QuizApi.Repositories
         /// Méthode qui ajoute une T à la base de données
         /// </summary>
         /// <param name="obj"></param>
-        /// <returns></returns>
-        public void Insert(T obj);
+        /// <returns>obj modifé après insertion en Bdd</returns>
+        public T Insert(T obj);
 
         /// <summary>
         /// Méthode qui supprime la T qui a pour id : {id} de la base de données

@@ -44,10 +44,11 @@ namespace QuizApi.Repositories
             return context.Niveau.Find(id);
         }
 
-        public void Insert(Niveau obj)
+        public Niveau Insert(Niveau obj)
         {
             context.Niveau.Add(obj);
             Save();
+            return obj;
         }
 
         public void Save()
