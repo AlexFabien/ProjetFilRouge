@@ -19,9 +19,9 @@ namespace QuizApi.Services
             this.repository = repository;
         }
 
-        public void Ajouter(ParametrageDto obj)
+        public ParametrageDto Ajouter(ParametrageDto obj)
         {
-            this.repository.Insert(obj);
+            return this.repository.Insert(obj);
         }
 
         public void Modifier(ParametrageDto obj)

@@ -18,9 +18,9 @@ namespace QuizApi.Services
             this.repository = repository;
         }
 
-        public void Ajouter(ReponduDto obj)
+        public ReponduDto Ajouter(ReponduDto obj)
         {
-            this.repository.Insert(obj);
+            return this.repository.Insert(obj);
         }
 
         public void Modifier(ReponduDto obj)
@@ -40,7 +40,7 @@ namespace QuizApi.Services
 
         public IEnumerable<ReponduDto> TrouverTout()
         {
-            return ConvertDtoEntity.ConvertListReponduToListReponduDto(this.repository.FindAll().ToList());
+            return ConvertDtoEntity.ConvertListReponduToListReponduDto(this.repository?.FindAll()?.ToList());
         }
     }
 }

@@ -24,8 +24,8 @@ namespace QuizApi.Services
         /// Méthode qui ajoute une T à la base de données
         /// </summary>
         /// <param name="obj"></param>
-        /// <returns></returns>
-        public void Ajouter(T obj);
+        /// <returns>L'obj modifié</returns>
+        public T Ajouter(T obj);
 
         /// <summary>
         /// Méthode qui supprime la T qui a pour id : {id} de la base de données
