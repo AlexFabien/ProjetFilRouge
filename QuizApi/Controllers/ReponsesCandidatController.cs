@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using QuizApi.Dtos;
 using QuizApi.Services;
 using QuizApi.Utils;
+using System;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -35,6 +37,10 @@ namespace QuizApi.Controllers
                     return BadRequest(e.Message);
                 }
             }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet("{id}")]
@@ -52,6 +58,14 @@ namespace QuizApi.Controllers
                 {
                     return BadRequest(e.Message);
                 }
+            }
+            catch (NullReferenceException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -72,6 +86,10 @@ namespace QuizApi.Controllers
                     return BadRequest(e.Message);
                 }
             }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPut()]
@@ -91,6 +109,10 @@ namespace QuizApi.Controllers
                     return BadRequest(e.Message);
                 }
             }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpDelete("{id}")]
@@ -109,6 +131,10 @@ namespace QuizApi.Controllers
                 {
                     return BadRequest(e.Message);
                 }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using QuizApi.quiz;
 using QuizApi.Utils;
 using System;
@@ -9,122 +11,90 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Repositories
 {
-    public class QuestionRepository : AbstractRepository<Question>
+    public class QuestionRepository : IRepository<Question>
     {
-        private QueryBuilder queryBuilder;
-        public QuestionRepository(QueryBuilder queryBuilder)
+        private QuizContext context;
+        private bool disposedValue;
+
+        public QuestionRepository(QuizContext context)
         {
-            this.queryBuilder = queryBuilder;
+            this.context = context;
         }
 
-        public override Question Create(Question obj)
+        public void Delete(int id)
         {
-            OpenConnection();
-            Dictionary<string, dynamic> questionDictionnary = new Dictionary<string, dynamic>();
-
-            foreach (PropertyInfo pr in obj.GetType().GetProperties())
+            Question obj = FindById(id);
+            if (obj != null)
             {
-                if (pr.Name.ToLower() != "id_quetion" 
-                    && pr.Name != "Question" 
-                    && pr.Name != "fk_Questions_Niveau1_idx"
-                    && pr.Name != "fk_Questions_TypeQuestion1_idx")
-                {
-                    questionDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
-                }
+                context.Question.Remove(obj);
+                Save();
             }
-            string request = queryBuilder
-                .Insert("question")
-                .Values(questionDictionnary);
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            cmd.ExecuteNonQuery();
-            long questionId = cmd.LastInsertedId;
-            obj.IdQuestion = (int)questionId;
-            connectionSql.Close();
+            else throw new RessourceException(StatusCodes.Status404NotFound, $"QuestionRepository.Delete : l'élément {id} n'a pas été trouvé ");
+        }
+
+        public IEnumerable<Question> FindAll()
+        {
+            return context.Question;
+        }
+
+        public Question FindById(int id)
+        {
+            return context.Question.Find(id);
+        }
+
+        public Question Insert(Question obj)
+        {
+            context.Question.Add(obj);
+            Save();
             return obj;
         }
 
-        //FIXIT : trouver une autre facon de recupere l'id car c'est pas generique
-        public override int Delete(int id)
+        public void Save()
         {
-            OpenConnection();
-            //TODO : c'est pas bien ca
-            string request = queryBuilder.Delete("question", id).Replace("id", "id_question");
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            int result = cmd.ExecuteNonQuery();
-            connectionSql.Close();
-            return result;
-        }
-
-        public override Question Find(int id)
-        {
-            OpenConnection();
-            string request = queryBuilder
-                .Select()
-                .From("question")
-                .Where("id_question", id, "=")
-                .Get();
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            Question question = new Question();
-            while (rdr.Read())
+            try
             {
-                question.IdQuestion = rdr.GetInt32(0);
-                question.Libelle = rdr.GetString(1);
-                question.ExplicationReponse = rdr.GetString(2);
-                question.IdNiveau = rdr.GetInt32(3);
-                question.IdTypeQuestion = rdr.GetInt32(4);
+                context.SaveChanges();
             }
-            CloseConnection(rdr);
-            return question;
-        }
-
-        public override List<Question> FindAll()
-        {
-            OpenConnection();
-            string request = queryBuilder
-                .Select()
-                .From("question")
-                .Get();
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            List<Question> questions = new List<Question>();
-
-            while (rdr.Read())
+            catch (DbUpdateException)
             {
-                Question question = new Question();
-                question.IdNiveau = rdr.GetInt32(0);
-                question.Libelle = rdr.GetString(1);
-                questions.Add(question);
+                throw new RessourceException(StatusCodes.Status400BadRequest, $"QuestionRepository.Save : \n\tdoublon sur enregistrement \n\tou tentative de mise à jour d'un enregistrement inexistant.");
             }
-            CloseConnection(rdr);
-            return questions;
         }
 
-        public override Question Update(int id, Question obj)
+        public void Update(Question obj)
         {
-            OpenConnection();
-            Dictionary<string, dynamic> questionDictionnary = new Dictionary<string, dynamic>();
+            context.Entry(obj).State = EntityState.Modified;
+            Save();
+        }
 
-            foreach (PropertyInfo pr in obj.GetType().GetProperties())
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
             {
-                if (pr.Name.ToLower() != "id_quetion"
-                    && pr.Name != "Question"
-                    && pr.Name != "fk_Questions_Niveau1_idx"
-                    && pr.Name != "fk_Questions_TypeQuestion1_idx"
-                    && pr.GetValue(obj) != null)
+                if (disposing)
                 {
-                    questionDictionnary.Add(pr.Name.ToLower(), pr.GetValue(obj));
+                    // TODO: supprimer l'état managé (objets managés)
+                    context.Dispose();
                 }
-            }
-            string request = queryBuilder
-              .Update("question")
-              .Set(questionDictionnary)
-              .Where("id_quetion", id).Get();
 
-            MySqlCommand cmd = new MySqlCommand(request, connectionSql);
-            cmd.ExecuteNonQuery();
-            connectionSql.Close();
-            return Find(id);
+                // TODO: libérer les ressources non managées (objets non managés) et substituer le finaliseur
+                // TODO: affecter aux grands champs une valeur null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: substituer le finaliseur uniquement si 'Dispose(bool disposing)' a du code pour libérer les ressources non managées
+        // ~ParametrageRepository()
+        // {
+        //     // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

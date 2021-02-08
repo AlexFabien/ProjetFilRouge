@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using QuizApi.Dtos;
 using QuizApi.Services;
 using QuizApi.Utils;
@@ -36,6 +37,10 @@ namespace QuizApi.Controllers
                     return BadRequest(e.Message);
                 }
             }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet("{id}")]
@@ -58,6 +63,10 @@ namespace QuizApi.Controllers
             {
                 return NotFound(e.Message);
             }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPost]
@@ -76,6 +85,10 @@ namespace QuizApi.Controllers
                 {
                     return BadRequest(e.Message);
                 }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -96,6 +109,10 @@ namespace QuizApi.Controllers
                     return BadRequest(e.Message);
                 }
             }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpDelete("{id}")]
@@ -114,6 +131,10 @@ namespace QuizApi.Controllers
                 {
                     return BadRequest(e.Message);
                 }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
     }
