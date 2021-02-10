@@ -1,6 +1,7 @@
 ﻿using QuizApi.Dtos;
 using QuizApi.Utils;
 using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace QuizApi.quiz
@@ -28,6 +29,7 @@ namespace QuizApi.quiz
             IdNiveauNavigation = idNiveauNavigation;
             IdTechnologieNavigation = idTechnologieNavigation;
             ActeurHasQuiz = acteurHasQuiz;
+            Question = new HashSet<Question>();
         }
 
         public int IdQuiz { get; set; }
@@ -50,5 +52,6 @@ namespace QuizApi.quiz
                 quiz.IdNiveau
                 );
         }
+        public virtual ICollection<Question> Question { get; set; }
     }
 }

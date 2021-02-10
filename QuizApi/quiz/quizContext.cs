@@ -199,6 +199,9 @@ namespace QuizApi.quiz
                 entity.HasIndex(e => e.IdNiveau)
                     .HasName("fk_Questions_Niveau1_idx");
 
+                entity.HasIndex(e => e.IdQuiz)
+                    .HasName("fk_question_quiz1_idx");
+
                 entity.HasIndex(e => e.IdTypeQuestion)
                     .HasName("fk_Questions_TypeQuestion1_idx");
 
@@ -208,6 +211,8 @@ namespace QuizApi.quiz
 
                 entity.Property(e => e.IdNiveau).HasColumnName("id_niveau");
 
+                entity.Property(e => e.IdQuiz).HasColumnName("id_quiz");
+
                 entity.Property(e => e.IdTypeQuestion).HasColumnName("id_type_question");
 
                 entity.Property(e => e.Libelle).HasColumnName("libelle");
@@ -216,6 +221,11 @@ namespace QuizApi.quiz
                     .WithMany(p => p.Question)
                     .HasForeignKey(d => d.IdNiveau)
                     .HasConstraintName("fk_Questions_Niveau1");
+
+                entity.HasOne(d => d.IdQuizNavigation)
+                    .WithMany(p => p.Question)
+                    .HasForeignKey(d => d.IdQuiz)
+                    .HasConstraintName("fk_question_quiz1");
 
                 entity.HasOne(d => d.IdTypeQuestionNavigation)
                     .WithMany(p => p.Question)

@@ -66,31 +66,6 @@ COMMENT = '			';
 
 
 -- -----------------------------------------------------
--- Table `quiz`.`question`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `quiz`.`question` (
-  `id_question` INT NOT NULL AUTO_INCREMENT,
-  `libelle` TEXT NULL,
-  `explication_reponse` TEXT NULL,
-  `id_niveau` INT NULL,
-  `id_type_question` INT NULL,
-  PRIMARY KEY (`id_question`),
-  INDEX `fk_Questions_Niveau1_idx` (`id_niveau` ASC) VISIBLE,
-  INDEX `fk_Questions_TypeQuestion1_idx` (`id_type_question` ASC) VISIBLE,
-  CONSTRAINT `fk_Questions_Niveau1`
-    FOREIGN KEY (`id_niveau`)
-    REFERENCES `quiz`.`niveau` (`id_niveau`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Questions_TypeQuestion1`
-    FOREIGN KEY (`id_type_question`)
-    REFERENCES `quiz`.`type_question` (`id_type_question`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `quiz`.`technologie`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `quiz`.`technologie` (
@@ -118,6 +93,38 @@ CREATE TABLE IF NOT EXISTS `quiz`.`quiz` (
   CONSTRAINT `fk_Quiz_technologie1`
     FOREIGN KEY (`id_technologie`)
     REFERENCES `quiz`.`technologie` (`id_technologie`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `quiz`.`question`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `quiz`.`question` (
+  `id_question` INT NOT NULL AUTO_INCREMENT,
+  `libelle` TEXT NULL,
+  `explication_reponse` TEXT NULL,
+  `id_niveau` INT NULL,
+  `id_type_question` INT NULL,
+  `id_quiz` INT NULL,
+  PRIMARY KEY (`id_question`),
+  INDEX `fk_Questions_Niveau1_idx` (`id_niveau` ASC) VISIBLE,
+  INDEX `fk_Questions_TypeQuestion1_idx` (`id_type_question` ASC) VISIBLE,
+  INDEX `fk_question_quiz1_idx` (`id_quiz` ASC) VISIBLE,
+  CONSTRAINT `fk_Questions_Niveau1`
+    FOREIGN KEY (`id_niveau`)
+    REFERENCES `quiz`.`niveau` (`id_niveau`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Questions_TypeQuestion1`
+    FOREIGN KEY (`id_type_question`)
+    REFERENCES `quiz`.`type_question` (`id_type_question`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_question_quiz1`
+    FOREIGN KEY (`id_quiz`)
+    REFERENCES `quiz`.`quiz` (`id_quiz`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

@@ -1,6 +1,7 @@
 ﻿using QuizApi.Dtos;
 using QuizApi.Utils;
 using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace QuizApi.quiz
@@ -13,13 +14,14 @@ namespace QuizApi.quiz
             Reponse = new HashSet<Reponse>();
         }
 
-        public Question(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion):this()
+        public Question(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion, int? idQuiz)
         {
             IdQuestion = idQuestion;
             Libelle = libelle;
             ExplicationReponse = explicationReponse;
             IdNiveau = idNiveau;
             IdTypeQuestion = idTypeQuestion;
+            IdQuiz = idQuiz;
         }
 
         public Question(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion,
@@ -42,8 +44,10 @@ namespace QuizApi.quiz
         public string ExplicationReponse { get; set; }
         public int? IdNiveau { get; set; }
         public int? IdTypeQuestion { get; set; }
+        public int? IdQuiz { get; set; }
 
         public virtual Niveau IdNiveauNavigation { get; set; }
+        public virtual Quiz IdQuizNavigation { get; set; }
         public virtual TypeQuestion IdTypeQuestionNavigation { get; set; }
         public virtual ICollection<ActeurHasQuestion> ActeurHasQuestion { get; set; }
         public virtual ICollection<Reponse> Reponse { get; set; }
@@ -59,7 +63,8 @@ namespace QuizApi.quiz
                 question.Libelle,
                 question.ExplicationReponse,
                 question.IdNiveau,
-                question.IdTypeQuestion
+                question.IdTypeQuestion,
+                question.IdQuiz
                 );
         }
     }

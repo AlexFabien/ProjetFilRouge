@@ -11,13 +11,14 @@ namespace QuizApi.Dtos
         {
         }
 
-        public QuestionDto(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion)
+        public QuestionDto(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion, int? idQuiz)
         {
             IdQuestion = idQuestion;
             Libelle = libelle;
             ExplicationReponse = explicationReponse;
             IdNiveau = idNiveau;
             IdTypeQuestion = idTypeQuestion;
+            IdQuiz = idQuiz;
         }
 
         public int IdQuestion { get; set; }
@@ -25,6 +26,7 @@ namespace QuizApi.Dtos
         public string ExplicationReponse { get; set; }
         public int? IdNiveau { get; set; }
         public int? IdTypeQuestion { get; set; }
+        public int? IdQuiz { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une question(DTO) en question(Models) automatiquement
@@ -37,7 +39,8 @@ namespace QuizApi.Dtos
                 questionDto.Libelle,
                 questionDto.ExplicationReponse,
                 questionDto.IdNiveau,
-                questionDto.IdTypeQuestion
+                questionDto.IdTypeQuestion,
+                questionDto.IdQuiz
                 );
         }
     }
