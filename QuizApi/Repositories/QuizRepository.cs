@@ -65,6 +65,11 @@ namespace QuizApi.Repositories
             Save();
         }
 
+        internal IEnumerable<Question> retourneListQuestion(int idTypeQuestion, int idNiveau, int nbQuestions)
+        {
+            return context.Question.Where(q => q.IdTypeQuestion == idTypeQuestion && q.IdNiveau == idNiveau && q.IdQuiz == null).Take(nbQuestions);
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

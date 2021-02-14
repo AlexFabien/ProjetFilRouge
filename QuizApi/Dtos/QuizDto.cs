@@ -21,6 +21,7 @@ namespace QuizApi.Dtos
         public int IdQuiz { get; set; }
         public int? IdTechnologie { get; set; }
         public int? IdNiveau { get; set; }
+        public int? NbQuestions { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une quiz(DTO) en quiz(Models) automatiquement

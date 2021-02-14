@@ -1,7 +1,4 @@
 ﻿using QuizApi.Dtos;
-using QuizApi.Utils;
-using System;
-﻿using System;
 using System.Collections.Generic;
 
 namespace QuizApi.quiz
@@ -11,6 +8,7 @@ namespace QuizApi.quiz
         public Quiz()
         {
             ActeurHasQuiz = new HashSet<ActeurHasQuiz>();
+            Question = new HashSet<Question>();
         }
 
         public Quiz(int idQuiz, int? idTechnologie, int? idNiveau):this()
@@ -20,16 +18,13 @@ namespace QuizApi.quiz
             IdNiveau = idNiveau;
         }
 
-        public Quiz(int idQuiz, int? idTechnologie, int? idNiveau, Niveau idNiveauNavigation,
-            Technologie idTechnologieNavigation, ICollection<ActeurHasQuiz> acteurHasQuiz)
+        public Quiz(int idQuiz, int? idTechnologie, int? idNiveau, Niveau idNiveauNavigation, Technologie idTechnologieNavigation): this()
         {
             IdQuiz = idQuiz;
             IdTechnologie = idTechnologie;
             IdNiveau = idNiveau;
             IdNiveauNavigation = idNiveauNavigation;
             IdTechnologieNavigation = idTechnologieNavigation;
-            ActeurHasQuiz = acteurHasQuiz;
-            Question = new HashSet<Question>();
         }
 
         public int IdQuiz { get; set; }
@@ -39,6 +34,7 @@ namespace QuizApi.quiz
         public virtual Niveau IdNiveauNavigation { get; set; }
         public virtual Technologie IdTechnologieNavigation { get; set; }
         public virtual ICollection<ActeurHasQuiz> ActeurHasQuiz { get; set; }
+        public virtual ICollection<Question> Question { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une quiz(Models) en quiz(DTO) automatiquement
@@ -52,6 +48,5 @@ namespace QuizApi.quiz
                 quiz.IdNiveau
                 );
         }
-        public virtual ICollection<Question> Question { get; set; }
     }
 }

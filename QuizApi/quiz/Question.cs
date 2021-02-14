@@ -1,7 +1,4 @@
 ﻿using QuizApi.Dtos;
-using QuizApi.Utils;
-using System;
-﻿using System;
 using System.Collections.Generic;
 
 namespace QuizApi.quiz
