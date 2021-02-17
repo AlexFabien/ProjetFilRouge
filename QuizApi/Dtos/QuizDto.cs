@@ -11,14 +11,16 @@ namespace QuizApi.Dtos
         {
         }
 
-        public QuizDto(int idQuiz, int? idTechnologie, int? idNiveau)
+        public QuizDto(int idQuiz, string libelle, int? idTechnologie, int? idNiveau)
         {
             IdQuiz = idQuiz;
+            Libelle = libelle;
             IdTechnologie = idTechnologie;
             IdNiveau = idNiveau;
         }
 
         public int IdQuiz { get; set; }
+        public string Libelle { get; set; }
         public int? IdTechnologie { get; set; }
         public int? IdNiveau { get; set; }
 
@@ -30,6 +32,7 @@ namespace QuizApi.Dtos
         {
             return new Quiz(
                 quizDto.IdQuiz,
+                quizDto.Libelle,
                 quizDto.IdTechnologie,
                 quizDto.IdNiveau
                 );
