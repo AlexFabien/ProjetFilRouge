@@ -80,6 +80,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `quiz`.`quiz` (
   `id_quiz` INT NOT NULL AUTO_INCREMENT,
+  `libelle` VARCHAR(150) NULL,
   `id_technologie` INT NULL,
   `id_niveau` INT NULL,
   PRIMARY KEY (`id_quiz`),
@@ -108,10 +109,12 @@ CREATE TABLE IF NOT EXISTS `quiz`.`question` (
   `id_niveau` INT NULL,
   `id_type_question` INT NULL,
   `id_quiz` INT NULL,
+  `id_technologie` INT NULL,
   PRIMARY KEY (`id_question`),
   INDEX `fk_Questions_Niveau1_idx` (`id_niveau` ASC) VISIBLE,
   INDEX `fk_Questions_TypeQuestion1_idx` (`id_type_question` ASC) VISIBLE,
   INDEX `fk_question_quiz1_idx` (`id_quiz` ASC) VISIBLE,
+  INDEX `fk_question_technologie1_idx` (`id_technologie` ASC) VISIBLE,
   CONSTRAINT `fk_Questions_Niveau1`
     FOREIGN KEY (`id_niveau`)
     REFERENCES `quiz`.`niveau` (`id_niveau`)
@@ -125,6 +128,11 @@ CREATE TABLE IF NOT EXISTS `quiz`.`question` (
   CONSTRAINT `fk_question_quiz1`
     FOREIGN KEY (`id_quiz`)
     REFERENCES `quiz`.`quiz` (`id_quiz`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_question_technologie1`
+    FOREIGN KEY (`id_technologie`)
+    REFERENCES `quiz`.`technologie` (`id_technologie`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

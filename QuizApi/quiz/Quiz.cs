@@ -1,4 +1,6 @@
 ﻿using QuizApi.Dtos;
+using QuizApi.Utils;
+using System;
 using System.Collections.Generic;
 
 namespace QuizApi.quiz
@@ -11,23 +13,16 @@ namespace QuizApi.quiz
             Question = new HashSet<Question>();
         }
 
-        public Quiz(int idQuiz, int? idTechnologie, int? idNiveau):this()
+        public Quiz(int idQuiz, string libelle, int? idTechnologie, int? idNiveau)
         {
             IdQuiz = idQuiz;
+            Libelle = libelle;
             IdTechnologie = idTechnologie;
             IdNiveau = idNiveau;
-        }
-
-        public Quiz(int idQuiz, int? idTechnologie, int? idNiveau, Niveau idNiveauNavigation, Technologie idTechnologieNavigation): this()
-        {
-            IdQuiz = idQuiz;
-            IdTechnologie = idTechnologie;
-            IdNiveau = idNiveau;
-            IdNiveauNavigation = idNiveauNavigation;
-            IdTechnologieNavigation = idTechnologieNavigation;
         }
 
         public int IdQuiz { get; set; }
+        public string Libelle { get; set; }
         public int? IdTechnologie { get; set; }
         public int? IdNiveau { get; set; }
 
@@ -35,6 +30,7 @@ namespace QuizApi.quiz
         public virtual Technologie IdTechnologieNavigation { get; set; }
         public virtual ICollection<ActeurHasQuiz> ActeurHasQuiz { get; set; }
         public virtual ICollection<Question> Question { get; set; }
+
 
         /// <summary>
         /// Fonction qui transforme une quiz(Models) en quiz(DTO) automatiquement
@@ -44,6 +40,7 @@ namespace QuizApi.quiz
         {
             return new QuizDto(
                 quiz.IdQuiz,
+                quiz.Libelle,
                 quiz.IdTechnologie,
                 quiz.IdNiveau
                 );

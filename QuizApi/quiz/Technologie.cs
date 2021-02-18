@@ -8,6 +8,7 @@ namespace QuizApi.quiz
     {
         public Technologie()
         {
+            Question = new HashSet<Question>();
             Quiz = new HashSet<Quiz>();
         }
         public Technologie(string libelle, int? idTechnologie = null)
@@ -19,6 +20,7 @@ namespace QuizApi.quiz
         public int? IdTechnologie { get; set; }
         public string Libelle { get; set; }
 
+        public virtual ICollection<Question> Question { get; set; }
         public virtual ICollection<Quiz> Quiz { get; set; }
 
         /// <summary>
