@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace QuizApi.Services
 {
-    public class QuestionService
+    public class QuestionService : IService<QuestionDto>
     {
         private IRepository<Question> repository;
 
