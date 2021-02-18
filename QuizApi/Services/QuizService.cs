@@ -5,15 +5,18 @@ using QuizApi.quiz;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace QuizApi.Services
 {
     public class QuizService : IService<QuizDto>
     {
         private QuizRepository repository;
-        public QuizService(QuizRepository repository)
+        private QuestionService questionService;
+        public QuizService(QuizRepository repository, QuestionService questionService)
         {
             this.repository = repository;
+            this.questionService = questionService;
         }
 
         public QuizDto Ajouter(QuizDto obj)
@@ -22,29 +25,31 @@ namespace QuizApi.Services
             {
                 try
                 {
+                    Quiz leQuiz = null;
                     // retourner une liste de question (type_question, niveau, nbQuestions)
-                    IEnumerable<Question> listQuestion = null;
+                    IEnumerable <Question> listQuestion = null;
                     if ((obj.IdTechnologie != null) && (obj.IdNiveau != null) && (obj.NbQuestions != null))
-                        listQuestion = this.repository.retourneListQuestion((int)obj.IdTechnologie, (int)obj.IdNiveau, (int)obj.NbQuestions);
-                    // prendre en compte la répartition des questions en fonction du niveau du quiz
-                    // Gérer si la répartition n'existe pas.
-                    // Prendre en compte le nombre de question max en Bdd
-                    // Gérer s'il ne reste pas assez de question.
+                        listQuestion = this.questionService.retourneListQuestion((int)obj.IdTechnologie, (int)obj.IdNiveau, (int)obj.NbQuestions);
                     
-                    // Créer le quiz en Bdd dans un premier temps, afin de récupérer la pk
-                    Quiz leQuiz = this.repository.Insert(obj);
-                    // Ajouter le créateur du quiz
-                    leQuiz.ActeurHasQuiz.Add(
-                        new ActeurHasQuiz(1, leQuiz.IdQuiz)
-                    );
-                    // Ajouter les questions au quiz
-                    foreach (Question q in listQuestion)
+                    if (listQuestion?.Count() == obj.NbQuestions)
                     {
-                        q.IdQuiz = leQuiz.IdQuiz;
-                        leQuiz.Question.Add(q);
+                        // Créer le quiz en Bdd dans un premier temps, afin de récupérer la pk
+                        leQuiz = this.repository.Insert(obj);
+                        // Ajouter le créateur du quiz
+                        leQuiz.ActeurHasQuiz.Add(
+                            new ActeurHasQuiz(1, leQuiz.IdQuiz)
+                        );
+                        // Ajouter les questions au quiz
+                        foreach (Question q in listQuestion)
+                        {
+                            q.IdQuiz = leQuiz.IdQuiz;
+                            leQuiz.Question.Add(q);
+                        }
+                        // Mettre à jout leQuiz en Bdd avec les nouvelles modifications
+                        this.repository.Update(leQuiz);
                     }
-                    // Mettre à jout leQuiz en Bdd avec les nouvelles modifications
-                    this.repository.Update(leQuiz);
+                    if (leQuiz == null)
+                        throw new RessourceException(StatusCodes.Status500InternalServerError, "QuizService.Ajouter : Erreur lors de la création du quiz !");
                     return leQuiz;
 
                     //Without this line, no changes will get applied to the database

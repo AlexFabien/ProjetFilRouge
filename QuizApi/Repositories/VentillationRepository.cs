@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 namespace QuizApi.Repositories
 {
@@ -52,6 +53,11 @@ namespace QuizApi.Repositories
         public void Save()
         {
             context.SaveChanges();
+        }
+
+        internal List<Ventillation> retourneVentillation(int idNiveau)
+        {
+            return context.Ventillation.Where(v => v.IdNiveauQuiz == idNiveau).ToList();
         }
 
         public void Update(Ventillation obj)

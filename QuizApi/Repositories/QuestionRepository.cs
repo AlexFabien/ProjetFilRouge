@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
 using QuizApi.quiz;
 using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace QuizApi.Repositories
 {
@@ -47,6 +44,11 @@ namespace QuizApi.Repositories
             context.Question.Add(obj);
             Save();
             return obj;
+        }
+
+        internal IEnumerable<Question> retourneListQuestion(int idTechnologie, int idNiveau, int nbQuestions)
+        {
+            return context.Question.Where(q => q.IdTechnologie == idTechnologie && q.IdNiveau == idNiveau && q.IdQuiz == null).Take(nbQuestions);
         }
 
         public void Save()

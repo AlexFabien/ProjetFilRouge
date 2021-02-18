@@ -1,12 +1,7 @@
-﻿using MySql.Data.MySqlClient;
-using QuizApi.Dtos;
-using QuizApi.quiz;
+﻿using QuizApi.quiz;
 using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 
@@ -63,11 +58,6 @@ namespace QuizApi.Repositories
         {
             context.Entry(obj).State = EntityState.Modified;
             Save();
-        }
-
-        internal IEnumerable<Question> retourneListQuestion(int idTypeQuestion, int idNiveau, int nbQuestions)
-        {
-            return context.Question.Where(q => q.IdTypeQuestion == idTypeQuestion && q.IdNiveau == idNiveau && q.IdQuiz == null).Take(nbQuestions);
         }
 
         protected virtual void Dispose(bool disposing)
