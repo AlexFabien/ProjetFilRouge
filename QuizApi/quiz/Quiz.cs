@@ -13,7 +13,7 @@ namespace QuizApi.quiz
             Question = new HashSet<Question>();
         }
 
-        public Quiz(int idQuiz, string libelle, int? idTechnologie, int? idNiveau)
+        public Quiz(int idQuiz, string libelle, int? idTechnologie, int? idNiveau) : this ()
         {
             IdQuiz = idQuiz;
             Libelle = libelle;
