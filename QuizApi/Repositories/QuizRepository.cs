@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 namespace QuizApi.Repositories
 {
@@ -47,6 +48,15 @@ namespace QuizApi.Repositories
             context.Quiz.Add(obj);
             Save();
             return obj;
+        }
+
+        internal IEnumerable<Acteur> TrouverTousLesUtilisateursDuQuiz(int id)
+        {
+            return context.Quiz.Where(q => q.IdQuiz == id)
+                .Include(q => q.ActeurHasQuiz)
+                .ThenInclude(a => a.IdActeurNavigation)
+                .Select(q => q.ActeurHasQuiz.Where(a => a.IdActeurNavigation.IdRole == 3).Select(a => a.IdActeurNavigation))
+                .First();
         }
 
         public void Save()

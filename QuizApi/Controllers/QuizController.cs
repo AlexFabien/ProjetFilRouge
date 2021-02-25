@@ -5,8 +5,6 @@ using QuizApi.Services;
 using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,9 +14,9 @@ namespace QuizApi.Controllers
     [ApiController]
     public class QuizController : ControllerBase
     {
-        private IService<QuizDto> service;
+        private QuizService service;
 
-        public QuizController(IService<QuizDto> service)
+        public QuizController(QuizService service)
         {
             this.service = service;
         }
@@ -69,6 +67,53 @@ namespace QuizApi.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{id}/candidates")]
+        public IActionResult FindAllCandidatesByQuiz(int id)
+        {
+            try
+            {
+                return Ok(this.service.TrouverTousLesUtilisateursDuQuiz(id));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        //[HttpGet]
+        //[Route("{id}/candidates/{idCandidate}")]
+        //public IActionResult FindAllCandidatesByQuiz(int id, int idCandidate)
+        //{
+        //    try
+        //    {
+        //        Console.Write($"idQuiz : {id}, idCandidate : {idCandidate}");
+        //        return Ok(this.service.TrouverParId(id));
+        //    }
+        //    catch (RessourceException e)
+        //    {
+        //        if (e.Statut == 404)
+        //            return NotFound(e.Message);
+        //        else
+        //        {
+        //            return BadRequest(e.Message);
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        //    }
+        //}
+
         [HttpDelete]
         [Route("{id}")]
         public IActionResult Delete(int id)
@@ -95,13 +140,13 @@ namespace QuizApi.Controllers
 
         [HttpPost]
         [Route("")]
-        public IActionResult Insert([FromBody] QuizDto quizDto)
+        public IActionResult Insert([FromBody] CreatedQuizDto createdQuizDto)
         {
             try
             {
-                quizDto = this.service.Ajouter(quizDto);
+                QuizDto unQuiz = this.service.CreerQuiz(createdQuizDto);
 #warning Retourner un code 201
-                return Ok(quizDto);
+                return Ok(unQuiz);
             }
             catch (RessourceException e)
             {
@@ -117,6 +162,32 @@ namespace QuizApi.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
+
+        //[HttpPost]
+        //[Route("{id}/candidates")]
+        //public IActionResult InsertCandidatesByQuiz(int id, [FromBody] List<int> listCandidats)
+        //{
+        //    try
+        //    {
+        //        Console.Write(id);
+        //        Console.Write(listCandidats);
+
+        //        return Ok(this.service.AjouterCandidats(id));
+        //    }
+        //    catch (RessourceException e)
+        //    {
+        //        if (e.Statut == 404)
+        //            return NotFound(e.Message);
+        //        else
+        //        {
+        //            return BadRequest(e.Message);
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        //    }
+        //}
 
         [HttpPut]
         [Route("")]
