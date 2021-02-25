@@ -64,5 +64,20 @@ namespace QuizApi.quiz
                 acteur.IdRole
                 );
         }
+
+        /// <summary>
+        /// Fonction qui transforme une Acteur(Models) en Acteur2(DTO) automatiquement
+        /// </summary>
+        /// <param name="acteur"></param>
+        public static implicit operator Acteur2Dto(Acteur acteur)
+        {
+            return new Acteur2Dto(
+                acteur.IdActeur,
+                acteur.Nom,
+                acteur.Prenom,
+                acteur.Email,
+                acteur.IdRole
+                );
+        }
     }
 }

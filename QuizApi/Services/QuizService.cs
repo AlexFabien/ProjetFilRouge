@@ -21,6 +21,10 @@ namespace QuizApi.Services
 
         public QuizDto Ajouter(QuizDto obj)
         {
+            return null;
+        }
+        public QuizDto CreerQuiz(CreatedQuizDto obj)
+        {
             //using (var transaction = context.Database.BeginTransaction())
             {
                 try
@@ -37,7 +41,7 @@ namespace QuizApi.Services
                         leQuiz = this.repository.Insert(obj);
                         // Ajouter le créateur du quiz
                         leQuiz.ActeurHasQuiz.Add(
-                            new ActeurHasQuiz(1, leQuiz.IdQuiz)
+                            new ActeurHasQuiz(obj.IdCreateur, leQuiz.IdQuiz)
                         );
                         // Ajouter les questions au quiz
                         foreach (Question q in listQuestion)
@@ -50,7 +54,9 @@ namespace QuizApi.Services
                     }
                     if (leQuiz == null)
                         throw new RessourceException(StatusCodes.Status500InternalServerError, "QuizService.Ajouter : Erreur lors de la création du quiz !");
-                    return leQuiz;
+                    QuizDto leQuizDto = leQuiz;
+                    leQuizDto.NbQuestions = obj.NbQuestions;
+                    return leQuizDto;
 
                     //Without this line, no changes will get applied to the database
                     //transaction.Commit();
@@ -82,6 +88,19 @@ namespace QuizApi.Services
         public IEnumerable<QuizDto> TrouverTout()
         {
             return ConvertDtoEntity.ConvertListQuizToListQuizDto(this.repository?.FindAll()?.ToList());
+        }
+
+        internal IEnumerable<Acteur2Dto> TrouverTousLesUtilisateursDuQuiz(int id)
+        {
+            IEnumerable<Acteur> listActeur = this.repository?.TrouverTousLesUtilisateursDuQuiz(id);
+            if (listActeur == null)
+                throw new RessourceException(StatusCodes.Status404NotFound, $"QuizService.TrouverTousLesUtilisateursDuQuiz : Pas d'utilisateurs trouvés pour le quiz n° {id}.");
+            return ConvertDtoEntity.ConvertListActeurToListActeur2Dto(listActeur?.ToList());
+        }
+
+        internal object AjouterCandidats(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

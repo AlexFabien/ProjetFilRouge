@@ -260,6 +260,20 @@ namespace QuizApi.Utils
             return listActeurDto;
         }
 
+        internal static ICollection<Acteur2Dto> ConvertListActeurToListActeur2Dto(ICollection<Acteur> collectionActeur)
+        {
+            List<Acteur2Dto> listActeurDto = null;
+            if (collectionActeur != null)
+            {
+                listActeurDto = new List<Acteur2Dto>();
+                foreach (Acteur acteur in collectionActeur)
+                {
+                    listActeurDto.Add(acteur);
+                }
+            }
+            return listActeurDto;
+        }
+
         public static ICollection<Role> ConvertListRoleDtoToListRole(ICollection<RoleDto> collectionRoleDto)
         {
             List<Role> listRole = null;
