@@ -163,31 +163,28 @@ namespace QuizApi.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("{id}/candidates")]
-        //public IActionResult InsertCandidatesByQuiz(int id, [FromBody] List<int> listCandidats)
-        //{
-        //    try
-        //    {
-        //        Console.Write(id);
-        //        Console.Write(listCandidats);
-
-        //        return Ok(this.service.AjouterCandidats(id));
-        //    }
-        //    catch (RessourceException e)
-        //    {
-        //        if (e.Statut == 404)
-        //            return NotFound(e.Message);
-        //        else
-        //        {
-        //            return BadRequest(e.Message);
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-        //    }
-        //}
+        [HttpPost]
+        [Route("{id}/candidates")]
+        public IActionResult InsertCandidatesByQuiz(int id, [FromBody] List<ActeurIdCandidat> listCandidats)
+        {
+            try
+            {
+                return Ok(this.service.AjouterCandidats(id, listCandidats));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         [HttpPut]
         [Route("")]

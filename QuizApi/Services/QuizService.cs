@@ -30,6 +30,7 @@ namespace QuizApi.Services
                 try
                 {
                     Quiz leQuiz = null;
+                    //TODO : vérifier le role du créateur
                     // retourner une liste de question (type_question, niveau, nbQuestions)
                     IEnumerable <Question> listQuestion = null;
                     if ((obj.IdTechnologie != null) && (obj.IdNiveau != null) && (obj.NbQuestions != null))
@@ -70,6 +71,26 @@ namespace QuizApi.Services
             }
         }
 
+        public ReponseBody AjouterCandidats(int id, List<ActeurIdCandidat> listCandidats)
+        {
+            try
+            {
+                Quiz leQuiz = this.repository.FindById(id);
+                //TODO : vérifier le role des candidats
+                // Ajouter les candidats au quiz
+                listCandidats.ForEach(a =>
+                leQuiz.ActeurHasQuiz.Add(
+                    new ActeurHasQuiz(a.IdCandidat, leQuiz.IdQuiz)
+                ));
+                this.repository.Update(leQuiz);
+                return new ReponseBody(true, "Les candidats ont été ajoutés au quiz.");
+            }
+            catch (Exception)
+            {
+                return new ReponseBody(false, "Les candidats n'ont pas été ajoutés au quiz.");
+            }
+        }
+
         public void Modifier(QuizDto obj)
         {
             this.repository.Update(obj);
@@ -96,11 +117,6 @@ namespace QuizApi.Services
             if (listActeur == null)
                 throw new RessourceException(StatusCodes.Status404NotFound, $"QuizService.TrouverTousLesUtilisateursDuQuiz : Pas d'utilisateurs trouvés pour le quiz n° {id}.");
             return ConvertDtoEntity.ConvertListActeurToListActeur2Dto(listActeur?.ToList());
-        }
-
-        internal object AjouterCandidats(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }
