@@ -13,10 +13,12 @@ namespace QuizApi.Services
     {
         private QuizRepository repository;
         private QuestionService questionService;
-        public QuizService(QuizRepository repository, QuestionService questionService)
+        private IService<ActeurDto> acteurService;
+        public QuizService(QuizRepository repository, QuestionService questionService, IService<ActeurDto> acteurService)
         {
             this.repository = repository;
             this.questionService = questionService;
+            this.acteurService = acteurService;
         }
 
         public QuizDto Ajouter(QuizDto obj)
@@ -69,6 +71,14 @@ namespace QuizApi.Services
                     throw ex;
                 }
             }
+        }
+
+        internal StartQuizDto StartQuiz(int idQuiz, int idCandidate)
+        {
+            Quiz quiz = this.repository.FindById(idQuiz);
+            Acteur candidat = this.acteurService.TrouverParId(idCandidate);
+            StartQuizDto startQuizDto = new StartQuizDto(quiz.Libelle, quiz.IdTechnologie, quiz.IdNiveau, candidat);
+            return startQuizDto;
         }
 
         public ReponseBody AjouterCandidats(int id, List<ActeurIdCandidat> listCandidats)

@@ -50,6 +50,24 @@ namespace QuizApi.Repositories
             return obj;
         }
 
+        public Quiz QuizAvecUtilisateur(int idQuiz, int idCandidate)
+        {
+            Quiz unQuiz;
+            try
+            {
+                unQuiz = context.Quiz
+                  .Include(acteur => acteur.ActeurHasQuiz)
+                  .ThenInclude(acteurHasQuiz => acteurHasQuiz.All(a => a.IdActeur == idCandidate))
+                  .Where(p => p.IdQuiz == idQuiz)
+                  .FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return unQuiz;
+        }
+
         internal IEnumerable<Acteur> TrouverTousLesUtilisateursDuQuiz(int id)
         {
             return context.Quiz.Where(q => q.IdQuiz == id)?

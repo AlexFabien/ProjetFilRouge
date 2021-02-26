@@ -12,10 +12,8 @@ namespace QuizApi.quiz
             IdQuiz = idQuiz;
         }
 
-        public ActeurHasQuiz(int idActeur, int idQuiz, Acteur idActeurNavigation, Quiz idQuizNavigation)
+        public ActeurHasQuiz(int idActeur, int idQuiz, Acteur idActeurNavigation, Quiz idQuizNavigation) : this(idActeur, idQuiz)
         {
-            IdActeur = idActeur;
-            IdQuiz = idQuiz;
             IdActeurNavigation = idActeurNavigation;
             IdQuizNavigation = idQuizNavigation;
         }

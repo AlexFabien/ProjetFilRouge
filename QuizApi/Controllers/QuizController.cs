@@ -90,29 +90,28 @@ namespace QuizApi.Controllers
             }
         }
 
-        //[HttpGet]
-        //[Route("{id}/candidates/{idCandidate}")]
-        //public IActionResult FindAllCandidatesByQuiz(int id, int idCandidate)
-        //{
-        //    try
-        //    {
-        //        Console.Write($"idQuiz : {id}, idCandidate : {idCandidate}");
-        //        return Ok(this.service.TrouverParId(id));
-        //    }
-        //    catch (RessourceException e)
-        //    {
-        //        if (e.Statut == 404)
-        //            return NotFound(e.Message);
-        //        else
-        //        {
-        //            return BadRequest(e.Message);
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-        //    }
-        //}
+        [HttpGet]
+        [Route("{idQuiz}/candidates/{idCandidate}")]
+        public IActionResult FindAllCandidatesByQuiz(int idQuiz, int idCandidate)
+        {
+            try
+            {
+                return Ok(this.service.StartQuiz(idQuiz, idCandidate));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         [HttpDelete]
         [Route("{id}")]
