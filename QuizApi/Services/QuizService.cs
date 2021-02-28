@@ -46,10 +46,14 @@ namespace QuizApi.Services
                         leQuiz.ActeurHasQuiz.Add(
                             new ActeurHasQuiz(obj.IdCreateur, leQuiz.IdQuiz)
                         );
+                        int i = 0;
+                        //TODO Ajouter de l'aléatoire dans la sélection des questions (actuellement dans l'ordre de la ventillation)
                         // Ajouter les questions au quiz
                         foreach (Question q in listQuestion)
                         {
+                            i++;
                             q.IdQuiz = leQuiz.IdQuiz;
+                            q.Numero = i;
                             leQuiz.Question.Add(q);
                         }
                         // Mettre à jout leQuiz en Bdd avec les nouvelles modifications
