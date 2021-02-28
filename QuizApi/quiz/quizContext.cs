@@ -221,6 +221,8 @@ namespace QuizApi.quiz
                 entity.Property(e => e.IdTypeQuestion).HasColumnName("id_type_question");
 
                 entity.Property(e => e.Libelle).HasColumnName("libelle");
+                
+                entity.Property(e => e.Numero).HasColumnName("numero");
 
                 entity.HasOne(d => d.IdNiveauNavigation)
                     .WithMany(p => p.Question)

@@ -104,6 +104,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `quiz`.`question` (
   `id_question` INT NOT NULL AUTO_INCREMENT,
+  `numero` INT NULL,
   `libelle` TEXT NULL,
   `explication_reponse` TEXT NULL,
   `id_niveau` INT NULL,

@@ -13,10 +13,11 @@ namespace QuizApi.quiz
             Reponse = new HashSet<Reponse>();
         }
 
-        public Question(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion, 
-            int? idQuiz, int? idTechnologie)
+        public Question(int idQuestion, int? numero, string libelle, string explicationReponse, 
+            int? idNiveau, int? idTypeQuestion, int? idQuiz, int? idTechnologie) : this()
         {
             IdQuestion = idQuestion;
+            Numero = numero;
             Libelle = libelle;
             ExplicationReponse = explicationReponse;
             IdNiveau = idNiveau;
@@ -26,6 +27,7 @@ namespace QuizApi.quiz
         }
 
         public int IdQuestion { get; set; }
+        public int? Numero { get; set; }
         public string Libelle { get; set; }
         public string ExplicationReponse { get; set; }
         public int? IdNiveau { get; set; }
@@ -48,6 +50,7 @@ namespace QuizApi.quiz
         {
             return new QuestionDto(
                 question.IdQuestion,
+                question.Numero,
                 question.Libelle,
                 question.ExplicationReponse,
                 question.IdNiveau,
