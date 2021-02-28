@@ -11,10 +11,11 @@ namespace QuizApi.Dtos
         {
         }
 
-        public QuestionDto(int idQuestion, string libelle, string explicationReponse, int? idNiveau, int? idTypeQuestion, 
-            int? idQuiz, int? idTechnologie)
+        public QuestionDto(int idQuestion, int? numero, string libelle, string explicationReponse, 
+            int? idNiveau, int? idTypeQuestion, int? idQuiz, int? idTechnologie)
         {
             IdQuestion = idQuestion;
+            Numero = numero;
             Libelle = libelle;
             ExplicationReponse = explicationReponse;
             IdNiveau = idNiveau;
@@ -24,6 +25,7 @@ namespace QuizApi.Dtos
         }
 
         public int IdQuestion { get; set; }
+        public int ?Numero { get; set; }
         public string Libelle { get; set; }
         public string ExplicationReponse { get; set; }
         public int? IdNiveau { get; set; }
@@ -39,6 +41,7 @@ namespace QuizApi.Dtos
         {
             return new Question(
                 questionDto.IdQuestion,
+                questionDto.Numero,
                 questionDto.Libelle,
                 questionDto.ExplicationReponse,
                 questionDto.IdNiveau,
