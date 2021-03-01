@@ -15,10 +15,12 @@ namespace QuizApi.Controllers
     public class QuizController : ControllerBase
     {
         private QuizService service;
+        private QuestionService questionService;
 
-        public QuizController(QuizService service)
+        public QuizController(QuizService service, QuestionService questionService)
         {
             this.service = service;
+            this.questionService = questionService;
         }
 
         [HttpGet]
@@ -96,7 +98,31 @@ namespace QuizApi.Controllers
         {
             try
             {
+                //TODO Ajouter n° de la question en cours
                 return Ok(this.service.StartQuiz(idQuiz, idCandidate));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{idQuiz}/questions{idQuestion}")]
+        public IActionResult FindNextQuestion(int idQuiz, int idQuestion)
+        {
+            try
+            {
+                return Ok(this.questionService.TrouverQuestionParQuizEtQuestion(idQuiz, idQuestion));
             }
             catch (RessourceException e)
             {

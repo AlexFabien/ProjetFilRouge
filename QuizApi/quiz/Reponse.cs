@@ -44,5 +44,17 @@ namespace QuizApi.quiz
                 reponse.IdQuestion
                 );
         }
+
+        /// <summary>
+        /// Fonction qui transforme une reponse(Models) en QuestionSuivanteReponse(DTO) automatiquement
+        /// </summary>
+        /// <param name="reponse"></param>
+        public static implicit operator ReponseQuestionSuivanteDto(Reponse reponse)
+        {
+            return new ReponseQuestionSuivanteDto(
+                reponse.IdReponse,
+                reponse.Libelle
+                );
+        }
     }
 }

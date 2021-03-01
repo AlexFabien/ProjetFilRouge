@@ -51,6 +51,31 @@ namespace QuizApi.Repositories
             return context.Question.Where(q => q.IdTechnologie == idTechnologie && q.IdNiveau == idNiveau && q.IdQuiz == null).Take(nbQuestions);
         }
 
+        internal Question FindQuestionByQuizAndNumeroQuestion(int idQuiz, int numeroQuestion)
+        {
+            try
+            {
+                Question question = context.Question
+                    .Where(q => q.IdQuiz == idQuiz)
+                    .Where(q => q.Numero == numeroQuestion)
+                    .Include(q => q.Reponse)
+                    .First();
+                if (question?.Reponse.Count() == 0)
+                    throw new RessourceException(StatusCodes.Status404NotFound, $"QuestionRepository.FindQuestionByQuizAndNumeroQuestion : " +
+                    $"les réponses pour la question n° {numeroQuestion} du quiz n° {idQuiz} n'ont pas été trouvées.");
+                return question;
+            }
+            catch(RessourceException e)
+            {
+                throw e;
+            }
+            catch (Exception)
+            {
+                throw new RessourceException(StatusCodes.Status404NotFound, $"QuestionRepository.FindQuestionByQuizAndNumeroQuestion : " +
+                    $"la question n° {numeroQuestion} du quiz n° {idQuiz} n'a pas été trouvée.");
+            }
+        }
+
         public void Save()
         {
             try

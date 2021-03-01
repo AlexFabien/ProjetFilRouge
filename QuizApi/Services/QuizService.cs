@@ -79,6 +79,7 @@ namespace QuizApi.Services
 
         internal StartQuizDto StartQuiz(int idQuiz, int idCandidate)
         {
+            //TODO Vérifier que le candidat est positionné sur le quiz
             Quiz quiz = this.repository.FindById(idQuiz);
             Acteur candidat = this.acteurService.TrouverParId(idCandidate);
             StartQuizDto startQuizDto = new StartQuizDto(quiz.Libelle, quiz.IdTechnologie, quiz.IdNiveau, candidat);

@@ -87,5 +87,10 @@ namespace QuizApi.Services
             } 
             return listQuestions;
         }
+
+        internal QuestionSuivanteDto TrouverQuestionParQuizEtQuestion(int idQuiz, int numeroQuestion)
+        {
+            return this.repository.FindQuestionByQuizAndNumeroQuestion(idQuiz, numeroQuestion);
+        }
     }
 }

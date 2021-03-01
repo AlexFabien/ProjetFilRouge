@@ -177,6 +177,20 @@ namespace QuizApi.Utils
             return listReponseDto;
         }
 
+        internal static ICollection<ReponseQuestionSuivanteDto> ConvertListReponseToListReponseQuestionSuivanteDto(ICollection<Reponse> collectionReponse)
+        {
+            List<ReponseQuestionSuivanteDto> listReponseQuestionSuivanteDto = null;
+            if (collectionReponse != null)
+            {
+                listReponseQuestionSuivanteDto = new List<ReponseQuestionSuivanteDto>();
+                foreach (Reponse reponse in collectionReponse)
+                {
+                    listReponseQuestionSuivanteDto.Add(reponse);
+                }
+            }
+            return listReponseQuestionSuivanteDto;
+        }
+
         public static List<Niveau> ConvertListNiveauDtoToListNiveau(ICollection<NiveauDto> collectionNiveauDto)
         {
             List<Niveau> listNiveau = null;
