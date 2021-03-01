@@ -17,8 +17,10 @@ namespace QuizApi.Controllers
     public class ActeursController : ControllerBase
     {
         private IService<ActeurDto> service;
+        //private ActeurService service;
 
         public ActeursController(IService<ActeurDto> service)
+        //public ActeursController(ActeurService service)
         {
             this.service = service;
         }
@@ -96,11 +98,14 @@ namespace QuizApi.Controllers
         [HttpPost]
         [Route("")]
         public IActionResult Insert([FromBody] ActeurDto acteurDto)
+
+        //public IActionResult Insert([FromBody] CreatedActeurDto createdActeurDto)
         {
             try
             {
+
                 acteurDto = this.service.Ajouter(acteurDto);
-#warning Retourner un code 201
+                //ActeurDto unActeur = this.service.CreerActeur(createdActeurDto);
                 return Ok(acteurDto);
             }
             catch (RessourceException e)

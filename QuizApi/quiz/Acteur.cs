@@ -23,6 +23,14 @@ namespace QuizApi.quiz
             IdRole = idRole;
         }
 
+        public Acteur(string nom, string prenom, string email, string password) : this()
+        {
+            Nom = nom;
+            Prenom = prenom;
+            Email = email;
+            Password = password;
+        }
+
         public Acteur(int idActeur, string nom, string prenom, string email, string password,
                 int? idRole, Role idRoleNavigation,
                 ICollection<ActeurHasQuestion> acteurHasQuestion, ICollection<ActeurHasQuiz> acteurHasQuiz)
