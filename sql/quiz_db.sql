@@ -140,12 +140,60 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `quiz`.`repondu`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `quiz`.`repondu` (
+  `id_etat_reponse` INT NOT NULL AUTO_INCREMENT,
+  `libelle` VARCHAR(45) NULL,
+  PRIMARY KEY (`id_etat_reponse`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `quiz`.`acteur_has_question`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `quiz`.`acteur_has_question` (
+  `id_acteur` INT NOT NULL,
+  `id_question` INT NOT NULL,
+  `commentaire` TEXT NULL,
+  `id_etat_reponse` INT NULL,
+  PRIMARY KEY (`id_acteur`, `id_question`),
+  INDEX `fk_utilisateur_has_question_question1_idx` (`id_question` ASC) VISIBLE,
+  INDEX `fk_utilisateur_has_question_utilisateur1_idx` (`id_acteur` ASC) VISIBLE,
+  INDEX `fk_utilisateur_has_question_repondu1_idx` (`id_etat_reponse` ASC) VISIBLE,
+  CONSTRAINT `fk_utilisateur_has_question_utilisateur1`
+    FOREIGN KEY (`id_acteur`)
+    REFERENCES `quiz`.`acteur` (`id_acteur`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_utilisateur_has_question_question1`
+    FOREIGN KEY (`id_question`)
+    REFERENCES `quiz`.`question` (`id_question`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_utilisateur_has_question_repondu1`
+    FOREIGN KEY (`id_etat_reponse`)
+    REFERENCES `quiz`.`repondu` (`id_etat_reponse`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `quiz`.`reponse_candidat`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `quiz`.`reponse_candidat` (
   `id_reponse_candidat` INT NOT NULL AUTO_INCREMENT,
   `libelle` VARCHAR(255) NULL,
-  PRIMARY KEY (`id_reponse_candidat`))
+  `id_acteur` INT NULL,
+  `id_question` INT NULL,
+  PRIMARY KEY (`id_reponse_candidat`),
+  INDEX `fk_reponse_candidat_acteur_has_question1_idx` (`id_acteur` ASC, `id_question` ASC) VISIBLE,
+  CONSTRAINT `fk_reponse_candidat_acteur_has_question1`
+    FOREIGN KEY (`id_acteur` , `id_question`)
+    REFERENCES `quiz`.`acteur_has_question` (`id_acteur` , `id_question`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -222,53 +270,6 @@ CREATE TABLE IF NOT EXISTS `quiz`.`ventillation` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = '	';
-
-
--- -----------------------------------------------------
--- Table `quiz`.`repondu`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `quiz`.`repondu` (
-  `id_etat_reponse` INT NOT NULL AUTO_INCREMENT,
-  `libelle` VARCHAR(45) NULL,
-  PRIMARY KEY (`id_etat_reponse`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `quiz`.`acteur_has_question`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `quiz`.`acteur_has_question` (
-  `id_acteur` INT NOT NULL,
-  `id_question` INT NOT NULL,
-  `commentaire` TEXT NULL,
-  `id_etat_reponse` INT NULL,
-  `id_reponse_candidat` INT NULL,
-  PRIMARY KEY (`id_acteur`, `id_question`),
-  INDEX `fk_utilisateur_has_question_question1_idx` (`id_question` ASC) VISIBLE,
-  INDEX `fk_utilisateur_has_question_utilisateur1_idx` (`id_acteur` ASC) VISIBLE,
-  INDEX `fk_utilisateur_has_question_repondu1_idx` (`id_etat_reponse` ASC) VISIBLE,
-  INDEX `fk_utilisateur_has_question_reponse_candidat1_idx` (`id_reponse_candidat` ASC) VISIBLE,
-  CONSTRAINT `fk_utilisateur_has_question_utilisateur1`
-    FOREIGN KEY (`id_acteur`)
-    REFERENCES `quiz`.`acteur` (`id_acteur`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_utilisateur_has_question_question1`
-    FOREIGN KEY (`id_question`)
-    REFERENCES `quiz`.`question` (`id_question`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_utilisateur_has_question_repondu1`
-    FOREIGN KEY (`id_etat_reponse`)
-    REFERENCES `quiz`.`repondu` (`id_etat_reponse`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_utilisateur_has_question_reponse_candidat1`
-    FOREIGN KEY (`id_reponse_candidat`)
-    REFERENCES `quiz`.`reponse_candidat` (`id_reponse_candidat`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

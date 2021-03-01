@@ -93,9 +93,6 @@ namespace QuizApi.quiz
                 entity.HasIndex(e => e.IdQuestion)
                     .HasName("fk_utilisateur_has_question_question1_idx");
 
-                entity.HasIndex(e => e.IdReponseCandidat)
-                    .HasName("fk_utilisateur_has_question_reponse_candidat1_idx");
-
                 entity.Property(e => e.IdActeur).HasColumnName("id_acteur");
 
                 entity.Property(e => e.IdQuestion).HasColumnName("id_question");
@@ -103,8 +100,6 @@ namespace QuizApi.quiz
                 entity.Property(e => e.Commentaire).HasColumnName("commentaire");
 
                 entity.Property(e => e.IdEtatReponse).HasColumnName("id_etat_reponse");
-
-                entity.Property(e => e.IdReponseCandidat).HasColumnName("id_reponse_candidat");
 
                 entity.HasOne(d => d.IdActeurNavigation)
                     .WithMany(p => p.ActeurHasQuestion)
@@ -122,11 +117,6 @@ namespace QuizApi.quiz
                     .HasForeignKey(d => d.IdQuestion)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_utilisateur_has_question_question1");
-
-                entity.HasOne(d => d.IdReponseCandidatNavigation)
-                    .WithMany(p => p.ActeurHasQuestion)
-                    .HasForeignKey(d => d.IdReponseCandidat)
-                    .HasConstraintName("fk_utilisateur_has_question_reponse_candidat1");
             });
 
             modelBuilder.Entity<ActeurHasQuiz>(entity =>
@@ -221,7 +211,7 @@ namespace QuizApi.quiz
                 entity.Property(e => e.IdTypeQuestion).HasColumnName("id_type_question");
 
                 entity.Property(e => e.Libelle).HasColumnName("libelle");
-                
+
                 entity.Property(e => e.Numero).HasColumnName("numero");
 
                 entity.HasOne(d => d.IdNiveauNavigation)
@@ -326,11 +316,23 @@ namespace QuizApi.quiz
 
                 entity.ToTable("reponse_candidat");
 
+                entity.HasIndex(e => new { e.IdActeur, e.IdQuestion })
+                    .HasName("fk_reponse_candidat_acteur_has_question1_idx");
+
                 entity.Property(e => e.IdReponseCandidat).HasColumnName("id_reponse_candidat");
+
+                entity.Property(e => e.IdActeur).HasColumnName("id_acteur");
+
+                entity.Property(e => e.IdQuestion).HasColumnName("id_question");
 
                 entity.Property(e => e.Libelle)
                     .HasColumnName("libelle")
                     .HasMaxLength(255);
+
+                entity.HasOne(d => d.Id)
+                    .WithMany(p => p.ReponseCandidat)
+                    .HasForeignKey(d => new { d.IdActeur, d.IdQuestion })
+                    .HasConstraintName("fk_reponse_candidat_acteur_has_question1");
             });
 
             modelBuilder.Entity<Role>(entity =>

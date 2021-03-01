@@ -27,7 +27,9 @@ namespace QuizApi.Dtos
         {
             return new ReponseCandidat(
                 reponseCandidat.IdReponseCandidat,
-                reponseCandidat.Libelle
+                reponseCandidat.Libelle,
+                null,
+                null
                 );
         }
     }
