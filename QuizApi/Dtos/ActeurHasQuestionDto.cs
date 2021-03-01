@@ -11,21 +11,18 @@ namespace QuizApi.Dtos
 {
     public class ActeurHasQuestionDto
     {
-        public ActeurHasQuestionDto(int idActeur, int idQuestion, string commentaire, 
-                int? idEtatReponse, int? idReponseCandidat)
+        public ActeurHasQuestionDto(int idActeur, int idQuestion, string commentaire, int? idEtatReponse)
         {
             IdActeur = idActeur;
             IdQuestion = idQuestion;
             Commentaire = commentaire;
             IdEtatReponse = idEtatReponse;
-            IdReponseCandidat = idReponseCandidat;
         }
 
         public int IdActeur { get; set; }
         public int IdQuestion { get; set; }
         public string Commentaire { get; set; }
         public int? IdEtatReponse { get; set; }
-        public int? IdReponseCandidat { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une acteurHasQuestion(DTO) en acteurHasQuestion(Models) automatiquement
@@ -37,8 +34,7 @@ namespace QuizApi.Dtos
                 acteurHasQuestionDto.IdActeur,
                 acteurHasQuestionDto.IdQuestion,
                 acteurHasQuestionDto.Commentaire,
-                acteurHasQuestionDto.IdEtatReponse,
-                acteurHasQuestionDto.IdReponseCandidat
+                acteurHasQuestionDto.IdEtatReponse
                 );
         }
     }
