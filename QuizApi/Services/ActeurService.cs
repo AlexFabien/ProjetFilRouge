@@ -27,14 +27,13 @@ namespace QuizApi.Services
 
         public ActeurDto CreerActeur(CreatedActeurDto createdActeurDto)
         {
-            //ActeurDto(int idActeur, string nom, string prenom, string email, string password, int? idRole)
             ActeurDto acteurDto = new ActeurDto(
                 0,
                 createdActeurDto.Nom,
                 createdActeurDto.Prenom,
                 createdActeurDto.Email,
-                createdActeurDto.Password, 
-                1 //FIXIT : idRole ne doit pas etre renseigné
+                createdActeurDto.Password,
+                1 //FIXIT : devrait fonctionner sans idRole
                 );
             return this.repository.Insert(acteurDto);        
         }
