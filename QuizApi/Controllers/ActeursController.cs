@@ -71,7 +71,30 @@ namespace QuizApi.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpGet]
+        [Route("{email}")]
+        public IActionResult FindByEmail(string email)
+        {
+            try
+            {
+                return Ok(this.service.TrouverParEmail(email));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+            [HttpDelete]
         [Route("{id}")]
         public IActionResult Delete(int id)
         {

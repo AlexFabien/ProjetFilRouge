@@ -39,7 +39,8 @@ namespace QuizApi
 
             services.AddTransient<QuizContext, QuizContext>();
 
-            services.AddTransient<IRepository<Acteur>, ActeurRepository>();
+            //services.AddTransient<IRepository<Acteur>, ActeurRepository>();
+            services.AddTransient<ActeurRepository, ActeurRepository>();
             services.AddTransient<IService<ActeurDto>, ActeurService>();
             services.AddTransient<ActeurService, ActeurService>();
 

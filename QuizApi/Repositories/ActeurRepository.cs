@@ -47,6 +47,14 @@ namespace QuizApi.Repositories
             return obj;
         }
 
+        public Acteur FindByEmail(string email)
+        {
+            Acteur acteur = context.Acteur.Where(a => a.Email == email).First();
+            if(acteur == null)
+                throw new RessourceException(StatusCodes.Status404NotFound, $"ActeurRepository.FindByEmail : l'email {email} n'a pas été trouvé ");
+            return acteur;
+        }
+        
         public Acteur Insert(Acteur obj)
         {
             context.Acteur.Add(obj);

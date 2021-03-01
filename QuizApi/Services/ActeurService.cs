@@ -12,10 +12,12 @@ namespace QuizApi.Services
 {
     public class ActeurService : IService<ActeurDto>
     {
-        private IRepository<Acteur> repository;
+        //private IRepository<Acteur> repository;
+        private ActeurRepository repository;
 
-        public ActeurService(IRepository<Acteur> repository)
+        public ActeurService(ActeurRepository repository)
         {
+            //this.acteurRepository = acteurRepository;
             this.repository = repository;
         }
 
@@ -56,6 +58,11 @@ namespace QuizApi.Services
         public IEnumerable<ActeurDto> TrouverTout()
         {
             return ConvertDtoEntity.ConvertListActeurToListActeurDto(this.repository?.FindAll()?.ToList());
+        }
+
+        public ActeurDto TrouverParEmail(string email)
+        {
+            return this.repository.FindByEmail(email);
         }
     }
 }
