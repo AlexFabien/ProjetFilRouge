@@ -16,11 +16,11 @@ namespace QuizApi.Controllers
     [ApiController]
     public class ActeursController : ControllerBase
     {
-        //private IService<ActeurDto> service;
-        private ActeurService service;
+        private IService<ActeurDto> service;
+        //private ActeurService service;
 
-        //public ActeursController(IService<ActeurDto> service)
-        public ActeursController(ActeurService service)
+        public ActeursController(IService<ActeurDto> service)
+        //public ActeursController(ActeurService service)
         {
             this.service = service;
         }
@@ -71,28 +71,28 @@ namespace QuizApi.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{email}")]
-        public IActionResult FindByEmail(string email)
-        {
-            try
-            {
-                return Ok(this.service.TrouverParEmail(email));
-            }
-            catch (RessourceException e)
-            {
-                if (e.Statut == 404)
-                    return NotFound(e.Message);
-                else
-                {
-                    return BadRequest(e.Message);
-                }
-            }
-            catch (Exception)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
-        }
+        //[HttpGet]
+        //[Route("{email}")]
+        //public IActionResult FindByEmail(string email)
+        //{
+        //    try
+        //    {
+        //        return Ok(this.service.TrouverParEmail(email));
+        //    }
+        //    catch (RessourceException e)
+        //    {
+        //        if (e.Statut == 404)
+        //            return NotFound(e.Message);
+        //        else
+        //        {
+        //            return BadRequest(e.Message);
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        //    }
+        //}
 
             [HttpDelete]
         [Route("{id}")]
@@ -125,10 +125,11 @@ namespace QuizApi.Controllers
         {
             try
             {
-                //acteurDto = this.service.Ajouter(acteurDto);
-                //return Ok(acteurDto);
-                ActeurDto unActeur = this.service.CreerActeur(createdActeurDto);
-                return Ok(createdActeurDto);
+                ActeurDto acteurDto = this.transformCreatedActeurDtoToActeurDto(createdActeurDto);
+                acteurDto = this.service.Ajouter(acteurDto);
+                return Ok(acteurDto);
+                //ActeurDto unActeur = this.service.CreerActeur(createdActeurDto);
+                //return Ok(createdActeurDto);
             }
             catch (RessourceException e)
             {
@@ -167,6 +168,17 @@ namespace QuizApi.Controllers
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        private ActeurDto transformCreatedActeurDtoToActeurDto(CreatedActeurDto createdActeurDto) {
+            return new ActeurDto(
+            0,
+            createdActeurDto.Nom,
+            createdActeurDto.Prenom,
+            createdActeurDto.Email,
+            createdActeurDto.Password,
+            1 //FIXIT : devrait fonctionner sans idRole
+            );
         }
     }
 
