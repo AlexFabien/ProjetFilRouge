@@ -126,6 +126,11 @@ namespace QuizApi.Services
             return ConvertDtoEntity.ConvertListQuizToListQuizDto(this.repository?.FindAll()?.ToList());
         }
 
+        public IEnumerable<GetAllQuizDto> TrouverToutAvecNiveauTechno()
+        {
+            return ConvertDtoEntity.ConvertListQuizToListGetAllQuizDto(this.repository?.FindAllWithLevelTechno()?.ToList());
+        }
+
         internal IEnumerable<Acteur2Dto> TrouverTousLesUtilisateursDuQuiz(int id)
         {
             IEnumerable<Acteur> listActeur = this.repository?.TrouverTousLesUtilisateursDuQuiz(id);

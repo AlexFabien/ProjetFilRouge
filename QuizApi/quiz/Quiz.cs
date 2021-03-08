@@ -45,5 +45,20 @@ namespace QuizApi.quiz
                 quiz.IdNiveau
                 );
         }
+
+        /// <summary>
+        /// Fonction qui transforme une quiz(Models) en GetAllQuiz(DTO) automatiquement
+        /// </summary>
+        /// <param name="quiz"></param>
+        public static implicit operator GetAllQuizDto(Quiz quiz)
+        {
+            return new GetAllQuizDto(
+                quiz.IdQuiz,
+                quiz.Libelle,
+                0,
+                quiz.IdNiveauNavigation,
+                quiz.IdTechnologieNavigation
+                );
+        }
     }
 }

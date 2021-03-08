@@ -35,6 +35,13 @@ namespace QuizApi.Repositories
             return context.Quiz;
         }
 
+        public IEnumerable<Quiz> FindAllWithLevelTechno()
+        {
+            return context.Quiz
+                .Include(q => q.IdNiveauNavigation)
+                .Include(q => q.IdTechnologieNavigation);
+        }
+
         public Quiz FindById(int id)
         {
             Quiz obj = context.Quiz.Find(id);
@@ -63,7 +70,7 @@ namespace QuizApi.Repositories
             }
             catch (Exception e)
             {
-                throw;
+                throw e;
             }
             return unQuiz;
         }

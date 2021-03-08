@@ -29,7 +29,7 @@ namespace QuizApi.Controllers
         {
             try
             {
-                return Ok(this.service.TrouverTout());
+                return Ok(this.service.TrouverToutAvecNiveauTechno());
             }
             catch (RessourceException e)
             {

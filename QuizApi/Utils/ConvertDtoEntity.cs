@@ -121,6 +121,20 @@ namespace QuizApi.Utils
             return listQuizDto;
         }
 
+        internal static ICollection<GetAllQuizDto> ConvertListQuizToListGetAllQuizDto(ICollection<Quiz> collectionQuiz)
+        {
+            List<GetAllQuizDto> listGetAllQuizDto = null;
+            if (collectionQuiz != null)
+            {
+                listGetAllQuizDto = new List<GetAllQuizDto>();
+                foreach (Quiz quiz in collectionQuiz)
+                {
+                    listGetAllQuizDto.Add(quiz);
+                }
+            }
+            return listGetAllQuizDto;
+        }
+
         public static List<Ventillation> ConvertListVentillationDtoToListVentillation(ICollection<VentillationDto> collectionVentillationDto)
         {
             List<Ventillation> listVentillation = null;
