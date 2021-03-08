@@ -10,32 +10,26 @@ using System.Linq.Expressions;
 
 namespace QuizApi.Dtos
 {
-    public class ConnectedActeurDto
+    public class ConnectActeurDto
     {
-        public ConnectedActeurDto()
+        public ConnectActeurDto()
         {
         }
 
-        public ConnectedActeurDto(string nom, string prenom, string email, string password, string? token = "")
+        public ConnectActeurDto(string email, string password)
         {
-            Nom = nom;
-            Prenom = prenom;
             Email = email;
             Password = password;
-            Token = token;
         }
 
-        public string Nom { get; set; }
-        public string Prenom { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string? Token { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une Acteur(DTO) en Acteur(Models) automatiquement
         /// </summary>
         /// <param name="acteurDto"></param>
-        public static implicit operator Acteur(ConnectedActeurDto dto)
+        public static implicit operator Acteur(ConnectActeurDto dto)
         {
             return new Acteur(null, null, dto.Email, dto.Password);
         }

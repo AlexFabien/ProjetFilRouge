@@ -12,33 +12,19 @@ namespace QuizApi.Services
 {
     public class ActeurService : IService<ActeurDto>
     {
-        private IRepository<Acteur> repository;
-        //private ActeurRepository repository;
+        //private IRepository<Acteur> repository;
+        private ActeurRepository repository;
 
-        public ActeurService(IRepository<Acteur> repository)
+        //public ActeurService(IRepository<Acteur> repository)
+        public ActeurService(ActeurRepository repository)
         {
-            //this.acteurRepository = acteurRepository;
             this.repository = repository;
         }
 
         public ActeurDto Ajouter(ActeurDto obj)
         {
-            //return null;
             return this.repository.Insert(obj);
         }
-
-        //public ActeurDto CreerActeur(CreatedActeurDto createdActeurDto)
-        //{
-        //    ActeurDto acteurDto = new ActeurDto(
-        //        0,
-        //        createdActeurDto.Nom,
-        //        createdActeurDto.Prenom,
-        //        createdActeurDto.Email,
-        //        createdActeurDto.Password,
-        //        1 //FIXIT : devrait fonctionner sans idRole
-        //        );
-        //    return this.repository.Insert(acteurDto);        
-        //}
 
         public void Modifier(ActeurDto obj)
         {
@@ -60,9 +46,9 @@ namespace QuizApi.Services
             return ConvertDtoEntity.ConvertListActeurToListActeurDto(this.repository?.FindAll()?.ToList());
         }
 
-        //public ActeurDto TrouverParEmail(string email)
-        //{
-        //    return this.repository.FindByEmail(email);
-        //}
+        public ConnectedActeurDto Connecter(ConnectActeurDto connectActeurDto)
+        {
+            return this.repository.Authenticate(connectActeurDto);
+        }
     }
 }

@@ -1,26 +1,31 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using QuizApi.Dtos;
 using QuizApi.Services;
 using QuizApi.Utils;
 using System;
-using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace QuizApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
     public class ActeursController : ControllerBase
     {
-        private IService<ActeurDto> service;
-        //private ActeurService service;
+        //private IService<ActeurDto> service;
+        private ActeurService service;
 
-        public ActeursController(IService<ActeurDto> service)
-        //public ActeursController(ActeurService service)
+        public ActeursController(ActeurService service)
         {
             this.service = service;
         }
@@ -71,30 +76,31 @@ namespace QuizApi.Controllers
             }
         }
 
-        //[HttpGet]
-        //[Route("{email}")]
-        //public IActionResult FindByEmail(string email)
-        //{
-        //    try
-        //    {
-        //        return Ok(this.service.TrouverParEmail(email));
-        //    }
-        //    catch (RessourceException e)
-        //    {
-        //        if (e.Statut == 404)
-        //            return NotFound(e.Message);
-        //        else
-        //        {
-        //            return BadRequest(e.Message);
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-        //    }
-        //}
+        [HttpPut]
+        [Route("")]
+        public IActionResult Update([FromBody] ActeurDto acteurDto)
+        {
+            try
+            {
+                this.service.Modifier(acteurDto);
+                return Ok(acteurDto);
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
 
-            [HttpDelete]
+        [HttpDelete]
         [Route("{id}")]
         public IActionResult Delete(int id)
         {
@@ -118,18 +124,14 @@ namespace QuizApi.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("")]
-        //public IActionResult Insert([FromBody] ActeurDto acteurDto)
-        public IActionResult Insert([FromBody] CreatedActeurDto createdActeurDto)
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody] ConnectActeurDto connectActeurDto)
         {
             try
             {
-                ActeurDto acteurDto = this.transformCreatedActeurDtoToActeurDto(createdActeurDto);
-                acteurDto = this.service.Ajouter(acteurDto);
-                return Ok(acteurDto);
-                //ActeurDto unActeur = this.service.CreerActeur(createdActeurDto);
-                //return Ok(createdActeurDto);
+                ConnectedActeurDto connectedActeurDto = this.service.Connecter(connectActeurDto);
+                return Ok(connectedActeurDto);
             }
             catch (RessourceException e)
             {
@@ -146,14 +148,16 @@ namespace QuizApi.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("")]
-        public IActionResult Update([FromBody] ActeurDto acteurDto)
+        [HttpPost]
+        [Route("register")]
+        [AllowAnonymous]
+        //public IActionResult Insert([FromBody] ActeurDto acteurDto)       
+        public IActionResult Register([FromBody] CreatedActeurDto createdActeurDto)
         {
             try
             {
-                this.service.Modifier(acteurDto);
-                return Ok(acteurDto);
+                ActeurDto acteurDto = this.transformCreatedActeurDtoToActeurDto(createdActeurDto);
+                return Ok(this.service.Ajouter(acteurDto));
             }
             catch (RessourceException e)
             {
