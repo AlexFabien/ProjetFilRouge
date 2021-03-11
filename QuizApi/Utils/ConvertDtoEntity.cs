@@ -233,6 +233,20 @@ namespace QuizApi.Utils
             return listNiveauDto;
         }
 
+        internal static ICollection<TypeQuestionDto> ConvertListTypeQuestionToListTypeQuestionDto(ICollection<TypeQuestion> collectionTypeQuestion)
+        {
+            List<TypeQuestionDto> listTypeQuestionDto = null;
+            if (collectionTypeQuestion != null)
+            {
+                listTypeQuestionDto = new List<TypeQuestionDto>();
+                foreach (TypeQuestion typeQuestion in collectionTypeQuestion)
+                {
+                    listTypeQuestionDto.Add(typeQuestion);
+                }
+            }
+            return listTypeQuestionDto;
+        }
+
         public static List<ReponseCandidat> ConvertListReponseCandidatDtoToListReponseCandidat(ICollection<ReponseCandidatDto> collectionReponseCandidatDto)
         {
             List<ReponseCandidat> listReponseCandidat = null;

@@ -80,8 +80,8 @@ namespace QuizApi
             services.AddTransient<IService<TechnologieDto>, TechnologieService>();
 
 
-            //services.AddTransient<IRepository<TypeQuestion>, TypeQuestionRepository>();
-            //services.AddTransient<IService<TypeQuestionDto>, TypeQuestionService>();
+            services.AddTransient<IRepository<TypeQuestion>, TypeQuestionRepository>();
+            services.AddTransient<IService<TypeQuestionDto>, TypeQuestionService>();
 
             //services.AddTransient<IRepository<Ventillation>, VentillationRepository>();
             //services.AddTransient<IService<VentillationDto>, VentillationService>();
