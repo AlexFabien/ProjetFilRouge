@@ -16,19 +16,20 @@ namespace QuizApi.Dtos
         {
         }
 
-        public ConnectedActeurDto(string nom, string prenom, string email, string password, string? token = "")
+        public ConnectedActeurDto(string nom, string prenom, string email, int? idRole, string? token = "")
         {
             Nom = nom;
             Prenom = prenom;
             Email = email;
-            Password = password;
+            //Password = password;
+            IdRole = idRole;
             Token = token;
         }
 
         public string Nom { get; set; }
         public string Prenom { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
+        public int? IdRole { get; set; }
         public string? Token { get; set; }
 
         /// <summary>
@@ -37,7 +38,7 @@ namespace QuizApi.Dtos
         /// <param name="acteurDto"></param>
         public static implicit operator Acteur(ConnectedActeurDto dto)
         {
-            return new Acteur(null, null, dto.Email, dto.Password);
+            return new Acteur(null, null, dto.Email, null);
         }
 
     }

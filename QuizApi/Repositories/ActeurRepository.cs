@@ -113,7 +113,7 @@ namespace QuizApi.Repositories
             acteur.Nom,
             acteur.Prenom,
             acteur.Email,
-            acteur.Password,
+            acteur.IdRole,
             tokenString
             );
         }
