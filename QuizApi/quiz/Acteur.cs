@@ -23,6 +23,14 @@ namespace QuizApi.quiz
             IdRole = idRole;
         }
 
+        public Acteur(string nom, string prenom, string email, string password) : this()
+        {
+            Nom = nom;
+            Prenom = prenom;
+            Email = email;
+            Password = password;
+        }
+
         public Acteur(int idActeur, string nom, string prenom, string email, string password,
                 int? idRole, Role idRoleNavigation,
                 ICollection<ActeurHasQuestion> acteurHasQuestion, ICollection<ActeurHasQuiz> acteurHasQuiz)
@@ -61,6 +69,21 @@ namespace QuizApi.quiz
                 acteur.Prenom,
                 acteur.Email,
                 acteur.Password,
+                acteur.IdRole
+                );
+        }
+
+        /// <summary>
+        /// Fonction qui transforme une Acteur(Models) en Acteur2(DTO) automatiquement
+        /// </summary>
+        /// <param name="acteur"></param>
+        public static implicit operator Acteur2Dto(Acteur acteur)
+        {
+            return new Acteur2Dto(
+                acteur.IdActeur,
+                acteur.Nom,
+                acteur.Prenom,
+                acteur.Email,
                 acteur.IdRole
                 );
         }

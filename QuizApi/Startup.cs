@@ -16,6 +16,10 @@ using QuizApi.quiz;
 using QuizApi.Services;
 using QuizApi.Repositories;
 using QuizApi.Dtos;
+using QuizApi.Utils;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace QuizApi
 {
@@ -39,8 +43,10 @@ namespace QuizApi
 
             services.AddTransient<QuizContext, QuizContext>();
 
-            services.AddTransient<IRepository<Acteur>, ActeurRepository>();
+            //services.AddTransient<IRepository<Acteur>, ActeurRepository>();
+            services.AddTransient<ActeurRepository, ActeurRepository>();
             services.AddTransient<IService<ActeurDto>, ActeurService>();
+            services.AddTransient<ActeurService, ActeurService>();
 
             //services.AddTransient<IRepository<ActeurHasQuestion>, ActeurHasQuestionRepository>();
             //services.AddTransient<IService<ActeurHasQuestionDto>, ActeurHasQuestionService>();
@@ -54,11 +60,13 @@ namespace QuizApi
             services.AddTransient<IRepository<Parametrage>, ParametrageRepository>();
             services.AddTransient<IService<ParametrageDto>, ParametrageService>();
 
-            //services.AddTransient<IRepository<Question>, QuestionRepository>();
+            services.AddTransient<QuestionRepository, QuestionRepository>();
             //services.AddTransient<IService<QuestionDto>, QuestionService>();
 
-            services.AddTransient<IRepository<Quiz>, QuizRepository>();
-            services.AddTransient<IService<QuizDto>, QuizService>();
+            services.AddTransient<QuizRepository, QuizRepository>();
+            services.AddTransient<QuizService, QuizService>();
+            services.AddTransient<QuestionService, QuestionService>();
+            services.AddTransient<VentillationRepository, VentillationRepository>();
 
             services.AddTransient<IRepository<Repondu>, ReponduRepository>();
             services.AddTransient<IService<ReponduDto>, ReponduService>();
@@ -81,6 +89,46 @@ namespace QuizApi
 
             //services.AddTransient<IRepository<Ventillation>, VentillationRepository>();
             //services.AddTransient<IService<VentillationDto>, VentillationService>();
+
+            // configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            // configure jwt authentication
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<ActeurService>();
+                        var userId = int.Parse(context.Principal.Identity.Name);
+                        var user = userService.TrouverParId(userId);
+                        if (user == null)
+                        {
+                            // return unauthorized if user no longer exists
+                            context.Fail("Unauthorized");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,6 +145,16 @@ namespace QuizApi
 
             app.UseRouting();
 
+            app.UseCors(
+                 builder =>
+                 {
+                     builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                 }
+            );
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

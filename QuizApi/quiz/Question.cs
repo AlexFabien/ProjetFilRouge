@@ -26,6 +26,14 @@ namespace QuizApi.quiz
             IdTechnologie = idTechnologie;
         }
 
+        public Question(int idQuestion, int? numero, string libelle, string explicationReponse, 
+            int? idNiveau, int? idTypeQuestion, int? idQuiz, int? idTechnologie, 
+            ICollection<Reponse> reponse) : this(idQuestion, numero, libelle, explicationReponse, idNiveau, idTypeQuestion, 
+                                                 idQuiz, idTechnologie)
+        {
+            Reponse = reponse;
+        }
+
         public int IdQuestion { get; set; }
         public int? Numero { get; set; }
         public string Libelle { get; set; }
@@ -57,6 +65,25 @@ namespace QuizApi.quiz
                 question.IdTypeQuestion,
                 question.IdQuiz,
                 question.IdTechnologie
+                );
+        }
+
+        /// <summary>
+        /// Fonction qui transforme une question(Models) en question(DTO) automatiquement
+        /// </summary>
+        /// <param name="question"></param>
+        public static implicit operator QuestionSuivanteDto(Question question)
+        {
+            return new QuestionSuivanteDto(
+                question.IdQuestion,
+                question.Numero,
+                question.Libelle,
+                //question.ExplicationReponse,
+                //question.IdNiveau,
+                //question.IdTypeQuestion,
+                //question.IdQuiz,
+                //question.IdTechnologie,
+                ConvertDtoEntity.ConvertListReponseToListReponseQuestionSuivanteDto(question.Reponse)
                 );
         }
     }

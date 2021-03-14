@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
 using QuizApi.quiz;
 using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace QuizApi.Repositories
 {
@@ -47,6 +44,36 @@ namespace QuizApi.Repositories
             context.Question.Add(obj);
             Save();
             return obj;
+        }
+
+        internal IEnumerable<Question> retourneListQuestion(int idTechnologie, int idNiveau, int nbQuestions)
+        {
+            return context.Question.Where(q => q.IdTechnologie == idTechnologie && q.IdNiveau == idNiveau && q.IdQuiz == null).Take(nbQuestions);
+        }
+
+        internal Question FindQuestionByQuizAndNumeroQuestion(int idQuiz, int numeroQuestion)
+        {
+            try
+            {
+                Question question = context.Question
+                    .Where(q => q.IdQuiz == idQuiz)
+                    .Where(q => q.Numero == numeroQuestion)
+                    .Include(q => q.Reponse)
+                    .First();
+                if (question?.Reponse.Count() == 0)
+                    throw new RessourceException(StatusCodes.Status404NotFound, $"QuestionRepository.FindQuestionByQuizAndNumeroQuestion : " +
+                    $"les réponses pour la question n° {numeroQuestion} du quiz n° {idQuiz} n'ont pas été trouvées.");
+                return question;
+            }
+            catch(RessourceException e)
+            {
+                throw e;
+            }
+            catch (Exception)
+            {
+                throw new RessourceException(StatusCodes.Status404NotFound, $"QuestionRepository.FindQuestionByQuizAndNumeroQuestion : " +
+                    $"la question n° {numeroQuestion} du quiz n° {idQuiz} n'a pas été trouvée.");
+            }
         }
 
         public void Save()

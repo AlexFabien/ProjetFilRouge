@@ -177,6 +177,20 @@ namespace QuizApi.Utils
             return listReponseDto;
         }
 
+        internal static ICollection<ReponseQuestionSuivanteDto> ConvertListReponseToListReponseQuestionSuivanteDto(ICollection<Reponse> collectionReponse)
+        {
+            List<ReponseQuestionSuivanteDto> listReponseQuestionSuivanteDto = null;
+            if (collectionReponse != null)
+            {
+                listReponseQuestionSuivanteDto = new List<ReponseQuestionSuivanteDto>();
+                foreach (Reponse reponse in collectionReponse)
+                {
+                    listReponseQuestionSuivanteDto.Add(reponse);
+                }
+            }
+            return listReponseQuestionSuivanteDto;
+        }
+
         public static List<Niveau> ConvertListNiveauDtoToListNiveau(ICollection<NiveauDto> collectionNiveauDto)
         {
             List<Niveau> listNiveau = null;
@@ -266,6 +280,20 @@ namespace QuizApi.Utils
             if (collectionActeur != null)
             {
                 listActeurDto = new List<ActeurDto>();
+                foreach (Acteur acteur in collectionActeur)
+                {
+                    listActeurDto.Add(acteur);
+                }
+            }
+            return listActeurDto;
+        }
+
+        internal static ICollection<Acteur2Dto> ConvertListActeurToListActeur2Dto(ICollection<Acteur> collectionActeur)
+        {
+            List<Acteur2Dto> listActeurDto = null;
+            if (collectionActeur != null)
+            {
+                listActeurDto = new List<Acteur2Dto>();
                 foreach (Acteur acteur in collectionActeur)
                 {
                     listActeurDto.Add(acteur);

@@ -1,14 +1,10 @@
-﻿using MySql.Data.MySqlClient;
-using QuizApi.Dtos;
-using QuizApi.quiz;
+﻿using QuizApi.quiz;
 using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 namespace QuizApi.Repositories
 {
@@ -52,6 +48,33 @@ namespace QuizApi.Repositories
             context.Quiz.Add(obj);
             Save();
             return obj;
+        }
+
+        public Quiz QuizAvecUtilisateur(int idQuiz, int idCandidate)
+        {
+            Quiz unQuiz;
+            try
+            {
+                unQuiz = context.Quiz
+                  .Include(acteur => acteur.ActeurHasQuiz)
+                  .ThenInclude(acteurHasQuiz => acteurHasQuiz.All(a => a.IdActeur == idCandidate))
+                  .Where(p => p.IdQuiz == idQuiz)
+                  .FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return unQuiz;
+        }
+
+        internal IEnumerable<Acteur> TrouverTousLesUtilisateursDuQuiz(int id)
+        {
+            return context.Quiz.Where(q => q.IdQuiz == id)?
+                .Include(q => q.ActeurHasQuiz)
+                .ThenInclude(a => a.IdActeurNavigation)
+                .Select(q => q.ActeurHasQuiz.Where(a => a.IdActeurNavigation.IdRole == 3).Select(a => a.IdActeurNavigation))
+                .FirstOrDefault();
         }
 
         public void Save()
