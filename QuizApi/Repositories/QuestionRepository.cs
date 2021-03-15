@@ -51,6 +51,11 @@ namespace QuizApi.Repositories
             return context.Question.Where(q => q.IdTechnologie == idTechnologie && q.IdNiveau == idNiveau && q.IdQuiz == null).Take(nbQuestions);
         }
 
+        internal int NbQuestionsDuQuiz(int idQuiz)
+        {
+            return context.Question.Count(q => q.IdQuiz == idQuiz);
+        }
+
         internal Question FindQuestionByQuizAndNumeroQuestion(int idQuiz, int numeroQuestion)
         {
             try

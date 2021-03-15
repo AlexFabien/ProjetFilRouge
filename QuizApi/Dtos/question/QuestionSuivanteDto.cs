@@ -9,25 +9,27 @@ namespace QuizApi.Dtos
     {
         public QuestionSuivanteDto()
         {
-            Reponse = new HashSet<ReponseQuestionSuivanteDto>();
+            Reponses = new HashSet<ReponseQuestionSuivanteDto>();
         }
 
-        public QuestionSuivanteDto(int idQuestion, int? numero, string libelle) : this()
+        public QuestionSuivanteDto(int idQuestion, int? numero, string libelle, int? idTypeQuestion) : this()
         {
             IdQuestion = idQuestion;
             Numero = numero;
             Libelle = libelle;
+            IdTypeQuestion = idTypeQuestion;
         }
 
-        public QuestionSuivanteDto(int idQuestion, int? numero, string libelle,
-            ICollection<ReponseQuestionSuivanteDto> reponse) : this(idQuestion, numero, libelle)
+        public QuestionSuivanteDto(int idQuestion, int? numero, string libelle, int? idTypeQuestion,
+            ICollection<ReponseQuestionSuivanteDto> reponses) : this(idQuestion, numero, libelle, idTypeQuestion)
         {
-            Reponse = reponse;
+            Reponses = reponses;
         }
 
         public int IdQuestion { get; set; }
         public int ?Numero { get; set; }
         public string Libelle { get; set; }
-        public virtual ICollection<ReponseQuestionSuivanteDto> Reponse { get; set; }
+        public int? IdTypeQuestion { get; set; }
+        public virtual ICollection<ReponseQuestionSuivanteDto> Reponses { get; set; }
     }
 }

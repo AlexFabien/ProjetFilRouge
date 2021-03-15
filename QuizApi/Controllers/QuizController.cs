@@ -94,6 +94,7 @@ namespace QuizApi.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("{idQuiz}/candidates/{idCandidate}")]
         public IActionResult FindAllCandidatesByQuiz(int idQuiz, int idCandidate)
@@ -118,13 +119,14 @@ namespace QuizApi.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet]
-        [Route("{idQuiz}/questions{idQuestion}")]
-        public IActionResult FindNextQuestion(int idQuiz, int idQuestion)
+        [Route("{idQuiz}/questions/{numQuestion}")]
+        public IActionResult FindNextQuestion(int idQuiz, int numQuestion)
         {
             try
             {
-                return Ok(this.questionService.TrouverQuestionParQuizEtQuestion(idQuiz, idQuestion));
+                return Ok(this.questionService.TrouverQuestionParQuizEtQuestion(idQuiz, numQuestion));
             }
             catch (RessourceException e)
             {

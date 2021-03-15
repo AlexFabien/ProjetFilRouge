@@ -82,7 +82,8 @@ namespace QuizApi.Services
             //TODO Vérifier que le candidat est positionné sur le quiz
             Quiz quiz = this.repository.FindById(idQuiz);
             Acteur candidat = this.acteurService.TrouverParId(idCandidate);
-            StartQuizDto startQuizDto = new StartQuizDto(quiz.Libelle, quiz.IdTechnologie, quiz.IdNiveau, candidat);
+            int nbQuestions = this.questionService.NbQuestionsDuQuiz(idQuiz);
+            StartQuizDto startQuizDto = new StartQuizDto(quiz.Libelle, quiz.IdTechnologie, quiz.IdNiveau, nbQuestions, candidat);
             return startQuizDto;
         }
 

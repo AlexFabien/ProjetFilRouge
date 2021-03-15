@@ -11,17 +11,19 @@ namespace QuizApi.Dtos
         {
         }
 
-        public StartQuizDto(string libelle, int? idTechnologie, int? idNiveau, Acteur2Dto candidat)
+        public StartQuizDto(string libelle, int? idTechnologie, int? idNiveau, int? nbQuestions, Acteur2Dto candidat)
         {
             Libelle = libelle;
             IdTechnologie = idTechnologie;
             IdNiveau = idNiveau;
+            NbQuestions = nbQuestions;
             Candidat = candidat;
         }
 
         public string Libelle { get; set; }
         public int? IdTechnologie { get; set; }
         public int? IdNiveau { get; set; }
+        public int? NbQuestions { get; set; }
         public Acteur2Dto Candidat { get; set; }
     }
 }

@@ -80,7 +80,7 @@ namespace QuizApi.quiz
                 question.Libelle,
                 //question.ExplicationReponse,
                 //question.IdNiveau,
-                //question.IdTypeQuestion,
+                question.IdTypeQuestion,
                 //question.IdQuiz,
                 //question.IdTechnologie,
                 ConvertDtoEntity.ConvertListReponseToListReponseQuestionSuivanteDto(question.Reponse)

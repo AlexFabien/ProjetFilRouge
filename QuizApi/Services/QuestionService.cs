@@ -50,6 +50,11 @@ namespace QuizApi.Services
             return ConvertDtoEntity.ConvertListQuestionToListQuestionDto(this.repository?.FindAll()?.ToList());
         }
 
+        public int NbQuestionsDuQuiz(int idQuiz)
+        {
+            return this.repository.NbQuestionsDuQuiz(idQuiz);
+        }
+
         internal IEnumerable<Question> retourneListQuestion(int idTechnologie, int idNiveau, int nbQuestions)
         {
             IEnumerable<Question> listQuestions = null;
