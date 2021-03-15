@@ -25,6 +25,11 @@ namespace QuizApi.Services
             return this.repository.Insert(obj);
         }
 
+        public QuestionAvecReponseDto Ajouter(CreatedQuestionDto obj)
+        {
+            return this.repository.Insert(obj);
+        }
+
         public void Modifier(QuestionDto obj)
         {
             this.repository.Update(obj);

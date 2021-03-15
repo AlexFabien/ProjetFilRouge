@@ -121,6 +121,20 @@ namespace QuizApi.Utils
             return listQuizDto;
         }
 
+        internal static ICollection<GetAllQuizDto> ConvertListQuizToListGetAllQuizDto(ICollection<Quiz> collectionQuiz)
+        {
+            List<GetAllQuizDto> listGetAllQuizDto = null;
+            if (collectionQuiz != null)
+            {
+                listGetAllQuizDto = new List<GetAllQuizDto>();
+                foreach (Quiz quiz in collectionQuiz)
+                {
+                    listGetAllQuizDto.Add(quiz);
+                }
+            }
+            return listGetAllQuizDto;
+        }
+
         public static List<Ventillation> ConvertListVentillationDtoToListVentillation(ICollection<VentillationDto> collectionVentillationDto)
         {
             List<Ventillation> listVentillation = null;
@@ -163,6 +177,20 @@ namespace QuizApi.Utils
             return listReponse;
         }
 
+        public static List<Reponse> ConvertListCreatedReponseDtoToListReponse(ICollection<CreatedReponseDto> collectionCreatedReponseDto)
+        {
+            List<Reponse> listReponse = null;
+            if (collectionCreatedReponseDto != null)
+            {
+                listReponse = new List<Reponse>();
+                foreach (CreatedReponseDto createdReponseDto in collectionCreatedReponseDto)
+                {
+                    listReponse.Add(createdReponseDto);
+                }
+            }
+            return listReponse;
+        }
+
         internal static ICollection<ReponseDto> ConvertListReponseToListReponseDto(ICollection<Reponse> collectionReponse)
         {
             List<ReponseDto> listReponseDto = null;
@@ -175,6 +203,20 @@ namespace QuizApi.Utils
                 }
             }
             return listReponseDto;
+        }
+
+        internal static ICollection<CreatedReponseDto> ConvertListReponseToListlistCreatedReponseDto(ICollection<Reponse> collectionReponse)
+        {
+            List<CreatedReponseDto> listCreatedReponseDto = null;
+            if (collectionReponse != null)
+            {
+                listCreatedReponseDto = new List<CreatedReponseDto>();
+                foreach (Reponse reponse in collectionReponse)
+                {
+                    listCreatedReponseDto.Add(reponse);
+                }
+            }
+            return listCreatedReponseDto;
         }
 
         internal static ICollection<ReponseQuestionSuivanteDto> ConvertListReponseToListReponseQuestionSuivanteDto(ICollection<Reponse> collectionReponse)

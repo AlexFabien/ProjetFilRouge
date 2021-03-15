@@ -16,9 +16,9 @@ namespace QuizApi.Controllers
     [ApiController]
     public class QuestionsController : ControllerBase
     {
-        private IService<QuestionDto> service;
+        private QuestionService service;
 
-        public QuestionsController(IService<QuestionDto> service)
+        public QuestionsController(QuestionService service)
         {
             this.service = service;
         }
@@ -72,12 +72,12 @@ namespace QuizApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] QuestionDto createDto)
+        public IActionResult Post([FromBody] CreatedQuestionDto createQuestionDto)
         {
             try
             {
-                this.service.Ajouter(createDto);
-                return Ok(createDto);
+                QuestionAvecReponseDto questionDto = this.service.Ajouter(createQuestionDto);
+                return Ok(questionDto);
             }
             catch (RessourceException e)
             {

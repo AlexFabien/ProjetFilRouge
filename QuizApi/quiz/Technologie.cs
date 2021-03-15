@@ -29,6 +29,8 @@ namespace QuizApi.quiz
         /// <param name="technologie"></param>
         public static implicit operator TechnologieDto(Technologie technologie)
         {
+            if (technologie == null)
+                return null;
             return new TechnologieDto(
                 technologie.Libelle,
                 technologie.IdTechnologie

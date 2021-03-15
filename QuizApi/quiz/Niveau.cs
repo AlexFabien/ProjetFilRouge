@@ -47,6 +47,8 @@ namespace QuizApi.quiz
         /// <param name="niveau"></param>
         public static implicit operator NiveauDto(Niveau niveau)
         {
+            if (niveau == null)
+                return null;
             return new NiveauDto(
                 niveau.IdNiveau,
                 niveau.Libelle

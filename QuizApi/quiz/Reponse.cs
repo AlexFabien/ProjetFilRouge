@@ -56,5 +56,17 @@ namespace QuizApi.quiz
                 reponse.Libelle
                 );
         }
+
+        /// <summary>
+        /// Fonction qui transforme une reponse(Models) en QuestionSuivanteReponse(DTO) automatiquement
+        /// </summary>
+        /// <param name="reponse"></param>
+        public static implicit operator CreatedReponseDto(Reponse reponse)
+        {
+            return new CreatedReponseDto(
+                reponse.Libelle,
+                reponse.ReponseCorrecte
+                );
+        }
     }
 }

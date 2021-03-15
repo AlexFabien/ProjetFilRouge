@@ -86,5 +86,40 @@ namespace QuizApi.quiz
                 ConvertDtoEntity.ConvertListReponseToListReponseQuestionSuivanteDto(question.Reponse)
                 );
         }
+
+        /// <summary>
+        /// Fonction qui transforme une question(Models) en createdQuestion(DTO) automatiquement
+        /// </summary>
+        /// <param name="question"></param>
+        public static implicit operator CreatedQuestionDto(Question question)
+        {
+            return new CreatedQuestionDto(
+                question.Libelle,
+                question.ExplicationReponse,
+                question.IdNiveau,
+                question.IdTypeQuestion,
+                question.IdTechnologie,
+                ConvertDtoEntity.ConvertListReponseToListlistCreatedReponseDto(question.Reponse)
+                );
+        }
+
+        /// <summary>
+        /// Fonction qui transforme une question(Models) en question(DTO) automatiquement
+        /// </summary>
+        /// <param name="question"></param>
+        public static implicit operator QuestionAvecReponseDto(Question question)
+        {
+            return new QuestionAvecReponseDto(
+                question.IdQuestion,
+                question.Numero,
+                question.Libelle,
+                question.ExplicationReponse,
+                question.IdNiveau,
+                question.IdTypeQuestion,
+                question.IdQuiz,
+                question.IdTechnologie,
+                ConvertDtoEntity.ConvertListReponseToListReponseDto(question.Reponse)
+                );
+        }
     }
 }
