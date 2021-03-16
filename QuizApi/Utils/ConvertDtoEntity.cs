@@ -289,6 +289,20 @@ namespace QuizApi.Utils
             return listReponseCandidat;
         }
 
+        public static List<ReponseCandidat> ConvertListCreatedReponseCandidatDtoToListReponseCandidat(ICollection<CreatedReponseCandidatDto> collectionReponseCandidatDto)
+        {
+            List<ReponseCandidat> listReponseCandidat = null;
+            if (collectionReponseCandidatDto != null)
+            {
+                listReponseCandidat = new List<ReponseCandidat>();
+                foreach (CreatedReponseCandidatDto createdReponseCandidatDto in collectionReponseCandidatDto)
+                {
+                    listReponseCandidat.Add(createdReponseCandidatDto);
+                }
+            }
+            return listReponseCandidat;
+        }
+
         internal static ICollection<ReponseCandidatDto> ConvertListReponseCandidatToListReponseCandidatDto(ICollection<ReponseCandidat> collectionReponseCandidat)
         {
             List<ReponseCandidatDto> listReponseCandidatDto = null;

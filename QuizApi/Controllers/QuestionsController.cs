@@ -94,6 +94,30 @@ namespace QuizApi.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("{idQuestion}/candidats/{idCandidat}/reponses")]
+        public IActionResult AjouterReponsesCandidat(int idQuestion, int idCandidat, [FromBody] CreatedActeurHasQuestionDto createdActeurHasQuestionDto)
+        {
+            try
+            {
+                return Ok(this.service.AjouterReponsesCandidat(idQuestion, idCandidat, createdActeurHasQuestionDto));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpPut()]
         public IActionResult Update([FromBody] QuestionDto dto)
         {

@@ -20,6 +20,12 @@ namespace QuizApi.quiz
             IdEtatReponse = idEtatReponse;
         }
 
+        public ActeurHasQuestion(int idActeur, int idQuestion, string commentaire, int? idEtatReponse,
+            ICollection<ReponseCandidat> reponseCandidat) : this(idActeur, idQuestion, commentaire, idEtatReponse)
+        {
+            ReponseCandidat = reponseCandidat;
+        }
+
         public int IdActeur { get; set; }
         public int IdQuestion { get; set; }
         public string Commentaire { get; set; }

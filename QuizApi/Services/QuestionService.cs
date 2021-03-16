@@ -69,7 +69,7 @@ namespace QuizApi.Services
                 int nbQuestionsDuNiveau;
                 for (int i = 0; i < ventilations.Count; i++)
                 {
-                    taux = (ventilations[i].Valeur == null) ? 0 : (Convert.ToDouble(ventilations[i].Valeur)/100);
+                    taux = (ventilations[i].Valeur == null) ? 0 : (Convert.ToDouble(ventilations[i].Valeur) / 100);
                     // On arrondi à l'inférieur ici ...
                     nbQuestionsDuNiveau = Convert.ToInt32(Math.Floor(taux * nbQuestions));
                     totalQuestions += nbQuestionsDuNiveau;
@@ -84,7 +84,7 @@ namespace QuizApi.Services
                     {
                         IEnumerable<Question> listQuestionsDuNiveau = this.repository.retourneListQuestion(idTechnologie, ventilations[i].IdNiveauQuestion, nbQuestionsDuNiveau);
                         // Gérer s'il ne reste pas assez de question.
-                        if ((listQuestionsDuNiveau==null) || (listQuestionsDuNiveau.Count() != nbQuestionsDuNiveau))
+                        if ((listQuestionsDuNiveau == null) || (listQuestionsDuNiveau.Count() != nbQuestionsDuNiveau))
                         {
                             throw new RessourceException(StatusCodes.Status500InternalServerError, $"QuestionService.retourneListQuestion : Pas assez de questions de la technologie n° {idTechnologie} " +
                                                                                                     $"et du niveau {ventilations[i].IdNiveauQuestion} !");
@@ -94,8 +94,33 @@ namespace QuizApi.Services
                         else listQuestions = listQuestions.Concat(listQuestionsDuNiveau);
                     }
                 }
-            } 
+            }
             return listQuestions;
+        }
+
+        public ReponseBody AjouterReponsesCandidat(int idQuestion, int idCandidat, CreatedActeurHasQuestionDto createdActeurHasQuestionDto)
+        {
+            try
+            {
+                Question laQuestion = this.repository.FindById(idQuestion);
+                if (laQuestion == null)
+                    throw new RessourceException(StatusCodes.Status404NotFound, $"QuestionService.AjouterReponsesCandidat : la question n° {idQuestion} n'a pas été trouvé ");
+                // Ajouter les réponses à la question
+                //laQuestion.ActeurHasQuestion.Add(createdActeurHasQuestionDto);
+                laQuestion.ActeurHasQuestion.Add(
+                    new ActeurHasQuestion(idCandidat,
+                                            idQuestion,
+                                            createdActeurHasQuestionDto.Commentaire,
+                                            createdActeurHasQuestionDto.IdEtatReponse,
+                                            ConvertDtoEntity.ConvertListCreatedReponseCandidatDtoToListReponseCandidat(createdActeurHasQuestionDto.ReponsesCandidat))
+                );
+                this.repository.Update(laQuestion);
+                return new ReponseBody(true, "La réponse a été enregistré.");
+            }
+            catch (Exception e)
+            {
+                return new ReponseBody(false, "La réponse n'a pas été enregistré.");
+            }
         }
 
         internal QuestionSuivanteDto TrouverQuestionParQuizEtQuestion(int idQuiz, int numeroQuestion)

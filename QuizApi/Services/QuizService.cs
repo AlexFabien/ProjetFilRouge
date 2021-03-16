@@ -92,6 +92,8 @@ namespace QuizApi.Services
             try
             {
                 Quiz leQuiz = this.repository.FindById(id);
+                if (leQuiz == null)
+                    throw new RessourceException(StatusCodes.Status404NotFound, $"QuizService.AjouterCandidats : le quiz n° {id} n'a pas été trouvé ");
                 //TODO : vérifier le role des candidats
                 // Ajouter les candidats au quiz
                 listCandidats.ForEach(a =>
