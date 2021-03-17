@@ -5,6 +5,7 @@ using QuizApi.Repositories;
 using QuizApi.Utils;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace QuizApi.Services
@@ -127,9 +128,9 @@ namespace QuizApi.Services
 
         internal ICollection<ResultReponseCandidatDto> RetourneResultatQuiz(int idQuiz, int idCandidat)
         {
-            ResultReponseCandidatDto resultOK = new ResultReponseCandidatDto("Réponse OK", 0);
-            ResultReponseCandidatDto resultPasse = new ResultReponseCandidatDto("Réponse Passe", 0);
-            ResultReponseCandidatDto resultKO = new ResultReponseCandidatDto("Réponse KO", 0);
+            ResultReponseCandidatDto resultOK = new ResultReponseCandidatDto("Réponse OK", 0, Color.Green.Name);
+            ResultReponseCandidatDto resultPasse = new ResultReponseCandidatDto("Réponse Passe", 0, Color.Orange.Name);
+            ResultReponseCandidatDto resultKO = new ResultReponseCandidatDto("Réponse KO", 0, Color.Red.Name);
             List<Question> listQuestion = this.repository.retourneListQuestion(idQuiz)?.ToList();
             listQuestion.ForEach(q =>
                 {
