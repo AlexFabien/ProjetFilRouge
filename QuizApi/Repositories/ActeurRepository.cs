@@ -53,24 +53,28 @@ namespace QuizApi.Repositories
                 throw new RessourceException(StatusCodes.Status404NotFound, $"ActeurRepository.FindById : l'élément {id} n'a pas été trouvé ");
             return obj;
         }
-                
+
         public Acteur Insert(Acteur obj)
         {
             //validation
-            if (string.IsNullOrWhiteSpace(obj.Password))
-                throw new RessourceException(404, "Erreur de saisie de mot de passe");
-            if(!IsValidEmail(obj.Email))
-                throw new RessourceException(404, "L'email \"" + obj.Email + "\" n'est pas valide.");
-            if (context.Acteur.Any(x =>x.Email == obj.Email))
-                throw new RessourceException(404, "L'email \""+ obj.Email + "\" est déjà utilisé.");
-            if(!IsValidPassword(obj.Password))           
-                throw new RessourceException(404, "Le password n''a pas au moins 8 caractères, une majuscule et une minuscule.");
-            //TODO: crypter le password en System.Security.Cryptography.HMACSHA512
-            //byte[] passwordHash, passwordSalt;
-            //CreatePasswordHash(obj.Password, out passwordHash, out passwordSalt);
-            //obj.PasswordHash = passwordHash;
-            //obj.PasswordSalt = passwordSalt;
+            if (obj.IdRole != 3)
+            {
 
+                if (string.IsNullOrWhiteSpace(obj.Password))
+                    throw new RessourceException(404, "Erreur de saisie de mot de passe");
+                if (!IsValidEmail(obj.Email))
+                    throw new RessourceException(404, "L'email \"" + obj.Email + "\" n'est pas valide.");
+                if (context.Acteur.Any(x => x.Email == obj.Email))
+                    throw new RessourceException(404, "L'email \"" + obj.Email + "\" est déjà utilisé.");
+                if (!IsValidPassword(obj.Password))
+                    throw new RessourceException(404, "Le password n''a pas au moins 8 caractères, une majuscule et une minuscule.");
+                //TODO: crypter le password en System.Security.Cryptography.HMACSHA512
+                //byte[] passwordHash, passwordSalt;
+                //CreatePasswordHash(obj.Password, out passwordHash, out passwordSalt);
+                //obj.PasswordHash = passwordHash;
+                //obj.PasswordSalt = passwordSalt;
+
+            }
             context.Acteur.Add(obj);
             Save();
             return obj;
@@ -81,8 +85,8 @@ namespace QuizApi.Repositories
             if (string.IsNullOrEmpty(connectActeurDto.Email) || string.IsNullOrEmpty(connectActeurDto.Password))
                 return null;
 
-            var acteur = context.Acteur.SingleOrDefault(x => x.Email == connectActeurDto.Email);            
-            
+            var acteur = context.Acteur.SingleOrDefault(x => x.Email == connectActeurDto.Email);
+
             // check if username exists
             if (acteur == null)
                 return null;

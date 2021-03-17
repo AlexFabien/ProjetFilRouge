@@ -16,18 +16,20 @@ namespace QuizApi.Dtos
         {
         }
 
-        public CreatedActeurDto( string nom, string prenom, string email, string password)
+        public CreatedActeurDto( string nom, string prenom, string email, string password, int idRole)
         {
             Nom = nom;
             Prenom = prenom;
             Email = email;
             Password = password;
+            IdRole = idRole;
         }
 
         public string Nom { get; set; }
         public string Prenom { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public int? IdRole { get; set; }
 
         /// <summary>
         /// Fonction qui transforme une Acteur(DTO) en Acteur(Models) automatiquement
@@ -36,10 +38,12 @@ namespace QuizApi.Dtos
         public static implicit operator Acteur(CreatedActeurDto createdActeurDto)
         {
             return new Acteur(
+                0,
                 createdActeurDto.Nom,
                 createdActeurDto.Prenom,
                 createdActeurDto.Email,
-                createdActeurDto.Password
+                null,
+                createdActeurDto.IdRole
                 );
         }
 

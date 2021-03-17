@@ -181,7 +181,8 @@ namespace QuizApi.Controllers
             createdActeurDto.Prenom,
             createdActeurDto.Email,
             createdActeurDto.Password,
-            1 //FIXIT : devrait fonctionner sans idRole
+            createdActeurDto.IdRole
+            //1 //FIXIT : devrait fonctionner sans idRole
             );
         }
     }
