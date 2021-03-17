@@ -1,8 +1,4 @@
-﻿using QuizApi.quiz;
-using QuizApi.Utils;
-using System.Collections.Generic;
-
-namespace QuizApi.Dtos
+﻿namespace QuizApi.Dtos
 {
     public class ResultReponseCandidatDto
     {
@@ -10,13 +6,15 @@ namespace QuizApi.Dtos
         {
         }
 
-        public ResultReponseCandidatDto(string libelle, int? total)
+        public ResultReponseCandidatDto(string libelle, int? total, string couleur)
         {
             Libelle = libelle;
             Total = total;
+            Couleur = couleur;
         }
 
         public string Libelle { get; set; }
         public int? Total { get; set; }
+        public string Couleur { get; set; }
     }
 }
