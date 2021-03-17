@@ -143,6 +143,30 @@ namespace QuizApi.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("{idQuiz}/candidats/{idCandidat}/resultats")]
+        public IActionResult ResultatQuiz(int idQuiz, int idCandidat)
+        {
+            try
+            {
+                return Ok(this.service.RetourneResultatQuiz(idQuiz, idCandidat));
+            }
+            catch (RessourceException e)
+            {
+                if (e.Statut == 404)
+                    return NotFound(e.Message);
+                else
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpDelete]
         [Route("{id}")]
         public IActionResult Delete(int id)

@@ -87,6 +87,15 @@ namespace QuizApi.Services
             return startQuizDto;
         }
 
+        internal ResultQuizDto RetourneResultatQuiz(int idQuiz, int idCandidat)
+        {
+            Quiz quiz = this.repository.FindById(idQuiz);
+            ICollection<ResultReponseCandidatDto> listReponses = this.questionService.RetourneResultatQuiz(idQuiz, idCandidat);
+            int nbQuestions = this.questionService.NbQuestionsDuQuiz(idQuiz);
+            ResultQuizDto result = new ResultQuizDto(quiz.Libelle, quiz.IdTechnologie, quiz.IdNiveau, nbQuestions, listReponses);
+            return result;
+        }
+
         public ReponseBody AjouterCandidats(int id, List<ActeurIdCandidat> listCandidats)
         {
             try

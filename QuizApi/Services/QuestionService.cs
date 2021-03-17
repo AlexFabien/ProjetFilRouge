@@ -13,11 +13,13 @@ namespace QuizApi.Services
     {
         private QuestionRepository repository;
         private VentillationRepository ventillationRepository;
+        private ActeurHasQuestionRepository acteurHasQuestionRepository;
 
-        public QuestionService(QuestionRepository repository, VentillationRepository ventillationRepository)
+        public QuestionService(QuestionRepository repository, VentillationRepository ventillationRepository, ActeurHasQuestionRepository acteurHasQuestionRepository)
         {
             this.repository = repository;
             this.ventillationRepository = ventillationRepository;
+            this.acteurHasQuestionRepository = acteurHasQuestionRepository;
         }
 
         public QuestionDto Ajouter(QuestionDto obj)
@@ -121,6 +123,80 @@ namespace QuizApi.Services
             {
                 return new ReponseBody(false, "La réponse n'a pas été enregistré.");
             }
+        }
+
+        internal ICollection<ResultReponseCandidatDto> RetourneResultatQuiz(int idQuiz, int idCandidat)
+        {
+            ResultReponseCandidatDto resultOK = new ResultReponseCandidatDto("Réponse OK", 0);
+            ResultReponseCandidatDto resultPasse = new ResultReponseCandidatDto("Réponse Passe", 0);
+            ResultReponseCandidatDto resultKO = new ResultReponseCandidatDto("Réponse KO", 0);
+            List<Question> listQuestion = this.repository.retourneListQuestion(idQuiz)?.ToList();
+            listQuestion.ForEach(q =>
+                {
+                    ActeurHasQuestion acteurHasQuestion = this.acteurHasQuestionRepository.ReponseQuestionAvecEtat(q.IdQuestion, idCandidat);
+                    if (acteurHasQuestion == null)
+                        throw new RessourceException(StatusCodes.Status404NotFound, $"QuestionService.RetourneResultatQuiz : Pas de réponse trouvé pour la question n° {q.IdQuestion} du candidat n° {idCandidat}.");
+                    if (acteurHasQuestion.IdEtatReponse == 1) // En Attente de traitement
+                    {
+                        // On va vérifier si la réponse est correcte
+                        if (q.IdTypeQuestion == 1) // Choix unique
+                        {
+                            if (q.Reponse.Where(r => r.ReponseCorrecte == 1).First().IdReponse == Convert.ToInt32(acteurHasQuestion.ReponseCandidat.First().Libelle))
+                                acteurHasQuestion.IdEtatReponse = 3; // Réponse correcte
+                            else acteurHasQuestion.IdEtatReponse = 4; // Reponse incorrecte
+                            // TODO : MAJ en Bdd
+                        }
+                        else if (q.IdTypeQuestion == 2) // Choix multiple
+                        {
+                            bool result = false;
+                            List<Reponse> listRepOK = q.Reponse.Where(r => r.ReponseCorrecte == 1).ToList();
+                            // On parcourt la réponse correcte
+                            for (int i = 0; i < listRepOK.Count; i++)
+                            {
+                                result = false;
+                                // On compare avec les réponses du candidat
+                                acteurHasQuestion.ReponseCandidat.ToList().ForEach(r =>
+                                {
+                                    if (Convert.ToInt32(r.Libelle) == listRepOK[i].IdReponse)
+                                    {
+                                        result = true;
+                                    }
+                                });
+                                if (!result) // Si pas retrouvé, la réponse du candidat est KO
+                                    break;
+                            }
+                            if (result)
+                                acteurHasQuestion.IdEtatReponse = 3; // Réponse correcte
+                            else acteurHasQuestion.IdEtatReponse = 4; // Reponse incorrecte
+                            // TODO : MAJ en Bdd
+                        }
+                    }
+                    _ = (acteurHasQuestion.IdEtatReponse == 2) ? resultPasse.Total++ :
+                                                                (acteurHasQuestion.IdEtatReponse == 3) ? resultOK.Total++ : resultKO.Total++;
+
+                    //switch (acteurHasQuestion.IdEtatReponse)
+                    //{
+                    //    case 2:
+                    //        resultPasse.Total++;
+                    //        break;
+                    //    case 3:
+                    //        resultOK.Total++;
+                    //        break;
+                    //    case 4:
+                    //        resultKO.Total++;
+                    //        break;
+
+                    //    default:
+                    //        break;
+                    //}
+                });
+            List<ResultReponseCandidatDto> toto = new List<ResultReponseCandidatDto>
+            {
+                resultOK,
+                resultKO,
+                resultPasse
+            };
+            return toto;
         }
 
         internal QuestionSuivanteDto TrouverQuestionParQuizEtQuestion(int idQuiz, int numeroQuestion)

@@ -51,6 +51,13 @@ namespace QuizApi.Repositories
             return context.Question.Where(q => q.IdTechnologie == idTechnologie && q.IdNiveau == idNiveau && q.IdQuiz == null).Take(nbQuestions);
         }
 
+        internal IEnumerable<Question> retourneListQuestion(int idQuiz)
+        {
+            return context.Question
+                .Where(q => q.IdQuiz == idQuiz)
+                .Include(q => q.Reponse);
+        }
+
         internal int NbQuestionsDuQuiz(int idQuiz)
         {
             return context.Question.Count(q => q.IdQuiz == idQuiz);
@@ -128,5 +135,6 @@ namespace QuizApi.Repositories
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
     }
 }
